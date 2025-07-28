@@ -1,0 +1,12 @@
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\bin\Debug\net9.0\Portal.Domain.deps.json
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\bin\Debug\net9.0\Portal.Domain.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\bin\Debug\net9.0\Portal.Domain.pdb
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.AssemblyInfoInputs.cache
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.AssemblyInfo.cs
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.csproj.CoreCompileInputs.cache
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.sourcelink.json
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\refint\Portal.Domain.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.pdb
+D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\ref\Portal.Domain.dll
