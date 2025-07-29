@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
@@ -31,6 +31,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Roles = "asd")]
         public async Task<IActionResult> Add(GameDTO request)
         {
             var game = await gameService.AddGameAsync(request);

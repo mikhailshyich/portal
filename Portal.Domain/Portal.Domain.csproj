@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="Responses\CustomResponses.cs~RFccb4d8.TMP" />
+  </ItemGroup>
+
 </Project>

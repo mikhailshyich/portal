@@ -169,3 +169,7 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\zh-Hans\Microsoft.Cod
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.MvcApplicationPartsAssemblyInfo.cs
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Scalar.AspNetCore.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

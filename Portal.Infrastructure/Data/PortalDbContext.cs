@@ -8,5 +8,6 @@ namespace Portal.Infrastructure.Data
         public PortalDbContext(DbContextOptions<PortalDbContext> options) : base(options) { }
 
         public DbSet<Game> Games { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
