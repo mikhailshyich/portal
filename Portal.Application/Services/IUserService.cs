@@ -11,6 +11,6 @@ namespace Portal.Application.Services
         //Task<User> GetByEmailAsync(string email);
         //Task<User> GetByUsernameAsync(string username);
         Task<CustomResponses> RegisterAsync(RegisterDTO request);
-        Task<User> LoginAsync(LoginDTO request);
+        Task<CustomResponses> LoginAsync(LoginDTO request);
     }
 }

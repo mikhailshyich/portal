@@ -9,5 +9,6 @@ namespace Portal.Infrastructure.Data
 
         public DbSet<Game> Games { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserToken> UserTokens { get; set; }
     }
 }

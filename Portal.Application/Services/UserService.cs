@@ -34,7 +34,7 @@ namespace Portal.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<User> LoginAsync(LoginDTO request)
+        public async Task<CustomResponses> LoginAsync(LoginDTO request)
         {
             return await userInterface.LoginAsync(request);
         }
