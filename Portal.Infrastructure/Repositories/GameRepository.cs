@@ -50,5 +50,22 @@ namespace Portal.Infrastructure.Repositories
 
             return game;
         }
+
+        public async Task<Game> EditGameAsync(Game request)
+        {
+            if (request is null)
+                return null!;
+
+            var game = await context.Games.FirstOrDefaultAsync(g => g.Id == request.Id);
+            if(game is null)
+                return null!;
+
+            game.Name = request.Name;
+            game.Description = request.Description;
+
+            await context.SaveChangesAsync();
+
+            return game;
+        }
     }
 }

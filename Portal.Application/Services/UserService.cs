@@ -14,6 +14,11 @@ namespace Portal.Application.Services
             this.userInterface = userInterface;
         }
 
+        public Task CheckTokens(LoginDTO request)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<User>> GetAllAsync()
         {
             throw new NotImplementedException();
@@ -34,12 +39,12 @@ namespace Portal.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<CustomResponses> LoginAsync(LoginDTO request)
+        public async Task<CustomAuthResponses> LoginAsync(LoginDTO request)
         {
             return await userInterface.LoginAsync(request);
         }
 
-        public async Task<CustomResponses> RegisterAsync(RegisterDTO request)
+        public async Task<CustomAuthResponses> RegisterAsync(RegisterDTO request)
         {
             return await userInterface.RegisterAsync(request);
         }

@@ -10,8 +10,8 @@ namespace Portal.Domain.Interfaces
         //Task<User> GetByIdAsync(Guid id);
         //Task<User> GetByEmailAsync(string email);
         //Task<User> GetByUsernameAsync(string username);
-        Task<CustomResponses> RegisterAsync(RegisterDTO request);
-        Task<CustomResponses> LoginAsync(LoginDTO request);
-        Task CheckTokens();
+        Task<CustomAuthResponses> RegisterAsync(RegisterDTO request);
+        Task<CustomAuthResponses> LoginAsync(LoginDTO request);
+        Task CheckTokens(LoginDTO request);
     }
 }

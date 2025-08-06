@@ -1,0 +1,24 @@
+﻿@page "/{status:int}"
+@inject NavigationManager navigationManager
+
+<div>@Message</div>
+
+@code {
+    [Parameter]
+    public int Status { get; set; }
+
+    public string Message = "";
+
+    protected override void OnInitialized()
+    {
+        switch (Status)
+        {
+            case StatusCodes.Status401Unauthorized:
+                navigationManager.NavigateTo("/login");
+                break;
+            case StatusCodes.Status404NotFound:
+                Message = "Страница не найдена.";
+                break;
+        }        
+    }
+}

@@ -55,10 +55,6 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -74,17 +70,10 @@ namespace Portal.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateTimeExpiredJWT")
+                    b.Property<DateTime>("DateTimeExpiredToken")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateTimeExpiredRef")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("JWTToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RefToken")
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

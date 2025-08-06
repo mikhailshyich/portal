@@ -8,5 +8,6 @@ namespace Portal.Application.Services
         Task<List<Game>> GetAllGamesAsync();
         Task<Game> AddGameAsync(GameDTO game);
         Task<Game> GetGameByIdAsync(Guid id);
+        Task<Game> EditGameAsync(Game request);
     }
 }

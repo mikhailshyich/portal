@@ -11,18 +11,17 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace Portal.Infrastructure.Repositories
 {
     public class UserRepository : IUserApp
     {
         private readonly PortalDbContext context;
-        private readonly IConfiguration configuration;
 
-        public UserRepository(PortalDbContext context, IConfiguration configuration)
+        public UserRepository(PortalDbContext context)
         {
             this.context = context;
-            this.configuration = configuration;
         }
 
         public Task<List<User>> GetAllAsync()
@@ -45,21 +44,23 @@ namespace Portal.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<CustomResponses> LoginAsync(LoginDTO request)
+        public async Task<CustomAuthResponses> LoginAsync(LoginDTO request)
         {
             if (request is null)
-                return new CustomResponses(false, $"Пользователь равен null.");
+                return new CustomAuthResponses(false, $"Пользователь равен null.");
 
             var userDB = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
             if (userDB is null)
-                return new CustomResponses(false, $"Проверьте введённые данные.");
+                return new CustomAuthResponses(false, $"Проверьте введённые данные.");
 
             if (new PasswordHasher<User>().VerifyHashedPassword(userDB, userDB.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
-                return new CustomResponses(false, "Проверьте введённые данные.");
+                return new CustomAuthResponses(false, "Проверьте введённые данные.");
 
-            await GenerateAndSaveTokensAsync(userDB);
+            var jwtToken = CreateToken(userDB);
 
-            return new CustomResponses(true, $"Пользователь {userDB.Username} успешно авторизован.");
+            await GenerateAndSaveTokensAsync(userDB, jwtToken);
+
+            return new CustomAuthResponses(true, $"Пользователь {userDB.Username} успешно авторизован.", jwtToken);
         }
 
         public Task CheckTokens()
@@ -68,45 +69,42 @@ namespace Portal.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<CustomResponses> RegisterAsync(RegisterDTO request)
+        public async Task<CustomAuthResponses> RegisterAsync(RegisterDTO request)
         {
             if (request is null)
-                return new CustomResponses(false, $"Проверьте введённые данные.");
+                return new CustomAuthResponses(false, $"Проверьте введённые данные.");
 
             var userDB = await context.Users.AnyAsync(u => u.Username == request.Username);
             if (userDB)
-                return new CustomResponses(false, $"Пользователь *{request.Username}* уже зарегистрирован.");
+                return new CustomAuthResponses(false, $"Пользователь *{request.Username}* уже зарегистрирован.");
 
             var newUser = new User();
 
             newUser.Username = request.Username;
             newUser.Email = request.Email;
             newUser.PasswordHash = new PasswordHasher<User>().HashPassword(newUser, request.Password);
-            newUser.Role = request.Role;
 
             context.Users.Add(newUser);
             await context.SaveChangesAsync();
-            return new CustomResponses(true, $"Пользователь *{request.Username}* успешно зарегистрирован.");
+            return new CustomAuthResponses(true, $"Пользователь *{request.Username}* успешно зарегистрирован.");
         }
 
-        private async Task GenerateAndSaveTokensAsync(User user)
+        private async Task GenerateAndSaveTokensAsync(User user, string jwtToken)
         {
-            var refTokenDB = await context.UserTokens.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            var userTokens = await context.UserTokens.FirstOrDefaultAsync(t => t.UserId == user.Id);
 
-            if (refTokenDB != null)
+            if (userTokens != null)
             {
-                refTokenDB.RefToken = GenerateRefreshToken();
-                refTokenDB.DateTimeExpiredRef = DateTime.Now.AddDays(7);
+                userTokens.RefreshToken = GenerateRefreshToken();
+                userTokens.DateTimeExpiredToken = DateTime.Now.AddDays(7);
             }
             else
             {
                 var refreshToken = new UserToken()
                 {
                     UserId = user.Id,
-                    JWTToken = CreateToken(user),
-                    DateTimeExpiredJWT = DateTime.Now.AddDays(1),
-                    RefToken = GenerateRefreshToken(),
-                    DateTimeExpiredRef = DateTime.Now.AddDays(7)
+                    RefreshToken = GenerateRefreshToken(),
+                    DateTimeExpiredToken = DateTime.Now.AddDays(7)
                 };
                 context.UserTokens.Add(refreshToken);
             }
@@ -119,7 +117,6 @@ namespace Portal.Infrastructure.Repositories
             var claimsList = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var key = new SymmetricSecurityKey(
@@ -131,19 +128,23 @@ namespace Portal.Infrastructure.Repositories
                 issuer: "Turov Dairy Industrial Complex",
                 audience: "Employees Turov Dairy Industrial Complex",
                 claims: claimsList,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
-
         private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
+        }
+
+        public Task CheckTokens(LoginDTO request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

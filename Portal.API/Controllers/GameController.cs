@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
+using Portal.Domain.Entities;
 
 namespace Portal.API.Controllers
 {
@@ -35,6 +36,13 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> Add(GameDTO request)
         {
             var game = await gameService.AddGameAsync(request);
+            return Ok(game);
+        }
+
+        [HttpPut("edit")]
+        public async Task<IActionResult> Edit(Game request)
+        {
+            var game = await gameService.EditGameAsync(request);
             return Ok(game);
         }
     }

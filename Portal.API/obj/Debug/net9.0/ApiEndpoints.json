@@ -42,6 +42,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.GameController",
+    "Method": "Edit",
+    "RelativePath": "api/Game/edit",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Portal.Domain.Entities.Game",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.UserController",
     "Method": "Login",
     "RelativePath": "api/User/login",

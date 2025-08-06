@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Portal.WEB.Authentication
+@using Portal.WEB.Components.Pages.Authentication
+@using Portal.WEB.Components.Pages.Errors
+
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+                <NotAuthorized>
+                    @if (true) { }
+                    <Login />
+                </NotAuthorized>
+                <Authorizing>
+                    @if (true) { }
+                </Authorizing>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <StatusErrorsPage />
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

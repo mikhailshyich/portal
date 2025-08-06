@@ -1,0 +1,38 @@
+﻿@page "/games"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Portal.Domain.Entities
+@using Portal.WEB.Authentication
+@using Portal.WEB.Services
+@using System.Security.Principal
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager navigationManager
+@inject GameService gameService
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@* @attribute [StreamRendering] *@
+
+
+<h3>Games</h3>
+
+<AuthorizeView>
+    <Authorized>
+        @foreach (Game game in GamesList)
+        {
+            <a href="/edit/@game.Id"><p>@game.Name</p></a>
+        }
+    </Authorized>
+</AuthorizeView>
+
+
+
+
+@code {
+    public List<Game> GamesList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+        GamesList = await gameService.GetAllGamesAsync();
+    }
+}

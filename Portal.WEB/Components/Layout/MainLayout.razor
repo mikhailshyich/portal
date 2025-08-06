@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Portal.WEB.Authentication
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <div> @context.User.Identity?.Name!</div>
+                    <a href="/logout">Выйти</a>
+                </Authorized>
+                <NotAuthorized>
+                    <div>Не авторизован</div>
+                    <a href="/login">Войти</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code{
+    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
+
+    private ClaimsPrincipal user = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            user = (await AuthStat).User;
+            if (user.Identity is null || !user.Identity.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+        }
+    }
+}
+
+
