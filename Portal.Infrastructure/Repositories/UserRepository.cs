@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Portal.Domain.DTOs;
-using Portal.Domain.Entities;
+using Portal.Domain.Entities.Users;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
@@ -11,7 +10,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 
 namespace Portal.Infrastructure.Repositories
 {
@@ -22,26 +20,6 @@ namespace Portal.Infrastructure.Repositories
         public UserRepository(PortalDbContext context)
         {
             this.context = context;
-        }
-
-        public Task<List<User>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetByEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetByUsernameAsync(string username)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<CustomAuthResponses> LoginAsync(LoginDTO request)
@@ -56,17 +34,15 @@ namespace Portal.Infrastructure.Repositories
             if (new PasswordHasher<User>().VerifyHashedPassword(userDB, userDB.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
                 return new CustomAuthResponses(false, "Проверьте введённые данные.");
 
+            var userRole = await context.UserRoles.FirstOrDefaultAsync(r => r.Id == userDB.UserRoleId);
+
+            userDB.UserRole = userRole;
+
             var jwtToken = CreateToken(userDB);
 
             await GenerateAndSaveTokensAsync(userDB, jwtToken);
 
             return new CustomAuthResponses(true, $"Пользователь {userDB.Username} успешно авторизован.", jwtToken);
-        }
-
-        public Task CheckTokens()
-        {
-            //сделать метод для проверки токенов
-            throw new NotImplementedException();
         }
 
         public async Task<CustomAuthResponses> RegisterAsync(RegisterDTO request)
@@ -80,6 +56,7 @@ namespace Portal.Infrastructure.Repositories
 
             var newUser = new User();
 
+            newUser.UserRoleId = request.UserRoleId;
             newUser.Username = request.Username;
             newUser.Email = request.Email;
             newUser.PasswordHash = new PasswordHasher<User>().HashPassword(newUser, request.Password);
@@ -117,6 +94,7 @@ namespace Portal.Infrastructure.Repositories
             var claimsList = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.UserRole.Title)
             };
 
             var key = new SymmetricSecurityKey(
@@ -128,7 +106,7 @@ namespace Portal.Infrastructure.Repositories
                 issuer: "Turov Dairy Industrial Complex",
                 audience: "Employees Turov Dairy Industrial Complex",
                 claims: claimsList,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: credentials
             );
 
@@ -142,9 +120,26 @@ namespace Portal.Infrastructure.Repositories
             return Convert.ToBase64String(randomNumber);
         }
 
-        public Task CheckTokens(LoginDTO request)
+        public async Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request)
         {
-            throw new NotImplementedException();
+            if(request is null)
+                return new CustomGeneralResponses(false, "Проверьте правильность введённых данных.");
+
+            var roleTitle = request.Title.ToLower();
+            var result = await context.UserRoles.AnyAsync(r => r.Title == roleTitle);
+
+            if (result)
+                return new CustomGeneralResponses(false, "Такая роль уже существует.");
+
+            var userRole = new UserRole()
+            {
+                Title = roleTitle,
+                PublicTitle = request.PublicTitle,
+            };
+
+            context.UserRoles.Add(userRole);
+            await context.SaveChangesAsync();
+            return new CustomGeneralResponses(true, $"Роль {roleTitle} успешно создана.");
         }
     }
 }

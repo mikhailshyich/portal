@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
 
@@ -17,6 +18,7 @@ namespace Portal.API.Controllers
             this.userService = userService;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDTO request)
         {
@@ -32,13 +34,13 @@ namespace Portal.API.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginDTO request)
         {
             if (request is null)
-            {
-                return BadRequest("пользователь null");
-            }
+                return BadRequest("Заполните обязательные поля.");
+
             var user = await userService.LoginAsync(request);
             if (user is null)
             {
@@ -46,6 +48,18 @@ namespace Portal.API.Controllers
             }
 
             return Ok(user);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("addRole")]
+        public async Task<ActionResult> AddUserRole(UserRoleDTO request)
+        {
+            if (request is null)
+                return BadRequest("Заполните обязательные поля.");
+
+            var role = await userService.AddRoleAsync(request);
+
+            return Ok(role);
         }
     }
 }

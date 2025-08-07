@@ -1,5 +1,4 @@
 ﻿using Portal.Domain.DTOs;
-using Portal.Domain.Entities;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 
@@ -14,29 +13,9 @@ namespace Portal.Application.Services
             this.userInterface = userInterface;
         }
 
-        public Task CheckTokens(LoginDTO request)
+        public async Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<User>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetByEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetByUsernameAsync(string username)
-        {
-            throw new NotImplementedException();
+            return await userInterface.AddRoleAsync(request);
         }
 
         public async Task<CustomAuthResponses> LoginAsync(LoginDTO request)

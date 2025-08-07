@@ -1,5 +1,4 @@
 ﻿using Portal.Domain.DTOs;
-using Portal.Domain.Entities;
 using Portal.Domain.Responses;
 
 namespace Portal.Application.Services
@@ -12,6 +11,7 @@ namespace Portal.Application.Services
         //Task<User> GetByUsernameAsync(string username);
         Task<CustomAuthResponses> RegisterAsync(RegisterDTO request);
         Task<CustomAuthResponses> LoginAsync(LoginDTO request);
-        Task CheckTokens(LoginDTO request);
+        Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request);
+        //Task CheckTokens(LoginDTO request);
     }
 }

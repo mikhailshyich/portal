@@ -59,6 +59,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.UserController",
+    "Method": "AddUserRole",
+    "RelativePath": "api/User/addRole",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Portal.Domain.DTOs.UserRoleDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UserController",
     "Method": "Login",
     "RelativePath": "api/User/login",
     "HttpMethod": "POST",

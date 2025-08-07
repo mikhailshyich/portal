@@ -32,7 +32,6 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("add")]
-        [Authorize(Roles = "asd")]
         public async Task<IActionResult> Add(GameDTO request)
         {
             var game = await gameService.AddGameAsync(request);
