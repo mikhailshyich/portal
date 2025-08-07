@@ -58,6 +58,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.MainWarehouseController",
+    "Method": "Add",
+    "RelativePath": "api/MainWarehouse/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Portal.Domain.DTOs.MainWarehouseDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.UserController",
     "Method": "AddUserRole",
     "RelativePath": "api/User/addRole",

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portal.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Portal.Infrastructure.Data;
 namespace Portal.Infrastructure.Migrations
 {
     [DbContext(typeof(PortalDbContext))]
-    partial class PortalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250807124952_AddDepartmens")]
+    partial class AddDepartmens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,9 +157,6 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<Guid>("UserRoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserTokenId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -166,8 +166,6 @@ namespace Portal.Infrastructure.Migrations
                     b.HasIndex("UserDepartmentId");
 
                     b.HasIndex("UserRoleId");
-
-                    b.HasIndex("UserTokenId");
 
                     b.ToTable("Users");
 
@@ -340,10 +338,6 @@ namespace Portal.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Portal.Domain.Entities.Users.UserToken", null)
-                        .WithMany("Users")
-                        .HasForeignKey("UserTokenId");
-
                     b.Navigation("UserDepartment");
 
                     b.Navigation("UserRole");
@@ -389,11 +383,6 @@ namespace Portal.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.UserRole", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Portal.Domain.Entities.Users.UserToken", b =>
                 {
                     b.Navigation("Users");
                 });

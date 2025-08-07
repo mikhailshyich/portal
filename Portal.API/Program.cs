@@ -23,6 +23,9 @@ builder.Services.AddScoped<IGame, GameRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserApp, UserRepository>();
 
+builder.Services.AddScoped<IMainWarehouse, MainWarehouseService>();
+builder.Services.AddScoped<IMainWarehouseDomain, MainWarehouseRepository>();
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
