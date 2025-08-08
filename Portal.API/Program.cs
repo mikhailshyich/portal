@@ -26,6 +26,9 @@ builder.Services.AddScoped<IUserApp, UserRepository>();
 builder.Services.AddScoped<IMainWarehouse, MainWarehouseService>();
 builder.Services.AddScoped<IMainWarehouseDomain, MainWarehouseRepository>();
 
+builder.Services.AddScoped<IUserDepartment, UserDepartmentService>();
+builder.Services.AddScoped<IUserDepartmentDomain, UserDepartmentRepository>();
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

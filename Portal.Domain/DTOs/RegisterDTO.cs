@@ -5,6 +5,7 @@ namespace Portal.Domain.DTOs
     public class RegisterDTO
     {
         public Guid UserRoleId { get; set; }
+        public Guid UserDepartmentId { get; set; }
         [Required]
         public string Username { get; set; } = string.Empty;
         [DataType(DataType.EmailAddress)]

@@ -120,5 +120,79 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UserDepartmentController",
+    "Method": "GetById",
+    "RelativePath": "api/UserDepartment/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UserDepartmentController",
+    "Method": "Add",
+    "RelativePath": "api/UserDepartment/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Portal.Domain.DTOs.UserDepartmentDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UserDepartmentController",
+    "Method": "GetAll",
+    "RelativePath": "api/UserDepartment/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UserDepartmentController",
+    "Method": "Delete",
+    "RelativePath": "api/UserDepartment/delete",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UserDepartmentController",
+    "Method": "Update",
+    "RelativePath": "api/UserDepartment/update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Portal.Domain.Entities.Users.UserDepartment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

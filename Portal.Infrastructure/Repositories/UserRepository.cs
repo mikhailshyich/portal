@@ -56,6 +56,7 @@ namespace Portal.Infrastructure.Repositories
 
             var newUser = new User();
 
+            newUser.UserDepartmentId = request.UserDepartmentId;
             newUser.UserRoleId = request.UserRoleId;
             newUser.Username = request.Username;
             newUser.Email = request.Email;
