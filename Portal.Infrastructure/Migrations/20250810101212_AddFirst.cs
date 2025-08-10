@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Portal.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDepartmens : Migration
+    public partial class AddFirst : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -99,34 +99,6 @@ namespace Portal.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserDepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_UserDepartments_UserDepartmentId",
-                        column: x => x.UserDepartmentId,
-                        principalTable: "UserDepartments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_UserRoles_UserRoleId",
-                        column: x => x.UserRoleId,
-                        principalTable: "UserRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Hardwares",
                 columns: table => new
                 {
@@ -136,6 +108,7 @@ namespace Portal.Infrastructure.Migrations
                     DocumentExternalSystemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Count = table.Column<int>(type: "int", nullable: false),
                     InventoryNumberExternalSystem = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TTN = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateTimeAdd = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -162,6 +135,54 @@ namespace Portal.Infrastructure.Migrations
                         name: "FK_Hardwares_MainWarehouses_MainWarehouseId",
                         column: x => x.MainWarehouseId,
                         principalTable: "MainWarehouses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserDepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserTokenId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_UserDepartments_UserDepartmentId",
+                        column: x => x.UserDepartmentId,
+                        principalTable: "UserDepartments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_UserRoles_UserRoleId",
+                        column: x => x.UserRoleId,
+                        principalTable: "UserRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UsersHardware",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HardwareId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersHardware", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UsersHardware_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -202,11 +223,11 @@ namespace Portal.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "PasswordHash", "UserDepartmentId", "UserRoleId", "Username" },
+                columns: new[] { "Id", "Email", "PasswordHash", "UserDepartmentId", "UserRoleId", "UserTokenId", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("d7fa6b79-cf3b-442e-37e6-08ddd5a32cac"), "user@user.by", "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==", new Guid("d7fa6b79-cf7b-442e-32e6-08ddd5a32cac"), new Guid("d7fa6b79-cf7b-442e-37e6-08ddd5a32cac"), "user" },
-                    { new Guid("f29533dd-9a3c-4889-d468-08ddd5a47b7a"), "admin@admin.by", "AQAAAAIAAYagAAAAEEnHKp66I1iY4a6WutPESx3dIQF0V/ITse74a7euQmBiSo8E516lhTSbFbEqJVAKQw==", new Guid("d7fa6b79-cf7b-442e-32e6-08ddd5a32cac"), new Guid("f29533dd-9a3c-4899-d468-08ddd5a47b7a"), "admin" }
+                    { new Guid("d7fa6b79-cf3b-442e-37e6-08ddd5a32cac"), "user@user.by", "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==", new Guid("d7fa6b79-cf7b-442e-32e6-08ddd5a32cac"), new Guid("d7fa6b79-cf7b-442e-37e6-08ddd5a32cac"), null, "user" },
+                    { new Guid("f29533dd-9a3c-4889-d468-08ddd5a47b7a"), "admin@admin.by", "AQAAAAIAAYagAAAAEEnHKp66I1iY4a6WutPESx3dIQF0V/ITse74a7euQmBiSo8E516lhTSbFbEqJVAKQw==", new Guid("d7fa6b79-cf7b-442e-32e6-08ddd5a32cac"), new Guid("f29533dd-9a3c-4899-d468-08ddd5a47b7a"), null, "admin" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -240,14 +261,43 @@ namespace Portal.Infrastructure.Migrations
                 column: "UserRoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_UserTokenId",
+                table: "Users",
+                column: "UserTokenId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersHardware_UserId",
+                table: "UsersHardware",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserTokens_UserId",
                 table: "UserTokens",
                 column: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_UserTokens_UserTokenId",
+                table: "Users",
+                column: "UserTokenId",
+                principalTable: "UserTokens",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Users_UserDepartments_UserDepartmentId",
+                table: "Users");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Users_UserRoles_UserRoleId",
+                table: "Users");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Users_UserTokens_UserTokenId",
+                table: "Users");
+
             migrationBuilder.DropTable(
                 name: "Games");
 
@@ -255,7 +305,7 @@ namespace Portal.Infrastructure.Migrations
                 name: "Hardwares");
 
             migrationBuilder.DropTable(
-                name: "UserTokens");
+                name: "UsersHardware");
 
             migrationBuilder.DropTable(
                 name: "CategoriesHardware");
@@ -267,13 +317,16 @@ namespace Portal.Infrastructure.Migrations
                 name: "MainWarehouses");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "UserDepartments");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

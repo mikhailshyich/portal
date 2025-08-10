@@ -12,8 +12,8 @@ using Portal.Infrastructure.Data;
 namespace Portal.Infrastructure.Migrations
 {
     [DbContext(typeof(PortalDbContext))]
-    [Migration("20250807124952_AddDepartmens")]
-    partial class AddDepartmens
+    [Migration("20250810115326_UserWarehouse")]
+    partial class UserWarehouse
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,9 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<Guid>("CategoryHardwareId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateTimeAdd")
                         .HasColumnType("datetime2");
 
@@ -126,6 +129,9 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryHardwareId");
@@ -134,7 +140,26 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("MainWarehouseId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Hardwares.UserHardware", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("HardwareId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsersHardware");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
@@ -157,6 +182,9 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<Guid>("UserRoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserTokenId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -166,6 +194,8 @@ namespace Portal.Infrastructure.Migrations
                     b.HasIndex("UserDepartmentId");
 
                     b.HasIndex("UserRoleId");
+
+                    b.HasIndex("UserTokenId");
 
                     b.ToTable("Users");
 
@@ -297,6 +327,26 @@ namespace Portal.Infrastructure.Migrations
                     b.ToTable("MainWarehouses");
                 });
 
+            modelBuilder.Entity("Portal.Domain.Entities.Warehouses.UserWarehouse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserWarehouses");
+                });
+
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.Hardware", b =>
                 {
                     b.HasOne("Portal.Domain.Entities.Hardwares.CategoryHardware", "CategoryHardware")
@@ -317,11 +367,17 @@ namespace Portal.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Portal.Domain.Entities.Users.User", "User")
+                        .WithMany("Hardwares")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("CategoryHardware");
 
                     b.Navigation("DocumentExternalSystem");
 
                     b.Navigation("MainWarehouse");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
@@ -337,6 +393,10 @@ namespace Portal.Infrastructure.Migrations
                         .HasForeignKey("UserRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Portal.Domain.Entities.Users.UserToken", null)
+                        .WithMany("Users")
+                        .HasForeignKey("UserTokenId");
 
                     b.Navigation("UserDepartment");
 
@@ -365,12 +425,28 @@ namespace Portal.Infrastructure.Migrations
                     b.Navigation("UserDepartment");
                 });
 
+            modelBuilder.Entity("Portal.Domain.Entities.Warehouses.UserWarehouse", b =>
+                {
+                    b.HasOne("Portal.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.CategoryHardware", b =>
                 {
                     b.Navigation("Hardwares");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.DocumentExternalSystem", b =>
+                {
+                    b.Navigation("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
                 {
                     b.Navigation("Hardwares");
                 });
@@ -383,6 +459,11 @@ namespace Portal.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.UserRole", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Users.UserToken", b =>
                 {
                     b.Navigation("Users");
                 });

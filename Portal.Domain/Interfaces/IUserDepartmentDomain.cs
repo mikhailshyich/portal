@@ -8,8 +8,8 @@ namespace Portal.Domain.Interfaces
     {
         Task<CustomGeneralResponses> AddAsync(UserDepartmentDTO request);
         Task<CustomGeneralResponses> UpdateAsync(UserDepartment request);
-        Task<CustomGeneralResponses> DeleteAsync(Guid Id);
+        Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<UserDepartment>> GetAllAsync();
-        Task<CustomGeneralResponses> GetByIdAsync(Guid Id);
+        Task<CustomGeneralResponses> GetByIdAsync(Guid id);
     }
 }

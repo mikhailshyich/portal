@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Portal.Infrastructure.Repositories
 {
-    public class UserRepository : IUserApp
+    public class UserRepository : IUserDomain
     {
         private readonly PortalDbContext context;
 
@@ -141,6 +141,33 @@ namespace Portal.Infrastructure.Repositories
             context.UserRoles.Add(userRole);
             await context.SaveChangesAsync();
             return new CustomGeneralResponses(true, $"Роль {roleTitle} успешно создана.");
+        }
+
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await context.Users.ToListAsync();
+        }
+
+        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        {
+            if (id == Guid.Empty) return new CustomGeneralResponses(false, "Guid не может быть пустым.");
+
+            var user = await context.Users.FindAsync(id);
+            if (user is null) return new CustomGeneralResponses(false, "Пользователь не найден.");
+
+            var userRole = await context.UserRoles.FindAsync(user.UserRoleId);
+            if (userRole != null)
+                user.UserRole = userRole;
+
+            var userDepartment = await context.UserDepartments.FindAsync(user.UserDepartmentId);
+            if (userDepartment != null)
+                user.UserDepartment = userDepartment;
+
+            var userWarehouse = context.UserWarehouses.Where(w => w.UserId == user.Id).ToList();
+            if (userWarehouse != null)
+                user.UserWarehouses = userWarehouse;
+
+            return new CustomGeneralResponses(true, "Пользователь успешно найден.", user);
         }
     }
 }

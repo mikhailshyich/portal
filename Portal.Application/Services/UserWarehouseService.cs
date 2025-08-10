@@ -1,0 +1,47 @@
+﻿using Portal.Domain.DTOs;
+using Portal.Domain.Entities.Warehouses;
+using Portal.Domain.Interfaces;
+using Portal.Domain.Responses;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Portal.Application.Services
+{
+    public class UserWarehouseService : IUserWarehouse
+    {
+        private readonly IUserWarehouseDomain userWarehouseDomain;
+
+        public UserWarehouseService(IUserWarehouseDomain userWarehouseDomain)
+        {
+            this.userWarehouseDomain = userWarehouseDomain;
+        }
+
+        public async Task<CustomGeneralResponses> AddAsync(UserWarehouseDTO request)
+        {
+            return await userWarehouseDomain.AddAsync(request);
+        }
+
+        public Task<CustomGeneralResponses> DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<UserWarehouse>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CustomGeneralResponses> UpdateAsync(UserWarehouse request)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

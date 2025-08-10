@@ -88,6 +88,9 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<Guid>("CategoryHardwareId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateTimeAdd")
                         .HasColumnType("datetime2");
 
@@ -123,6 +126,12 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UserWarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryHardwareId");
@@ -131,7 +140,28 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("MainWarehouseId");
 
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserWarehouseId");
+
                     b.ToTable("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Hardwares.UserHardware", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("HardwareId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsersHardware");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
@@ -299,6 +329,26 @@ namespace Portal.Infrastructure.Migrations
                     b.ToTable("MainWarehouses");
                 });
 
+            modelBuilder.Entity("Portal.Domain.Entities.Warehouses.UserWarehouse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserWarehouses");
+                });
+
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.Hardware", b =>
                 {
                     b.HasOne("Portal.Domain.Entities.Hardwares.CategoryHardware", "CategoryHardware")
@@ -319,11 +369,21 @@ namespace Portal.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Portal.Domain.Entities.Users.User", "User")
+                        .WithMany("Hardwares")
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("Portal.Domain.Entities.Warehouses.UserWarehouse", null)
+                        .WithMany("Hardwares")
+                        .HasForeignKey("UserWarehouseId");
+
                     b.Navigation("CategoryHardware");
 
                     b.Navigation("DocumentExternalSystem");
 
                     b.Navigation("MainWarehouse");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
@@ -371,6 +431,17 @@ namespace Portal.Infrastructure.Migrations
                     b.Navigation("UserDepartment");
                 });
 
+            modelBuilder.Entity("Portal.Domain.Entities.Warehouses.UserWarehouse", b =>
+                {
+                    b.HasOne("Portal.Domain.Entities.Users.User", "User")
+                        .WithMany("UserWarehouses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.CategoryHardware", b =>
                 {
                     b.Navigation("Hardwares");
@@ -379,6 +450,13 @@ namespace Portal.Infrastructure.Migrations
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.DocumentExternalSystem", b =>
                 {
                     b.Navigation("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
+                {
+                    b.Navigation("Hardwares");
+
+                    b.Navigation("UserWarehouses");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.UserDepartment", b =>
@@ -399,6 +477,11 @@ namespace Portal.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Warehouses.MainWarehouse", b =>
+                {
+                    b.Navigation("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Warehouses.UserWarehouse", b =>
                 {
                     b.Navigation("Hardwares");
                 });

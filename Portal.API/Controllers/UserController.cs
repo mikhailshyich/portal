@@ -61,5 +61,19 @@ namespace Portal.API.Controllers
 
             return Ok(role);
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> AllUsers()
+        {
+            var result = await userService.GetAllAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await userService.GetByIdAsync(id);
+            return Ok(result);
+        }
     }
 }

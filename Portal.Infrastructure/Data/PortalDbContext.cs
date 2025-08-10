@@ -8,7 +8,9 @@ namespace Portal.Infrastructure.Data
 {
     public class PortalDbContext : DbContext
     {
-        public PortalDbContext(DbContextOptions<PortalDbContext> options) : base(options) { }
+        public PortalDbContext(DbContextOptions<PortalDbContext> options) : base(options) { 
+            //Database.EnsureCreated();
+            }
 
         public DbSet<Game> Games { get; set; }
         public DbSet<User> Users { get; set; }
@@ -19,6 +21,8 @@ namespace Portal.Infrastructure.Data
         public DbSet<Hardware> Hardwares { get; set; }
         public DbSet<CategoryHardware> CategoriesHardware { get; set; }
         public DbSet<DocumentExternalSystem> DocumentsExternalSystem { get; set; }
+        public DbSet<UserHardware> UsersHardware { get; set; }
+        public DbSet<UserWarehouse> UserWarehouses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

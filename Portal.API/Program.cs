@@ -7,6 +7,7 @@ using Portal.Infrastructure.Data;
 using Portal.Infrastructure.Repositories;
 using Scalar.AspNetCore;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,18 +17,34 @@ builder.Services.AddDbContext<PortalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ??
         throw new InvalidOperationException("Строка подключения к БД не найдена"));
 });
+builder.Services.AddControllersWithViews()
+                .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IGame, GameRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserApp, UserRepository>();
+builder.Services.AddScoped<IUserDomain, UserRepository>();
 
 builder.Services.AddScoped<IMainWarehouse, MainWarehouseService>();
 builder.Services.AddScoped<IMainWarehouseDomain, MainWarehouseRepository>();
 
 builder.Services.AddScoped<IUserDepartment, UserDepartmentService>();
 builder.Services.AddScoped<IUserDepartmentDomain, UserDepartmentRepository>();
+
+builder.Services.AddScoped<IHardware, HardwareService>();
+builder.Services.AddScoped<IHardwareDomain, HardwareRepository>();
+
+builder.Services.AddScoped<IDocumentExternalSystem, DocumentExternalSystemService>();
+builder.Services.AddScoped<IDocumentExternalSystemDomain, DocumentExternalSystemRepository>();
+
+builder.Services.AddScoped<ICategoryHardware, CategoryHardwareService>();
+builder.Services.AddScoped<ICategoryHardwareDomain, CategoryHardwareRepository>();
+
+builder.Services.AddScoped<IUserWarehouse, UserWarehouseService>();
+builder.Services.AddScoped<IUserWarehouseDomain, UserWarehouseRepositiry>();
+
+
 
 builder.Services.AddAuthentication(x =>
 {
