@@ -16,7 +16,6 @@ namespace Portal.API.Controllers
             this.mainWarehouseService = mainWarehouseService;
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPost("add")]
         public async Task<IActionResult> Add(MainWarehouseDTO request)
         {

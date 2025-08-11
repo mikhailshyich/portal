@@ -174,7 +174,19 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Patronymic")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -206,7 +218,10 @@ namespace Portal.Infrastructure.Migrations
                         {
                             Id = new Guid("f29533dd-9a3c-4889-d468-08ddd5a47b7a"),
                             Email = "admin@admin.by",
+                            FirstName = "",
+                            LastName = "",
                             PasswordHash = "AQAAAAIAAYagAAAAEEnHKp66I1iY4a6WutPESx3dIQF0V/ITse74a7euQmBiSo8E516lhTSbFbEqJVAKQw==",
+                            Patronymic = "",
                             UserDepartmentId = new Guid("d7fa6b79-cf7b-442e-32e6-08ddd5a32cac"),
                             UserRoleId = new Guid("f29533dd-9a3c-4899-d468-08ddd5a47b7a"),
                             Username = "admin"
@@ -215,7 +230,10 @@ namespace Portal.Infrastructure.Migrations
                         {
                             Id = new Guid("d7fa6b79-cf3b-442e-37e6-08ddd5a32cac"),
                             Email = "user@user.by",
+                            FirstName = "",
+                            LastName = "",
                             PasswordHash = "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==",
+                            Patronymic = "",
                             UserDepartmentId = new Guid("d7fa6b79-cf7b-442e-32e6-08ddd5a32cac"),
                             UserRoleId = new Guid("d7fa6b79-cf7b-442e-37e6-08ddd5a32cac"),
                             Username = "user"
@@ -327,6 +345,15 @@ namespace Portal.Infrastructure.Migrations
                     b.HasIndex("UserDepartmentId");
 
                     b.ToTable("MainWarehouses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c9006a11-ac35-4df9-0c93-08ddd89f84c8"),
+                            Description = "",
+                            Title = "Основной склад",
+                            UserDepartmentId = new Guid("d7fa6b79-cf7b-442e-32e6-08ddd5a32cac")
+                        });
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Warehouses.UserWarehouse", b =>
@@ -347,6 +374,20 @@ namespace Portal.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserWarehouses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0588a0e8-fdc8-4310-1850-08ddd8a42ead"),
+                            Title = "Склад пользователя по умолчанию",
+                            UserId = new Guid("f29533dd-9a3c-4889-d468-08ddd5a47b7a")
+                        },
+                        new
+                        {
+                            Id = new Guid("0588a0e8-fdc8-4317-1850-08ddd8a42ead"),
+                            Title = "Склад пользователя по умолчанию",
+                            UserId = new Guid("d7fa6b79-cf3b-442e-37e6-08ddd5a32cac")
+                        });
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.Hardware", b =>
@@ -370,10 +411,10 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Portal.Domain.Entities.Users.User", "User")
-                        .WithMany("Hardwares")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.HasOne("Portal.Domain.Entities.Warehouses.UserWarehouse", null)
+                    b.HasOne("Portal.Domain.Entities.Warehouses.UserWarehouse", "UserWarehouse")
                         .WithMany("Hardwares")
                         .HasForeignKey("UserWarehouseId");
 
@@ -384,6 +425,8 @@ namespace Portal.Infrastructure.Migrations
                     b.Navigation("MainWarehouse");
 
                     b.Navigation("User");
+
+                    b.Navigation("UserWarehouse");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
@@ -454,8 +497,6 @@ namespace Portal.Infrastructure.Migrations
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
                 {
-                    b.Navigation("Hardwares");
-
                     b.Navigation("UserWarehouses");
                 });
 

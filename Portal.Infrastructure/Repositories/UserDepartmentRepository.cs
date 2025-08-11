@@ -58,6 +58,18 @@ namespace Portal.Infrastructure.Repositories
             var department = await context.UserDepartments.FindAsync(id);
             if (department is null) return new CustomGeneralResponses(false, "Отдел не найден.");
 
+            var users = context.Users.Where(d => d.UserDepartmentId == department.Id).ToList();
+            if (users != null)
+            {
+                department.Users = users;
+            }
+
+            var mainWarehouse = context.MainWarehouses.Where(m => m.UserDepartmentId == department.Id).ToList();
+            if(mainWarehouse != null)
+            {
+                department.MainWarehouses = mainWarehouse;
+            }
+
             return new CustomGeneralResponses(true, "Департамент успешно найден.", department);
         }
 

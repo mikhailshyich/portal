@@ -206,6 +206,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.UserController",
+    "Method": "GetAllRoles",
+    "RelativePath": "api/User/roles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.UserDepartmentController",
     "Method": "GetById",
     "RelativePath": "api/UserDepartment/{id}",

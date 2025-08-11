@@ -45,26 +45,31 @@ namespace Portal.Infrastructure.Repositories
             return new CustomAuthResponses(true, $"Пользователь {userDB.Username} успешно авторизован.", jwtToken);
         }
 
-        public async Task<CustomAuthResponses> RegisterAsync(RegisterDTO request)
+        public async Task<CustomGeneralResponses> RegisterAsync(RegisterDTO request)
         {
             if (request is null)
-                return new CustomAuthResponses(false, $"Проверьте введённые данные.");
+                return new CustomGeneralResponses(false, "Передаваемый объект равен null.");
 
             var userDB = await context.Users.AnyAsync(u => u.Username == request.Username);
             if (userDB)
-                return new CustomAuthResponses(false, $"Пользователь *{request.Username}* уже зарегистрирован.");
+                return new CustomGeneralResponses(false, "Такой пользователь уже зарегистрирован.");
 
-            var newUser = new User();
+            var newUser = new User()
+            {
+                UserDepartmentId = request.UserDepartmentId,
+                UserRoleId = request.UserRoleId,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Patronymic = request.Patronymic,
+                Username = request.Username,
+                Email = request.Email,
+            };
 
-            newUser.UserDepartmentId = request.UserDepartmentId;
-            newUser.UserRoleId = request.UserRoleId;
-            newUser.Username = request.Username;
-            newUser.Email = request.Email;
             newUser.PasswordHash = new PasswordHasher<User>().HashPassword(newUser, request.Password);
 
             context.Users.Add(newUser);
             await context.SaveChangesAsync();
-            return new CustomAuthResponses(true, $"Пользователь *{request.Username}* успешно зарегистрирован.");
+            return new CustomGeneralResponses(true, "Пользователь успешно добавлен.", newUser);
         }
 
         private async Task GenerateAndSaveTokensAsync(User user, string jwtToken)
@@ -107,7 +112,7 @@ namespace Portal.Infrastructure.Repositories
                 issuer: "Turov Dairy Industrial Complex",
                 audience: "Employees Turov Dairy Industrial Complex",
                 claims: claimsList,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddDays(15),
                 signingCredentials: credentials
             );
 
@@ -148,12 +153,12 @@ namespace Portal.Infrastructure.Repositories
             return await context.Users.ToListAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
-            if (id == Guid.Empty) return new CustomGeneralResponses(false, "Guid не может быть пустым.");
+            if (id == Guid.Empty) return null!;
 
             var user = await context.Users.FindAsync(id);
-            if (user is null) return new CustomGeneralResponses(false, "Пользователь не найден.");
+            if (user is null) return null!;
 
             var userRole = await context.UserRoles.FindAsync(user.UserRoleId);
             if (userRole != null)
@@ -167,7 +172,12 @@ namespace Portal.Infrastructure.Repositories
             if (userWarehouse != null)
                 user.UserWarehouses = userWarehouse;
 
-            return new CustomGeneralResponses(true, "Пользователь успешно найден.", user);
+            return user;
+        }
+
+        public async Task<List<UserRole>> GetAllUserRolesAsync()
+        {
+            return await context.UserRoles.ToListAsync();
         }
     }
 }

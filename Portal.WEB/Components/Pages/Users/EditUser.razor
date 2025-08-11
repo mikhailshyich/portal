@@ -1,0 +1,16 @@
+﻿@page "/user/{Id:guid}"
+@inject UserServiceWEB userService
+<h3>@User.LastName @User.FirstName</h3>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private User User = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await userService.GetByIdAsync(Id);
+        User = user;
+    }
+}

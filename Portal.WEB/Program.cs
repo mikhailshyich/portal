@@ -41,6 +41,8 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<UserServiceWEB>();
+builder.Services.AddScoped<UserDepartmentServiceWEB>();
 
 var app = builder.Build();
 

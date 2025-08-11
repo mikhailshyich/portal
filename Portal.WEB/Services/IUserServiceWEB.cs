@@ -2,9 +2,9 @@
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Responses;
 
-namespace Portal.Domain.Interfaces
+namespace Portal.WEB.Services
 {
-    public interface IUserDomain
+    public interface IUserServiceWEB
     {
         Task<List<User>> GetAllAsync();
         Task<User> GetByIdAsync(Guid id);

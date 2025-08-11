@@ -6,7 +6,6 @@ using Portal.Domain.Entities.Users;
 
 namespace Portal.API.Controllers
 {
-    [Authorize(Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserDepartmentController : ControllerBase

@@ -19,12 +19,17 @@ namespace Portal.Application.Services
             return await userInterface.AddRoleAsync(request);
         }
 
+        public async Task<List<UserRole>> GetAllUserRolesAsync()
+        {
+            return await userInterface.GetAllUserRolesAsync();
+        }
+
         public async Task<List<User>> GetAllAsync()
         {
             return await userInterface.GetAllAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
             return await userInterface.GetByIdAsync(id);
         }
@@ -34,7 +39,7 @@ namespace Portal.Application.Services
             return await userInterface.LoginAsync(request);
         }
 
-        public async Task<CustomAuthResponses> RegisterAsync(RegisterDTO request)
+        public async Task<CustomGeneralResponses> RegisterAsync(RegisterDTO request)
         {
             return await userInterface.RegisterAsync(request);
         }

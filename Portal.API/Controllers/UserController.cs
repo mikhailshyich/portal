@@ -18,19 +18,10 @@ namespace Portal.API.Controllers
             this.userService = userService;
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDTO request)
         {
-            if (request is null)
-            {
-                return BadRequest("пользователь null");
-            }
             var user = await userService.RegisterAsync(request);
-            if (user.Flag == false)
-            {
-                return BadRequest(user);
-            }
             return Ok(user);
         }
 
@@ -50,7 +41,6 @@ namespace Portal.API.Controllers
             return Ok(user);
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPost("addRole")]
         public async Task<ActionResult> AddUserRole(UserRoleDTO request)
         {
@@ -73,6 +63,13 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await userService.GetByIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpGet("roles")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var result = await userService.GetAllUserRolesAsync();
             return Ok(result);
         }
     }
