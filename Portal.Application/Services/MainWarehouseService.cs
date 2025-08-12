@@ -1,6 +1,7 @@
 ﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
+using Portal.Domain.Responses;
 
 namespace Portal.Application.Services
 {
@@ -12,7 +13,7 @@ namespace Portal.Application.Services
             this.mainWarehouseDomainInterface = mainWarehouseDomainInterface;
         }
 
-        public async Task<MainWarehouse> AddAsync(MainWarehouseDTO request)
+        public async Task<CustomGeneralResponses> AddAsync(MainWarehouseDTO request)
         {
             return await mainWarehouseDomainInterface.AddAsync(request);
         }
@@ -22,9 +23,9 @@ namespace Portal.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<MainWarehouse>> GetAllAsync()
+        public async Task<List<MainWarehouse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await mainWarehouseDomainInterface.GetAllAsync();
         }
 
         public Task<MainWarehouse> GetByIdAsync(Guid id)

@@ -1,0 +1,104 @@
+﻿@page "/documents"
+
+@inject AuthenticationStateProvider AuthStateProvider
+@inject DocumentExternalSystemServiceWEB DocumentExternalSystem
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <div class="row mb-2 text-center">
+                <div class="col"><h3>Документы внешних учётных систем</h3></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDocument">+</button>
+                </div>
+            </div>
+            <div class="row" style="overflow: scroll;">
+                <QuickGrid Items="DocumentsExternal.AsQueryable()">
+                    <PropertyColumn Property="@(p => p.Title)" Title="Полное наименование" Sortable="true" />
+                    <PropertyColumn Property="@(p => p.ShortTitle)" Title="Краткое наименование" Sortable="true" />
+                </QuickGrid>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="addDocument" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addDocumentTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addDocumentTitle">Новый документ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <EditForm Model="documentExternalDTO" FormName="AddDocument" Context="AddDocument" OnValidSubmit="AddDocument">
+                            <div class="modal-body">
+                                <DataAnnotationsValidator />
+
+                                <!-- Alert -->
+                                <div class="alert @ClassesAlert" role="alert">
+                                    @ResponseMessage
+                                </div>
+                                <!-- End alert -->
+
+                                <div class="form-group">
+                                    <label for="title">Полное наименование</label>
+                                    <InputText id="title" class="form-control" @bind-Value="documentExternalDTO.Title" />
+                                    <ValidationMessage For="@(() => documentExternalDTO.Title)" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="shorttitle">Краткое наименование</label>
+                                    <InputText id="shorttitle" class="form-control" @bind-Value="documentExternalDTO.ShortTitle" />
+                                    <ValidationMessage For="@(() => documentExternalDTO.ShortTitle)" />
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                                <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal -->
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Не авторизован.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private DocumentExternalSystemDTO documentExternalDTO = new();
+    private List<DocumentExternalSystem> DocumentsExternal = new();
+    private string ResponseMessage = string.Empty;
+    private string ClassesAlert = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            DocumentsExternal = await DocumentExternalSystem.GetAllAsync();
+        }
+        catch (Exception ex) { }
+    }
+
+    private async Task AddDocument()
+    {
+        var response = await DocumentExternalSystem.AddAsync(documentExternalDTO);
+        if (!response.Flag)
+        {
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-warning";
+        }
+        else
+        {
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-success";
+            documentExternalDTO = new();
+            DocumentsExternal = await DocumentExternalSystem.GetAllAsync();
+        }
+    }
+}

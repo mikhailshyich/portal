@@ -4,7 +4,7 @@ namespace Portal.Domain.DTOs
 {
     public class DocumentExternalSystemDTO
     {
-        [Required]
+        [Required(ErrorMessage = "Обязательно для заполнения")]
         public string Title { get; set; } = string.Empty;
         public string ShortTitle { get; set; } = string.Empty;
     }

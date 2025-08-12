@@ -1,0 +1,131 @@
+﻿@page "/main-warehouses"
+
+@inject AuthenticationStateProvider AuthStateProvider
+@inject MainWarehouseServiceWEB MainWarehouseService
+@inject UserDepartmentServiceWEB userDepartment
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            @if(MainWarehouses.Count != 0)
+            {
+                <div class="row mb-2 text-center">
+                    <div class="col"><h3>Основные склады (по подразделениям)</h3></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+</b></button>
+                    </div>
+                </div>
+                <div class="row" style="overflow: scroll;">
+                    <QuickGrid Items="MainWarehouses.AsQueryable()">
+                        <PropertyColumn Property="@(p => p.Title)" Title="Наименование склада" Sortable="true" />
+                        <PropertyColumn Property="@(p => p.UserDepartment!.Title)" Title="Наименование подразделения" Sortable="true" />
+                        <PropertyColumn Property="@(p => p.Description)" Title="Описание" />
+                    </QuickGrid>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="addMainwarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addMainwarehouseTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addMainwarehouseTitle">Новый склад для подразделения</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <EditForm Model="mainWarehouseDTO" FormName="AddMainwarehouse" Context="AddMainwarehouse" OnValidSubmit="AddMainwarehouse">
+                                <div class="modal-body">
+                                    <DataAnnotationsValidator />
+
+                                    <!-- Alert -->
+                                    <div class="alert @ClassesAlert" role="alert">
+                                        @ResponseMessage
+                                    </div>
+                                    <!-- End alert -->
+
+                                    <div class="form-group">
+                                        <label for="userdepartment">Подразделение</label>
+                                        <InputSelect id="userdepartment" class="form-control" @bind-Value="mainWarehouseDTO.UserDepartmentId">
+                                            <option value="">Выберите подразделение пользователя</option>
+                                            @foreach (UserDepartment department in UserDepartments)
+                                            {
+                                                <option value="@department.Id">@department.Title</option>
+                                            }
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => mainWarehouseDTO.UserDepartmentId)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="title">Наименование</label>
+                                        <InputText id="title" class="form-control" @bind-Value="mainWarehouseDTO.Title" />
+                                        <ValidationMessage For="@(() => mainWarehouseDTO.Title)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="shorttitle">Описание</label>
+                                        <InputText id="shorttitle" class="form-control" @bind-Value="mainWarehouseDTO.Description" />
+                                        <ValidationMessage For="@(() => mainWarehouseDTO.Description)" />
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+                <!-- End modal -->
+            }
+            else
+            {
+                <div class="text-center">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Загрузка...</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Не авторизован.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private MainWarehouseDTO mainWarehouseDTO = new();
+    private List<MainWarehouse> MainWarehouses = new();
+    private List<UserDepartment> UserDepartments = new();
+    private string ResponseMessage = string.Empty;
+    private string ClassesAlert = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            MainWarehouses = await MainWarehouseService.GetAllAsync();
+            UserDepartments = await userDepartment.GetAllAsync();
+        }
+        catch (Exception ex) { }
+    }
+
+    private async Task AddMainwarehouse()
+    {
+        var response = await MainWarehouseService.AddAsync(mainWarehouseDTO);
+        if (!response.Flag)
+        {
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-warning";
+        }
+        else
+        {
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-success";
+            mainWarehouseDTO = new();
+            MainWarehouses = await MainWarehouseService.GetAllAsync();
+        }
+    }
+}

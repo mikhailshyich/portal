@@ -34,8 +34,8 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped(sp => 
 {
-    //return new HttpClient { BaseAddress = new Uri("http://localhost:81/") };
-    return new HttpClient { BaseAddress = new Uri("https://localhost:7266/") };
+    return new HttpClient { BaseAddress = new Uri("http://localhost:81/") };
+    //return new HttpClient { BaseAddress = new Uri("https://localhost:7266/") };
 });
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
@@ -43,6 +43,9 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<UserServiceWEB>();
 builder.Services.AddScoped<UserDepartmentServiceWEB>();
+builder.Services.AddScoped<CategoryHardwareServiceWEB>();
+builder.Services.AddScoped<DocumentExternalSystemServiceWEB>();
+builder.Services.AddScoped<MainWarehouseServiceWEB>();
 
 var app = builder.Build();
 

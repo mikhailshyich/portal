@@ -1,7 +1,9 @@
-﻿using Portal.Domain.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Portal.Domain.DTOs;
 using Portal.Domain.Entities;
 using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
+using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
 
 namespace Portal.Infrastructure.Repositories
@@ -15,10 +17,10 @@ namespace Portal.Infrastructure.Repositories
             this.context = context;
         }
 
-        public async Task<MainWarehouse> AddAsync(MainWarehouseDTO request)
+        public async Task<CustomGeneralResponses> AddAsync(MainWarehouseDTO request)
         {
             if (request is null)
-                return null!;
+                return new CustomGeneralResponses(false, "Передаваемый объект равен null.");
 
             var mainWarehouse = new MainWarehouse()
             {
@@ -30,7 +32,7 @@ namespace Portal.Infrastructure.Repositories
             await context.MainWarehouses.AddAsync(mainWarehouse);
             await context.SaveChangesAsync();
 
-            return mainWarehouse;
+            return new CustomGeneralResponses(true, "Склад успешно добавлен.", mainWarehouse);
         }
 
         public Task<MainWarehouse> EditGameAsync(MainWarehouse request)
@@ -38,9 +40,16 @@ namespace Portal.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<MainWarehouse>> GetAllAsync()
+        public async Task<List<MainWarehouse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var mainWarehouses = await context.MainWarehouses.ToListAsync();
+            foreach(var mainWarehouse in mainWarehouses)
+            {
+                var userDepartment = await context.UserDepartments.FindAsync(mainWarehouse.UserDepartmentId);
+                if(userDepartment != null)
+                    mainWarehouse.UserDepartment = userDepartment;
+            }
+            return mainWarehouses;
         }
 
         public Task<MainWarehouse> GetByIdAsync(Guid id)

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
+using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
@@ -64,10 +65,20 @@ namespace Portal.Infrastructure.Repositories
                 Username = request.Username,
                 Email = request.Email,
             };
-
             newUser.PasswordHash = new PasswordHasher<User>().HashPassword(newUser, request.Password);
 
             context.Users.Add(newUser);
+
+            var department = await context.UserDepartments.FirstOrDefaultAsync(d => d.Id == request.UserDepartmentId);
+
+            //Создаём автоматически склад пользователя
+            var userWarehouse = new UserWarehouse()
+            {
+                UserId = newUser.Id,
+                Title = department!.Title
+            };
+
+            context.UserWarehouses.Add(userWarehouse);
             await context.SaveChangesAsync();
             return new CustomGeneralResponses(true, "Пользователь успешно добавлен.", newUser);
         }

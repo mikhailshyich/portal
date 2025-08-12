@@ -172,3 +172,4 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\refint\Portal.API.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.pdb
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.genruntimeconfig.cache
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\ref\Portal.API.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.MvcApplicationPartsAssemblyInfo.cs

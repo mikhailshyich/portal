@@ -1,7 +1,6 @@
 ﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Responses;
-using System.Net.Http;
 
 namespace Portal.WEB.Services
 {
@@ -15,9 +14,11 @@ namespace Portal.WEB.Services
             this.httpClient = httpClient;
         }
 
-        public Task<CustomGeneralResponses> AddAsync(UserDepartmentDTO request)
+        public async Task<CustomGeneralResponses> AddAsync(UserDepartmentDTO request)
         {
-            throw new NotImplementedException();
+            var departmen = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
+            var response = await departmen.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
         }
 
         public Task<CustomGeneralResponses> DeleteAsync(Guid id)

@@ -16,6 +16,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.CategoryHardwareController",
+    "Method": "GetAll",
+    "RelativePath": "api/CategoryHardware/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.DocumentExternalSystemController",
     "Method": "Add",
     "RelativePath": "api/DocumentExternalSystem/add",
@@ -29,6 +39,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.DocumentExternalSystemController",
+    "Method": "GetAll",
+    "RelativePath": "api/DocumentExternalSystem/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -129,6 +149,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.MainWarehouseController",
+    "Method": "GetAll",
+    "RelativePath": "api/MainWarehouse/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

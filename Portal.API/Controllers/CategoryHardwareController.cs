@@ -21,5 +21,12 @@ namespace Portal.API.Controllers
             var result = await categoryHardware.AddAsync(request);
             return Ok(result);
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await categoryHardware.GetAllAsync();
+            return Ok(result);
+        }
     }
 }

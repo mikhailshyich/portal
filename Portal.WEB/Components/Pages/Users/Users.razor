@@ -1,9 +1,9 @@
 ﻿@page "/users"
 
-@inject UserServiceWEB userService
 @inject UserDepartmentServiceWEB userDepartment
 @inject AuthenticationStateProvider AuthStateProvider
-@inject IJSRuntime jsRuntime
+@inject UserServiceWEB userService
+@inject AuthenticationStateProvider AuthStateProvider
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
@@ -36,71 +36,78 @@
                         </div>
                         <EditForm Model="RegisterDTO" FormName="AddUser" Context="AddUser" OnValidSubmit="AddUser">
                             <div class="modal-body">
-                                    <DataAnnotationsValidator />
-                                    @* <ValidationSummary /> *@
-                                    <div class="form-group">
-                                        <label for="userrole">Роль</label>
-                                        <InputSelect id="userrole" class="form-control" @bind-Value="RegisterDTO.UserRoleId">
-                                            <option value="">Выберите роль пользователя</option>
-                                            @foreach (UserRole role in UserRoles)
-                                            {
-                                                <option value="@role.Id">@role.PublicTitle</option>
-                                            }
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => RegisterDTO.UserRoleId)" />
-                                    </div>
+                                <DataAnnotationsValidator />
+                                @* <ValidationSummary /> *@
 
-                                    <div class="form-group">
-                                        <label for="userdepartment">Подразделение</label>
-                                        <InputSelect id="userdepartment" class="form-control" @bind-Value="RegisterDTO.UserDepartmentId">
-                                            <option value="">Выберите подразделение пользователя</option>
-                                            @foreach (UserDepartment department in UserDepartments)
-                                            {
-                                                <option value="@department.Id">@department.Title</option>
-                                            }
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => RegisterDTO.UserDepartmentId)" />
-                                    </div>
+                                <!-- Alert -->
+                                <div class="alert @ClassesAlert" role="alert">
+                                    @ResponseMessage
+                                </div>
+                                <!-- End alert -->
 
-                                    <div class="form-group">
-                                        <label for="lastname">Фамилия</label>
-                                        <InputText id="lastname" class="form-control" @bind-Value="RegisterDTO.LastName" />
-                                        <ValidationMessage For="@(() => RegisterDTO.LastName)" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="userrole">Роль</label>
+                                    <InputSelect id="userrole" class="form-control" @bind-Value="RegisterDTO.UserRoleId">
+                                        <option value="">Выберите роль пользователя</option>
+                                        @foreach (UserRole role in UserRoles)
+                                        {
+                                            <option value="@role.Id">@role.PublicTitle</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => RegisterDTO.UserRoleId)" />
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="description">Имя</label>
-                                        <InputText id="description" class="form-control" @bind-Value="RegisterDTO.FirstName" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="userdepartment">Подразделение</label>
+                                    <InputSelect id="userdepartment" class="form-control" @bind-Value="RegisterDTO.UserDepartmentId">
+                                        <option value="">Выберите подразделение пользователя</option>
+                                        @foreach (UserDepartment department in UserDepartments)
+                                        {
+                                            <option value="@department.Id">@department.Title</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => RegisterDTO.UserDepartmentId)" />
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="patronymic">Отчество</label>
-                                        <InputText id="patronymic" class="form-control" @bind-Value="RegisterDTO.Patronymic" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="lastname">Фамилия</label>
+                                    <InputText id="lastname" class="form-control" @bind-Value="RegisterDTO.LastName" />
+                                    <ValidationMessage For="@(() => RegisterDTO.LastName)" />
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="username" class="form-label">Логин</label>
-                                        <InputText id="username" class="form-control" @bind-Value="RegisterDTO.Username" />
-                                        <ValidationMessage For="@(() => RegisterDTO.Username)" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="description">Имя</label>
+                                    <InputText id="description" class="form-control" @bind-Value="RegisterDTO.FirstName" />
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="email" class="form-label">E-mail</label>
-                                        <InputText id="email" class="form-control" @bind-Value="RegisterDTO.Email" />
-                                        <ValidationMessage For="@(() => RegisterDTO.Email)" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="patronymic">Отчество</label>
+                                    <InputText id="patronymic" class="form-control" @bind-Value="RegisterDTO.Patronymic" />
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="password" class="form-label">Пароль</label>
-                                        <InputText id="password" type="password" class="form-control" @bind-Value="RegisterDTO.Password" />
-                                        <ValidationMessage For="@(() => RegisterDTO.Password)" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="username" class="form-label">Логин</label>
+                                    <InputText id="username" class="form-control" @bind-Value="RegisterDTO.Username" />
+                                    <ValidationMessage For="@(() => RegisterDTO.Username)" />
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="confirmpassword" class="form-label">Подтверждение пароля</label>
-                                        <InputText id="confirmpassword" type="password" class="form-control" @bind-Value="RegisterDTO.ConfirmPassword" />
-                                        <ValidationMessage For="@(() => RegisterDTO.ConfirmPassword)" />
-                                    </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">E-mail</label>
+                                    <InputText id="email" class="form-control" @bind-Value="RegisterDTO.Email" />
+                                    <ValidationMessage For="@(() => RegisterDTO.Email)" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password" class="form-label">Пароль</label>
+                                    <InputText id="password" type="password" class="form-control" @bind-Value="RegisterDTO.Password" />
+                                    <ValidationMessage For="@(() => RegisterDTO.Password)" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirmpassword" class="form-label">Подтверждение пароля</label>
+                                    <InputText id="confirmpassword" type="password" class="form-control" @bind-Value="RegisterDTO.ConfirmPassword" />
+                                    <ValidationMessage For="@(() => RegisterDTO.ConfirmPassword)" />
+                                </div>
 
                             </div>
                             <div class="modal-footer">
@@ -111,16 +118,7 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Toasts -->
-            <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        @ErrorMessage
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
-                </div>
-            </div>
+            <!-- End modal -->
         </div>
         
     </Authorized>
@@ -134,8 +132,8 @@
     private List<UserRole> UserRoles = new();
     private List<UserDepartment> UserDepartments = new();
     private RegisterDTO RegisterDTO = new();
-    private string ErrorMessage = string.Empty;
-
+    private string ResponseMessage = string.Empty;
+    private string ClassesAlert = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -149,26 +147,20 @@
         catch(Exception ex){ }
     }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            jsRuntime.InvokeVoidAsync("showToast");
-        }
-    }
-
     private async Task AddUser()
     {
         var response = await userService.RegisterAsync(RegisterDTO);
         if (!response.Flag)
         {
-            ErrorMessage = response.Message;
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-warning";
         }
         else
         {
-            ErrorMessage = response.Message;
-            UsersList = await userService.GetAllAsync();
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-success";
             RegisterDTO = new();
+            UsersList = await userService.GetAllAsync();
         }
     }
 }

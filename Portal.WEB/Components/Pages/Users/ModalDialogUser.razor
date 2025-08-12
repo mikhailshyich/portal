@@ -1,0 +1,148 @@
+﻿@inject UserDepartmentServiceWEB userDepartment
+@inject AuthenticationStateProvider AuthStateProvider
+@inject UserServiceWEB userService
+@inject IJSRuntime jsRuntime
+
+<!-- Modal -->
+<div class="modal fade" id="addUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserTitle">Новый пользователь</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <EditForm Model="RegisterDTO" FormName="AddUser" Context="AddUser" OnValidSubmit="AddUser">
+                <div class="modal-body">
+                    <DataAnnotationsValidator />
+                    @* <ValidationSummary /> *@
+                    <!-- Toasts -->
+                    <div class="toast align-items-center text-white @ClassesForModal border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                @ErrorMessage
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                        </div>
+                    </div>
+                    <!-- End toasts -->
+                    <div class="form-group">
+                        <label for="userrole">Роль</label>
+                        <InputSelect id="userrole" class="form-control" @bind-Value="RegisterDTO.UserRoleId">
+                            <option value="">Выберите роль пользователя</option>
+                            @foreach (UserRole role in UserRoles)
+                            {
+                                <option value="@role.Id">@role.PublicTitle</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => RegisterDTO.UserRoleId)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userdepartment">Подразделение</label>
+                        <InputSelect id="userdepartment" class="form-control" @bind-Value="RegisterDTO.UserDepartmentId">
+                            <option value="">Выберите подразделение пользователя</option>
+                            @foreach (UserDepartment department in UserDepartments)
+                            {
+                                <option value="@department.Id">@department.Title</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => RegisterDTO.UserDepartmentId)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastname">Фамилия</label>
+                        <InputText id="lastname" class="form-control" @bind-Value="RegisterDTO.LastName" />
+                        <ValidationMessage For="@(() => RegisterDTO.LastName)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Имя</label>
+                        <InputText id="description" class="form-control" @bind-Value="RegisterDTO.FirstName" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="patronymic">Отчество</label>
+                        <InputText id="patronymic" class="form-control" @bind-Value="RegisterDTO.Patronymic" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username" class="form-label">Логин</label>
+                        <InputText id="username" class="form-control" @bind-Value="RegisterDTO.Username" />
+                        <ValidationMessage For="@(() => RegisterDTO.Username)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">E-mail</label>
+                        <InputText id="email" class="form-control" @bind-Value="RegisterDTO.Email" />
+                        <ValidationMessage For="@(() => RegisterDTO.Email)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Пароль</label>
+                        <InputText id="password" type="password" class="form-control" @bind-Value="RegisterDTO.Password" />
+                        <ValidationMessage For="@(() => RegisterDTO.Password)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmpassword" class="form-label">Подтверждение пароля</label>
+                        <InputText id="confirmpassword" type="password" class="form-control" @bind-Value="RegisterDTO.ConfirmPassword" />
+                        <ValidationMessage For="@(() => RegisterDTO.ConfirmPassword)" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<UserRole> UserRoles = new();
+    private List<UserDepartment> UserDepartments = new();
+    private RegisterDTO RegisterDTO = new();
+    private string ErrorMessage = "Заполните обязательные поля.";
+    private string ClassesForModal = "bg-danger";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            UserRoles = await userService.GetAllUserRolesAsync();
+            UserDepartments = await userDepartment.GetAllAsync();
+        }
+        catch (Exception ex) { }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            jsRuntime.InvokeVoidAsync("showToast");
+        }
+        else
+        {
+            jsRuntime.InvokeVoidAsync("showToast");
+        }
+    }
+
+    private async Task AddUser()
+    {
+        var response = await userService.RegisterAsync(RegisterDTO);
+        if (!response.Flag)
+        {
+            ErrorMessage = response.Message;
+        }
+        else
+        {
+            ClassesForModal = "bg-success";
+            ErrorMessage = response.Message;
+            RegisterDTO = new();
+            ClassesForModal = "bg-danger";
+            ErrorMessage = "Заполните обязательные поля.";
+        }
+    }
+}
