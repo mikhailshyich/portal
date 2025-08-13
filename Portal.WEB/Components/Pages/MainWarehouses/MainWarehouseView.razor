@@ -1,0 +1,223 @@
+﻿@page "/main-warehouse/{Id:guid}"
+
+@inject AuthenticationStateProvider AuthStateProvider
+@inject MainWarehouseServiceWEB MainWarehouseService
+@inject CategoryHardwareServiceWEB CategoryHardwareService
+@inject DocumentExternalSystemServiceWEB DocumentExternalSystem
+@inject HardwareServiceWEB HardwareService
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            @if (MainWarehouse != null)
+            {
+                <div class="card mb-3">
+                    <div class="card-header d-flex flex-row">
+                        <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
+                        <div class="px-1">
+                            <select class="form-select form-select-sm" @onchange="OnPageSizeChanged">
+                                <option value="5">5</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+</b></button>
+                    </div>
+                    <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+                        <QuickGrid Class="table table-sm table-hover m-0 align-items-center"
+                                   Items="MainWarehouse.Hardwares.AsQueryable()"
+                                   ItemKey="@(k => k.Id)"
+                                   Pagination="pagination">
+                            <PropertyColumn Property="@(p => p.Title)"
+                                            Title="Наименование"
+                                            Sortable="true"/>
+                            <PropertyColumn Property="@(p => p.Description)"
+                                            Title="Описание"/>
+                            <PropertyColumn Property="@(p => p.InventoryNumberExternalSystem)"
+                                            Title="Номер" />
+                            <PropertyColumn Property="@(p => p.InventoryNumber)"
+                                            Title="Инвентарный" />
+                            <PropertyColumn Property="@(p => p.DateTimeAdd)"
+                                            Title="Дата добавления"
+                                            Sortable="true"
+                                            IsDefaultSortColumn="true"
+                                            InitialSortDirection="SortDirection.Descending" />
+                            <TemplateColumn Context="hardware">
+                                <button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToHardware(hardware.Id)">Переместить</button>
+                                <button class="btn btn-outline-secondary btn-sm mx-1" @onclick="() => GoToHardware(hardware.Id)">Подробнее</button>
+                            </TemplateColumn>
+                        </QuickGrid>
+                    </div>
+                    <div class="card-footer">
+                        <Paginator State="pagination" />
+                    </div>
+                </div>
+                @* <div class="page-size-chooser">
+                    Items per page:
+                    <select @bind="@pagination.ItemsPerPage">
+                        <option selected>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                </div> *@
+
+                <!-- Modal -->
+                <div class="modal fade" id="addHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addHardwareTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addHardwareTitle">Новое оборудование</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <EditForm Model="hardwareDTO" FormName="AddHardware" Context="AddHardware" OnValidSubmit="AddHardware">
+                                <div class="modal-body">
+                                    <DataAnnotationsValidator />
+
+                                    <!-- Alert -->
+                                    <div class="alert @ClassesAlert" role="alert">
+                                        @ResponseMessage
+                                    </div>
+                                    <!-- End alert -->
+
+                                    <div class="form-group">
+                                        <label for="category">Категория</label>
+                                        <InputSelect id="category" class="form-control" @bind-Value="hardwareDTO.CategoryHardwareId">
+                                            <option value="">Выберите категорию оборудования</option>
+                                            @foreach (CategoryHardware category in Categories)
+                                            {
+                                                <option value="@category.Id">@category.Title</option>
+                                            }
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => hardwareDTO.CategoryHardwareId)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="document">Документ</label>
+                                        <InputSelect id="document" class="form-control" @bind-Value="hardwareDTO.DocumentExternalSystemId">
+                                            <option value="">Выберите документ внешней системы</option>
+                                            @foreach (DocumentExternalSystem document in Documents)
+                                            {
+                                                <option value="@document.Id">@document.Title</option>
+                                            }
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => hardwareDTO.DocumentExternalSystemId)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="title">Наименование</label>
+                                        <InputText id="title" class="form-control" @bind-Value="hardwareDTO.Title" />
+                                        <ValidationMessage For="@(() => hardwareDTO.Title)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="description">Описание</label>
+                                        <InputText id="description" class="form-control" @bind-Value="hardwareDTO.Description" />
+                                        <ValidationMessage For="@(() => hardwareDTO.Description)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="count">Количество</label>
+                                        <InputNumber id="count" class="form-control" @bind-Value="hardwareDTO.Count" />
+                                        <ValidationMessage For="@(() => hardwareDTO.Count)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="numberext">Номер внешней системы</label>
+                                        <InputText id="numberext" class="form-control" @bind-Value="hardwareDTO.InventoryNumberExternalSystem" />
+                                        <ValidationMessage For="@(() => hardwareDTO.InventoryNumberExternalSystem)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="ttn">ТТН</label>
+                                        <InputText id="ttn" class="form-control" @bind-Value="hardwareDTO.TTN" />
+                                        <ValidationMessage For="@(() => hardwareDTO.TTN)" />
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+                <!-- End modal -->
+            }
+            else
+            {
+                <div class="text-center">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Загрузка...</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Не авторизован.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+    private MainWarehouse MainWarehouse = new();
+    private HardwareDTO hardwareDTO = new();
+    private List<CategoryHardware> Categories = new();
+    private List<DocumentExternalSystem> Documents = new();
+    private string ResponseMessage = string.Empty;
+    private string ClassesAlert = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            var response = await MainWarehouseService.GetByIdAsync(Id);
+            if (response != null)
+            {
+                MainWarehouse = response;
+                Categories = await CategoryHardwareService.GetAllAsync();
+                Documents = await DocumentExternalSystem.GetAllAsync();
+            }
+        }
+        catch (Exception ex) { }
+    }
+    private void OnPageSizeChanged(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            pagination.ItemsPerPage = int.Parse((string)e.Value);
+        }
+    }
+    private async Task AddHardware()
+    {
+        hardwareDTO.MainWarehouseId = Id;
+        var response = await HardwareService.AddAsync(hardwareDTO);
+        if (!response.Flag)
+        {
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-warning";
+        }
+        else
+        {
+            ResponseMessage = response.Message;
+            ClassesAlert = "alert-success";
+            hardwareDTO = new();
+            MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+        }
+    }
+
+    private void GoToHardware(Guid id)
+    {
+        
+    }
+}

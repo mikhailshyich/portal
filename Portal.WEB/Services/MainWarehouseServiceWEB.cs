@@ -32,9 +32,11 @@ namespace Portal.WEB.Services
             return response!;
         }
 
-        public Task<MainWarehouse> GetByIdAsync(Guid id)
+        public async Task<MainWarehouse> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var mainWarehouse = await httpClient.GetAsync($"{BaseURI}/{id}");
+            var response = await mainWarehouse.Content.ReadFromJsonAsync<MainWarehouse>();
+            return response!;
         }
     }
 }

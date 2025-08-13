@@ -28,9 +28,9 @@ namespace Portal.Application.Services
             return await mainWarehouseDomainInterface.GetAllAsync();
         }
 
-        public Task<MainWarehouse> GetByIdAsync(Guid id)
+        public async Task<MainWarehouse> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await mainWarehouseDomainInterface.GetByIdAsync(id);
         }
     }
 }

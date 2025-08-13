@@ -52,9 +52,26 @@ namespace Portal.Infrastructure.Repositories
             return mainWarehouses;
         }
 
-        public Task<MainWarehouse> GetByIdAsync(Guid id)
+        public async Task<MainWarehouse> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty) return null!;
+
+            var mainWarehouse = await context.MainWarehouses.FindAsync(id);
+            if (mainWarehouse is null) return null!;
+
+            var department = await context.UserDepartments.FindAsync(mainWarehouse.UserDepartmentId);
+            if (department != null)
+            {
+                mainWarehouse.UserDepartment = department;
+            }
+
+            var hardwares = context.Hardwares.Where(m => m.MainWarehouseId == mainWarehouse.Id).ToList();
+            if (hardwares != null)
+            {
+                mainWarehouse.Hardwares = hardwares;
+            }
+
+            return mainWarehouse;
         }
     }
 }

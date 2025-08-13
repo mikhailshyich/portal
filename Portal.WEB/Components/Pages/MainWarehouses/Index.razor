@@ -3,27 +3,61 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject MainWarehouseServiceWEB MainWarehouseService
 @inject UserDepartmentServiceWEB userDepartment
+@inject NavigationManager navigationManager
 
 <AuthorizeView>
     <Authorized>
         <div class="container">
             @if(MainWarehouses.Count != 0)
             {
-                <div class="row mb-2 text-center">
-                    <div class="col"><h3>Основные склады (по подразделениям)</h3></div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col">
+                <div class="card mb-3">
+                    <div class="card-header d-flex flex-row">
+                        <h3>Основные склады (по подразделениям)</h3>
+                        <div class="px-1">
+                            <select class="form-select form-select-sm" @onchange="OnPAgeSizeChanged">
+                                <option value="5">5</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+</b></button>
                     </div>
+                    <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+                        <QuickGrid Class="table table-striped m-0"
+                                   Items="MainWarehouses.AsQueryable()"
+                                   ItemKey="@(k => k.Id)"
+                                   Pagination="pagination">
+                            <PropertyColumn Property="@(p => p.UserDepartment!.Title)"
+                                   Title="Наименование подразделения"
+                                   Sortable="true"
+                                   IsDefaultSortColumn="true" />
+                            <PropertyColumn 
+                                   Property="@(p => p.Title)" 
+                                   Title="Наименование склада" 
+                                   Sortable="true" />
+                            <PropertyColumn 
+                                   Property="@(p => p.Description)" 
+                                   Title="Описание" />
+                            <TemplateColumn Title="" Context="department">
+                                <button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToMainWarehouse(department.Id)">Перейти</button>
+                            </TemplateColumn>
+                        </QuickGrid>
+                    </div>
+                    <div class="card-footer">
+                        <Paginator State="pagination" />
+                    </div>
                 </div>
-                <div class="row" style="overflow: scroll;">
-                    <QuickGrid Items="MainWarehouses.AsQueryable()">
-                        <PropertyColumn Property="@(p => p.Title)" Title="Наименование склада" Sortable="true" />
-                        <PropertyColumn Property="@(p => p.UserDepartment!.Title)" Title="Наименование подразделения" Sortable="true" />
-                        <PropertyColumn Property="@(p => p.Description)" Title="Описание" />
-                    </QuickGrid>
-                </div>
+                @* <div class="page-size-chooser">
+                    Items per page:
+                    <select @bind="@pagination.ItemsPerPage">
+                        <option selected>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                </div> *@
 
                 <!-- Modal -->
                 <div class="modal fade" id="addMainwarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addMainwarehouseTitle" aria-hidden="true">
@@ -46,7 +80,7 @@
                                     <div class="form-group">
                                         <label for="userdepartment">Подразделение</label>
                                         <InputSelect id="userdepartment" class="form-control" @bind-Value="mainWarehouseDTO.UserDepartmentId">
-                                            <option value="">Выберите подразделение пользователя</option>
+                                            <option value="x">Выберите подразделение пользователя</option>
                                             @foreach (UserDepartment department in UserDepartments)
                                             {
                                                 <option value="@department.Id">@department.Title</option>
@@ -95,6 +129,7 @@
 </AuthorizeView>
 
 @code {
+    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
     private MainWarehouseDTO mainWarehouseDTO = new();
     private List<MainWarehouse> MainWarehouses = new();
     private List<UserDepartment> UserDepartments = new();
@@ -127,5 +162,17 @@
             mainWarehouseDTO = new();
             MainWarehouses = await MainWarehouseService.GetAllAsync();
         }
+    }
+    private void OnPAgeSizeChanged(ChangeEventArgs e)
+    {
+        if(e.Value is not null)
+        {
+            pagination.ItemsPerPage = int.Parse((string)e.Value);
+        }
+    }
+
+    private void GoToMainWarehouse(Guid id)
+    {
+        navigationManager.NavigateTo($"/main-warehouse/{id}");
     }
 }
