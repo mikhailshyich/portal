@@ -8,5 +8,6 @@ namespace Portal.Domain.Interfaces
     {
         Task<CustomGeneralResponses> AddAsync(HardwareDTO request);
         Task<List<Hardware>> GetAllAsync();
+        Task<string> GenerateQR(Guid? id, List<Guid>? idList);
     }
 }

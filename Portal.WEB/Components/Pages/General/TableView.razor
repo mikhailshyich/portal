@@ -1,0 +1,61 @@
+﻿@inject NavigationManager navigationManager
+
+<table class="table table-hover text-center">
+    <thead>
+        <tr>
+            <th><input class="form-check-input" type="checkbox" /></th>
+            @foreach(var header in TableHeader)
+            {
+                <th scope="col">@header</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if(MainWarehousesBody.Count > 0)
+        {
+            @foreach (MainWarehouse warehouse in MainWarehousesBody)
+            {
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" /></td>
+                    <td>@warehouse.Title</td>
+                    <td>@warehouse.UserDepartment?.Title</td>
+                    <td>@warehouse.Description</td>
+                    <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToMainWarehouse(warehouse.Id)">Перейти</button></td>
+                </tr>
+            }
+        }
+        else if(Hardwares.Count > 0)
+        {
+            @foreach (Hardware hardware in Hardwares)
+            {
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@hardware.Id" @oninput="CheckboxChanged" /></td>
+                    <td>@hardware.Title</td>
+                    <td>@hardware.Description</td>
+                    <td>@hardware.CombinedInvNumber</td>
+                    <td>@hardware.InventoryNumberExternalSystem</td>
+                    <td>@hardware.DateTimeAdd</td>
+                    <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToMainWarehouse(hardware.Id)">Перейти</button></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public List<string> TableHeader { get; set; } = new();
+    [Parameter]
+    public List<MainWarehouse>? MainWarehousesBody { get; set; } = new();
+    [Parameter]
+    public List<Hardware>? Hardwares { get; set; } = new();
+
+    private void GoToMainWarehouse(Guid id)
+    {
+        navigationManager.NavigateTo($"/main-warehouse/{id}");
+    }
+    private void CheckboxChanged(ChangeEventArgs args)
+    {
+        throw new NotImplementedException();
+    }
+}

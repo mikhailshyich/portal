@@ -304,6 +304,14 @@
             "Microsoft.Extensions.Identity.Core": {
               "target": "Package",
               "version": "[9.0.7, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "iTextSharp": {
+              "target": "Package",
+              "version": "[5.5.13.4, )"
             }
           },
           "imports": [

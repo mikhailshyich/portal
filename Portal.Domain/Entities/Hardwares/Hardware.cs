@@ -23,6 +23,7 @@ namespace Portal.Domain.Entities.Hardwares
         public string FileNameImage { get; set; } = string.Empty;
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InventoryNumber { get; set; }
+        public string CombinedInvNumber { get; set; } = string.Empty;
 
         public MainWarehouse? MainWarehouse { get; set; }
         public CategoryHardware? CategoryHardware { get; set; }

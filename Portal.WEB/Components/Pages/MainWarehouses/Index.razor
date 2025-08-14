@@ -1,5 +1,7 @@
 ﻿@page "/main-warehouses"
 
+@using Portal.WEB.Components.Pages.General
+
 @inject AuthenticationStateProvider AuthStateProvider
 @inject MainWarehouseServiceWEB MainWarehouseService
 @inject UserDepartmentServiceWEB userDepartment
@@ -10,22 +12,14 @@
         <div class="container">
             @if(MainWarehouses.Count != 0)
             {
+                <h3>Склады по подразделениям</h3>
                 <div class="card mb-3">
                     <div class="card-header d-flex flex-row">
-                        <h3>Основные склады (по подразделениям)</h3>
-                        <div class="px-1">
-                            <select class="form-select form-select-sm" @onchange="OnPAgeSizeChanged">
-                                <option value="5">5</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+</b></button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+ Добавить</b></button>
                     </div>
                     <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-                        <QuickGrid Class="table table-striped m-0"
+                        <TableView MainWarehousesBody="MainWarehouses" TableHeader="TableHeaders" />
+                        @* <QuickGrid Class="table table-striped m-0"
                                    Items="MainWarehouses.AsQueryable()"
                                    ItemKey="@(k => k.Id)"
                                    Pagination="pagination">
@@ -43,10 +37,10 @@
                             <TemplateColumn Title="" Context="department">
                                 <button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToMainWarehouse(department.Id)">Перейти</button>
                             </TemplateColumn>
-                        </QuickGrid>
+                        </QuickGrid> *@
                     </div>
                     <div class="card-footer">
-                        <Paginator State="pagination" />
+                        @* <Paginator State="pagination" /> *@
                     </div>
                 </div>
                 @* <div class="page-size-chooser">
@@ -135,6 +129,7 @@
     private List<UserDepartment> UserDepartments = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
+    private List<string> TableHeaders = ["", "Склад", "Подразделение", "Описание", ""];
 
     protected override async Task OnInitializedAsync()
     {

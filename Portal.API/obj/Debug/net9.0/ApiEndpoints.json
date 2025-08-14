@@ -136,6 +136,64 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "Method": "File",
+    "RelativePath": "api/Hardware/file",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "Method": "GenerateQR",
+    "RelativePath": "api/Hardware/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "Method": "GenerateQR",
+    "RelativePath": "api/Hardware/generateqr/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Portal.API.Controllers.MainWarehouseController",
     "Method": "GetById",
     "RelativePath": "api/MainWarehouse/{id}",

@@ -1,4 +1,5 @@
-﻿using Portal.Domain.DTOs;
+﻿using Portal.Application.Services;
+using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Responses;
 
@@ -19,6 +20,22 @@ namespace Portal.WEB.Services
             var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
             var response = await hardware.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
+        }
+
+        public async Task<string> GenerateQR(Guid? id, List<Guid>? idList)
+        {
+            if (id is not null) 
+            {
+                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/generateqr/{id}", id);
+                var response = await hardware.Content.ReadAsStringAsync();
+                return response!;
+            }
+            else
+            {
+                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/generate", idList);
+                var response = await hardware.Content.ReadAsStringAsync();
+                return response!;
+            }
         }
 
         public async Task<List<Hardware>> GetAllAsync()

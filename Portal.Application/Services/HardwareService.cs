@@ -19,6 +19,11 @@ namespace Portal.Application.Services
             return await hardwareDomain.AddAsync(request);
         }
 
+        public async Task<string> GenerateQR(Guid? id, List<Guid>? idList)
+        {
+            return await hardwareDomain.GenerateQR(id, idList);
+        }
+
         public async Task<List<Hardware>> GetAllAsync()
         {
             return await hardwareDomain.GetAllAsync();

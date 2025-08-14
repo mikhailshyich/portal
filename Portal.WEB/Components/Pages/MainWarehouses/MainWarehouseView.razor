@@ -1,5 +1,6 @@
 ﻿@page "/main-warehouse/{Id:guid}"
 
+
 @inject AuthenticationStateProvider AuthStateProvider
 @inject MainWarehouseServiceWEB MainWarehouseService
 @inject CategoryHardwareServiceWEB CategoryHardwareService
@@ -11,58 +12,48 @@
         <div class="container">
             @if (MainWarehouse != null)
             {
+                <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
                 <div class="card mb-3">
-                    <div class="card-header d-flex flex-row">
-                        <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
-                        <div class="px-1">
-                            <select class="form-select form-select-sm" @onchange="OnPageSizeChanged">
-                                <option value="5">5</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
-                        </div>
+                    <div class="card-header">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+</b></button>
+                        <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
                     </div>
                     <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-                        <QuickGrid Class="table table-sm table-hover m-0 align-items-center"
-                                   Items="MainWarehouse.Hardwares.AsQueryable()"
-                                   ItemKey="@(k => k.Id)"
-                                   Pagination="pagination">
-                            <PropertyColumn Property="@(p => p.Title)"
-                                            Title="Наименование"
-                                            Sortable="true"/>
-                            <PropertyColumn Property="@(p => p.Description)"
-                                            Title="Описание"/>
-                            <PropertyColumn Property="@(p => p.InventoryNumberExternalSystem)"
-                                            Title="Номер" />
-                            <PropertyColumn Property="@(p => p.InventoryNumber)"
-                                            Title="Инвентарный" />
-                            <PropertyColumn Property="@(p => p.DateTimeAdd)"
-                                            Title="Дата добавления"
-                                            Sortable="true"
-                                            IsDefaultSortColumn="true"
-                                            InitialSortDirection="SortDirection.Descending" />
-                            <TemplateColumn Context="hardware">
-                                <button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToHardware(hardware.Id)">Переместить</button>
-                                <button class="btn btn-outline-secondary btn-sm mx-1" @onclick="() => GoToHardware(hardware.Id)">Подробнее</button>
-                            </TemplateColumn>
-                        </QuickGrid>
+                        <table class="table table-hover text-center">
+                            <thead>
+                                <tr>
+                                    <th><input class="form-check-input" type="checkbox" @oninput="e => { ChangeAll(e.Value); }" /></th>
+                                    @foreach (var header in TableHeaders)
+                                    {
+                                        <th scope="col">@header</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (MainWarehouse.Hardwares.Count > 0)
+                                {
+                                    @foreach (Hardware hardware in MainWarehouse.Hardwares)
+                                    {
+                                        <tr>
+                                            <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
+                                            <td>@hardware.Title</td>
+                                            <td>@hardware.Description</td>
+                                            <td>@hardware.CombinedInvNumber</td>
+                                            <td>@hardware.InventoryNumberExternalSystem</td>
+                                            <td>@hardware.DateTimeAdd</td>
+                                            <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        
                     </div>
                     <div class="card-footer">
-                        <Paginator State="pagination" />
+
                     </div>
                 </div>
-                @* <div class="page-size-chooser">
-                    Items per page:
-                    <select @bind="@pagination.ItemsPerPage">
-                        <option selected>5</option>
-                        <option>10</option>
-                        <option>20</option>
-                        <option>50</option>
-                    </select>
-                </div> *@
+
 
                 <!-- Modal -->
                 <div class="modal fade" id="addHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addHardwareTitle" aria-hidden="true">
@@ -173,8 +164,11 @@
     private HardwareDTO hardwareDTO = new();
     private List<CategoryHardware> Categories = new();
     private List<DocumentExternalSystem> Documents = new();
+    private List<Guid> HardwaresId = new();
+    private bool IsChecked = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
+    private List<string> TableHeaders = ["Наименование", "Описание", "Инвентарный", "Номер в у/с", "Дата добавления", ""];
 
     protected override async Task OnInitializedAsync()
     {
@@ -216,8 +210,34 @@
         }
     }
 
-    private void GoToHardware(Guid id)
+    private async Task GenerateQR()
     {
-        
+        if (HardwaresId?.Count > 0)
+        {
+            var fileName = await HardwareService.GenerateQR(null, HardwaresId);
+        }
+    }
+
+    private void CheckboxChanged(Guid id, object checkedValue)
+    {
+        if ((bool)checkedValue)
+        {
+            HardwaresId.Add(id);
+        }
+        else
+        {
+            HardwaresId.Remove(id);
+        }
+    }
+    private void ChangeAll(object checkedValue)
+    {
+        if ((bool)checkedValue)
+        {
+            IsChecked = true;
+        }
+        else
+        {
+            IsChecked = false;
+        }
     }
 }
