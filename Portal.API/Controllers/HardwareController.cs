@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.FileProviders;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
 
@@ -31,30 +30,34 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("generateqr/{id}")]
-        public void GenerateQR(Guid id)
+        [HttpPost("generateqr")]
+        public async Task<string> GenerateQR(List<Guid>? listId)
         {
-            hardwareInterface.GenerateQR(id, null);
+            return await hardwareInterface.GenerateQR(listId);
         }
 
-        [HttpPost("generate")]
-        public async Task<string> GenerateQR(List<Guid> id)
+        [HttpPost("generatelabel")]
+        public async Task<string> GenerateLabel(List<Guid>? listId)
         {
-            return await hardwareInterface.GenerateQR(null, id);
+            return await hardwareInterface.GenerateLabel(listId);
         }
 
-        [HttpGet("file")]
-        public async Task<IActionResult> File()
+        [HttpGet("getlabel/{fileName}")]
+        public async Task<IActionResult> File(string fileName)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Labels", "ZQ5Bp+wP8vOWDg==-qr.pdf");
-            var provider = new FileExtensionContentTypeProvider();
-            if(!provider.TryGetContentType(filePath, out var contentType))
+            try
             {
-                contentType = "application/octet-stream";
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "labels", fileName);
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(filePath, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                return File(bytes, contentType);
+                //return File(bytes, contentType, Path.GetFileName(filePath));
             }
-
-            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            return File(bytes, contentType, Path.GetFileName(filePath));
+            catch (Exception ex) { return BadRequest(ex.Message); }
         }
     }
 }

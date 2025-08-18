@@ -1,7 +1,6 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
-using Portal.Application.Services;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Interfaces;
@@ -26,35 +25,42 @@ namespace Portal.Infrastructure.Repositories
             
             var hardwareCount = request.Count;
             var hardwareList = new List<Hardware>();
-
-            var category = await context.CategoriesHardware.FindAsync(request.CategoryHardwareId);
-
-            for(var i=0; i < hardwareCount; i++)
+            try
             {
-                var hardware = new Hardware()
+                var category = await context.CategoriesHardware.FindAsync(request.CategoryHardwareId);
+
+                for (var i = 0; i < hardwareCount; i++)
                 {
-                    MainWarehouseId = request.MainWarehouseId,
-                    CategoryHardwareId = request.CategoryHardwareId,
-                    DocumentExternalSystemId = request.DocumentExternalSystemId,
-                    Title = request.Title,
-                    Description = request.Description,
-                    Count = 1,
-                    InventoryNumberExternalSystem = request.InventoryNumberExternalSystem,
-                    TTN = request.TTN,
-                    DateTimeAdd = DateTime.Now,
-                    FileNameImage = request.FileNameImage
-                };
-                context.Hardwares.Add(hardware);
+                    var hardware = new Hardware()
+                    {
+                        MainWarehouseId = request.MainWarehouseId,
+                        CategoryHardwareId = request.CategoryHardwareId,
+                        DocumentExternalSystemId = request.DocumentExternalSystemId,
+                        Title = request.Title,
+                        Description = request.Description,
+                        Count = 1,
+                        InventoryNumberExternalSystem = request.InventoryNumberExternalSystem,
+                        TTN = request.TTN,
+                        DateTimeAdd = DateTime.Now,
+                        FileNameImage = request.FileNameImage
+                    };
+                    context.Hardwares.Add(hardware);
+                    await context.SaveChangesAsync();
+                    hardware.CombinedInvNumber = $"{category?.ShortTitle}-{hardware.InventoryNumber}";
+                }
+
                 await context.SaveChangesAsync();
-                hardware.CombinedInvNumber = $"{category?.ShortTitle}-{hardware.InventoryNumber}";
+                return new CustomGeneralResponses(true, "Оборудование успешно добавлено.", hardwareList);
+            }
+            catch(Exception ex)
+            {
+                return new CustomGeneralResponses(false, "Ошибка при добавлении оборудования.\nПроверьте заполнение обязательных полей.");
             }
 
-            await context.SaveChangesAsync();
-
-            return new CustomGeneralResponses(true, "Оборудование успешно добавлено.", hardwareList);
+            
         }
 
-        public async Task<string> GenerateQR(Guid? id, List<Guid>? idList)
+        public async Task<string> GenerateQR(List<Guid>? idList)
         {
             try
             {
@@ -65,7 +71,7 @@ namespace Portal.Infrastructure.Repositories
                 rng.GetBytes(randomNumber);
                 var randomText = Convert.ToBase64String(randomNumber);
                 var fileName = $"{randomText}-qr.pdf";
-                var pathQR = $"Labels\\{fileName}";
+                var pathQR = $"labels\\{fileName}";
                 if (System.IO.File.Exists(pathQR))
                 {
                     System.IO.File.Delete(pathQR);
@@ -75,39 +81,109 @@ namespace Portal.Infrastructure.Repositories
                     PdfWriter writer = PdfWriter.GetInstance(document, fs);
 
                     document.Open();
-                    foreach (var hardawreId in idList)
+                    if(idList is not null)
                     {
-                        var hardware = context.Hardwares.Find(hardawreId);
+                        foreach (var hardawreId in idList)
+                        {
+                            var hardware = context.Hardwares.Find(hardawreId);
 
-                        // URL or text to be encoded in the QR code
-                        string text = hardware?.CombinedInvNumber;
-                        // Create the QR code
-                        BarcodeQRCode qrcode = new BarcodeQRCode(text, 25, 25, null);
-                        // Convert the QR code to an image
-                        iTextSharp.text.Image img = qrcode.GetImage();
-                        // Create a PdfWriter instance
-                        //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
-                        document.Add(img);
-                        document.NewPage();
+                            // URL or text to be encoded in the QR code
+                            string text = hardware?.CombinedInvNumber;
+                            // Create the QR code
+                            BarcodeQRCode qrcode = new BarcodeQRCode(text, 25, 25, null);
+                            // Convert the QR code to an image
+                            iTextSharp.text.Image img = qrcode.GetImage();
+                            // Create a PdfWriter instance
+                            //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
+                            document.Add(img);
+                            document.NewPage();
 
+                        }
                     }
                     document.Close();
                 }
                 return fileName;
-                //if (System.IO.File.Exists(pathBarcode))
-                //{
-                //    System.IO.File.Delete(pathBarcode);
-                //}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return ex.Message;
+            }
+        }
 
-                // Create a Document object
-                //iTextSharp.text.Rectangle labelSize = new(111, 84); //49,4x31,7mm 111, 84
+        public async Task<string> GenerateLabel(List<Guid>? idList)
+        {
+            try
+            {
+                iTextSharp.text.Rectangle labelSize = new(111, 84); //49,4x31,7mm 111, 84
+                iTextSharp.text.Document doc = new(labelSize, 10, 5, 5, 5);
+                string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "TAHOMA.TTF");                //
+                var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);                                //нужно для отображения кирилицы
+                var font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);       //
+                var fontTmk = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);    //
+                var fontBold = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.BOLD);
+                fontTmk.Size = 5;
+                font.Size = 7;
+                fontBold.Size = 9;
 
+                Document document = new Document(labelSize, 0, 0, 0, 0);
+                var randomNumber = new byte[10];
+                using var rng = RandomNumberGenerator.Create();
+                rng.GetBytes(randomNumber);
+                var randomText = Convert.ToBase64String(randomNumber);
+                var fileName = $"{randomText}-label.pdf";
+                var pathQR = $"labels\\{fileName}";
+                if (System.IO.File.Exists(pathQR))
+                {
+                    System.IO.File.Delete(pathQR);
+                }
+                using (FileStream fs = new FileStream(pathQR, FileMode.CreateNew))
+                {
+                    PdfWriter writer = PdfWriter.GetInstance(document, fs);
 
+                    document.Open();
+                    if (idList is not null)
+                    {
+                        foreach (var hardwareId in idList)
+                        {
+                            var hardware = context.Hardwares.Find(hardwareId);
 
-                // Open the document for writing
+                            Paragraph tmk = new("ОАО \"Туровский молочный комбинат\"", fontTmk);
+                            tmk.Alignment = Element.ALIGN_CENTER;
+                            tmk.SpacingAfter = 2;
 
-                // Add the QR code image to the document
-                // Close the document
+                            string invExt = "";
+                            if (hardware.InventoryNumberExternalSystem != "")
+                            {
+                                invExt = $" ({hardware.InventoryNumberExternalSystem})";
+                            }
+                            Paragraph title = new($"{hardware.Title}{invExt}", font);
+                            title.Alignment = Element.ALIGN_CENTER;
+                            title.SpacingAfter = 2;
+                            Paragraph inventoryNumber = new($"{hardware.CombinedInvNumber}", fontBold);
+                            inventoryNumber.Alignment = Element.ALIGN_CENTER;
+                            title.SpacingAfter = 2;
+
+                            // URL or text to be encoded in the QR code
+                            string qrText = hardware?.CombinedInvNumber;
+                            // Create the QR code
+                            BarcodeQRCode qrcode = new BarcodeQRCode(qrText, 25, 25, null);
+                            // Convert the QR code to an image
+                            iTextSharp.text.Image img = qrcode.GetImage();
+                            img.Alignment = Element.ALIGN_CENTER;
+                            // Create a PdfWriter instance
+                            //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
+                            document.Add(tmk);
+                            document.Add(img);
+                            document.Add(title);
+                            document.Add(inventoryNumber);
+                            document.NewPage();
+
+                        }
+                    }
+                    document.Close();
+                }
+                return fileName;
             }
             catch (Exception ex)
             {

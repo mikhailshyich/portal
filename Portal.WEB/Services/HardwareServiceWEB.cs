@@ -22,20 +22,18 @@ namespace Portal.WEB.Services
             return response!;
         }
 
-        public async Task<string> GenerateQR(Guid? id, List<Guid>? idList)
+        public async Task<string> GenerateLabel(List<Guid>? idList)
         {
-            if (id is not null) 
-            {
-                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/generateqr/{id}", id);
-                var response = await hardware.Content.ReadAsStringAsync();
-                return response!;
-            }
-            else
-            {
-                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/generate", idList);
-                var response = await hardware.Content.ReadAsStringAsync();
-                return response!;
-            }
+            var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/generatelabel", idList);
+            var response = await hardware.Content.ReadAsStringAsync();
+            return response!;
+        }
+
+        public async Task<string> GenerateQR(List<Guid>? idList)
+        {
+            var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/generateqr", idList);
+            var response = await hardware.Content.ReadAsStringAsync();
+            return response!;
         }
 
         public async Task<List<Hardware>> GetAllAsync()

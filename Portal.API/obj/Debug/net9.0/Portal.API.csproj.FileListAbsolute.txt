@@ -162,15 +162,15 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.development.json
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.csproj.Up2Date
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\refint\Portal.API.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.pdb
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.genruntimeconfig.cache
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\ref\Portal.API.dll
-D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.MvcApplicationPartsAssemblyInfo.cs
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\itextsharp.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\Microsoft.Win32.SystemEvents.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.MvcApplicationPartsAssemblyInfo.cs
+D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

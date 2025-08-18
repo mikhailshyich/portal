@@ -1,11 +1,13 @@
 ﻿@page "/main-warehouse/{Id:guid}"
 
-
+@inject HttpClient httpClient
+@inject IJSRuntime js
 @inject AuthenticationStateProvider AuthStateProvider
 @inject MainWarehouseServiceWEB MainWarehouseService
 @inject CategoryHardwareServiceWEB CategoryHardwareService
 @inject DocumentExternalSystemServiceWEB DocumentExternalSystem
 @inject HardwareServiceWEB HardwareService
+@inject NavigationManager navigationManager
 
 <AuthorizeView>
     <Authorized>
@@ -17,6 +19,7 @@
                     <div class="card-header">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
+                        <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
                     </div>
                     <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
                         <table class="table table-hover text-center">
@@ -37,6 +40,7 @@
                                         <tr>
                                             <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
                                             <td>@hardware.Title</td>
+                                            <td>@hardware.CategoryHardware.Title</td>
                                             <td>@hardware.Description</td>
                                             <td>@hardware.CombinedInvNumber</td>
                                             <td>@hardware.InventoryNumberExternalSystem</td>
@@ -168,7 +172,9 @@
     private bool IsChecked = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    private List<string> TableHeaders = ["Наименование", "Описание", "Инвентарный", "Номер в у/с", "Дата добавления", ""];
+    //private readonly string host = "http://192.168.1.145";
+    private readonly string host = "https://localhost:7266";
+    private List<string> TableHeaders = ["Наименование", "Категория", "Описание", "Инвентарный", "Номер в у/с", "Дата добавления", ""];
 
     protected override async Task OnInitializedAsync()
     {
@@ -194,28 +200,50 @@
     }
     private async Task AddHardware()
     {
-        hardwareDTO.MainWarehouseId = Id;
-        var response = await HardwareService.AddAsync(hardwareDTO);
-        if (!response.Flag)
+        try
         {
-            ResponseMessage = response.Message;
-            ClassesAlert = "alert-warning";
+            hardwareDTO.MainWarehouseId = Id;
+            var response = await HardwareService.AddAsync(hardwareDTO);
+            if (!response.Flag)
+            {
+                ResponseMessage = response.Message;
+                ClassesAlert = "alert-warning";
+            }
+            else
+            {
+                ResponseMessage = response.Message;
+                ClassesAlert = "alert-success";
+                hardwareDTO = new();
+                MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+            }
         }
-        else
+        catch(Exception ex)
         {
-            ResponseMessage = response.Message;
-            ClassesAlert = "alert-success";
-            hardwareDTO = new();
-            MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+            ResponseMessage = ex.Message;
         }
+
     }
 
     private async Task GenerateQR()
     {
         if (HardwaresId?.Count > 0)
         {
-            var fileName = await HardwareService.GenerateQR(null, HardwaresId);
+            var fileName = await HardwareService.GenerateQR(HardwaresId);
+            var response = await httpClient.GetAsync($"{host}/api/Hardware/getlabel/{fileName}");
+            await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
         }
+        navigationManager.Refresh(true);
+    }
+
+    private async Task GenerateLabel()
+    {
+        if (HardwaresId?.Count > 0)
+        {
+            var fileName = await HardwareService.GenerateLabel(HardwaresId);
+            var response = await httpClient.GetAsync($"{host}/api/Hardware/getlabel/{fileName}");
+            await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
+        }
+        navigationManager.Refresh(true);
     }
 
     private void CheckboxChanged(Guid id, object checkedValue)

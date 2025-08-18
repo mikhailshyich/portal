@@ -137,26 +137,16 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwareController",
-    "Method": "File",
-    "RelativePath": "api/Hardware/file",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
-    "Method": "GenerateQR",
-    "RelativePath": "api/Hardware/generate",
+    "Method": "GenerateLabel",
+    "RelativePath": "api/Hardware/generatelabel",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "listId",
         "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -174,24 +164,44 @@
   {
     "ContainingType": "Portal.API.Controllers.HardwareController",
     "Method": "GenerateQR",
-    "RelativePath": "api/Hardware/generateqr/{id}",
+    "RelativePath": "api/Hardware/generateqr",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
+        "Name": "listId",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "Method": "File",
+    "RelativePath": "api/Hardware/getlabel/{fileName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Portal.API.Controllers.MainWarehouseController",
