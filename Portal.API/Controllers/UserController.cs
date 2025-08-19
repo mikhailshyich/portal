@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
+using System.Security.Cryptography;
 
 namespace Portal.API.Controllers
 {
@@ -33,10 +34,6 @@ namespace Portal.API.Controllers
                 return BadRequest("Заполните обязательные поля.");
 
             var user = await userService.LoginAsync(request);
-            if (user is null)
-            {
-                return BadRequest("Проверьте введённые данные.");
-            }
 
             return Ok(user);
         }
@@ -70,6 +67,13 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> GetAllRoles()
         {
             var result = await userService.GetAllUserRolesAsync();
+            return Ok(result);
+        }
+
+        [HttpPost("sync")]
+        public async Task<IActionResult> SyncUsers()
+        {
+            var result = await userService.SyncUsersAsync();
             return Ok(result);
         }
     }

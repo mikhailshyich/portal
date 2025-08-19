@@ -182,6 +182,9 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -223,6 +226,7 @@ namespace Portal.Infrastructure.Migrations
                             Id = new Guid("f29533dd-9a3c-4889-d468-08ddd5a47b7a"),
                             Email = "admin@admin.by",
                             FirstName = "",
+                            IsActive = true,
                             LastName = "",
                             PasswordHash = "AQAAAAIAAYagAAAAEEnHKp66I1iY4a6WutPESx3dIQF0V/ITse74a7euQmBiSo8E516lhTSbFbEqJVAKQw==",
                             Patronymic = "",
@@ -235,6 +239,7 @@ namespace Portal.Infrastructure.Migrations
                             Id = new Guid("d7fa6b79-cf3b-442e-37e6-08ddd5a32cac"),
                             Email = "user@user.by",
                             FirstName = "",
+                            IsActive = true,
                             LastName = "",
                             PasswordHash = "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==",
                             Patronymic = "",

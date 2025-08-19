@@ -41,11 +41,11 @@
                                             <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
                                             <td>@hardware.Title</td>
                                             <td>@hardware.CategoryHardware.Title</td>
-                                            <td>@hardware.Description</td>
                                             <td>@hardware.CombinedInvNumber</td>
                                             <td>@hardware.InventoryNumberExternalSystem</td>
+                                            <td>@hardware.DocumentExternalSystem.ShortTitle</td>
                                             <td>@hardware.DateTimeAdd</td>
-                                            <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
+                                            <td><button class="btn btn-secondary btn-sm mx-1">Подробнее</button></td>
                                         </tr>
                                     }
                                 }
@@ -172,9 +172,9 @@
     private bool IsChecked = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    //private readonly string host = "http://192.168.1.145";
+    //private readonly string host = "http://192.168.1.147:81";
     private readonly string host = "https://localhost:7266";
-    private List<string> TableHeaders = ["Наименование", "Категория", "Описание", "Инвентарный", "Номер в у/с", "Дата добавления", ""];
+    private List<string> TableHeaders = ["Наименование", "Категория", "Инвентарный", "Номер у/с", "Документ у/с", "Дата добавления", ""];
 
     protected override async Task OnInitializedAsync()
     {

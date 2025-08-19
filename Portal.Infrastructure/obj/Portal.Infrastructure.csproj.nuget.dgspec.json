@@ -213,6 +213,10 @@
               "target": "Package",
               "version": "[9.0.7, )"
             },
+            "System.DirectoryServices.AccountManagement": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[9.0.8, )"

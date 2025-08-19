@@ -43,5 +43,10 @@ namespace Portal.Application.Services
         {
             return await userInterface.RegisterAsync(request);
         }
+
+        public async Task<CustomGeneralResponses> SyncUsersAsync()
+        {
+            return await userInterface.SyncUsersAsync();
+        }
     }
 }

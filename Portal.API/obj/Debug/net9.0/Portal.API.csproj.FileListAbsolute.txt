@@ -64,8 +64,6 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.IdentityModel.
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Memory.Data.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Runtime.Caching.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
-D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Security.Permissions.dll
-D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Windows.Extensions.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -138,8 +136,6 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win-arm64\na
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
-D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
-D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Portal.Application.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Portal.Domain.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Portal.Infrastructure.dll
@@ -172,5 +168,14 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\BouncyCastle.Cryptogr
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\itextsharp.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\Microsoft.Win32.SystemEvents.dll
-D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.MvcApplicationPartsAssemblyInfo.cs
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.DirectoryServices.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.DirectoryServices.AccountManagement.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.DirectoryServices.Protocols.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.DirectoryServices.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.DirectoryServices.AccountManagement.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\linux\lib\net9.0\System.DirectoryServices.Protocols.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\osx\lib\net9.0\System.DirectoryServices.Protocols.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.DirectoryServices.Protocols.dll

@@ -5,7 +5,7 @@
 @inject UserServiceWEB userService
 @inject AuthenticationStateProvider AuthStateProvider
 
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
 
 <AuthorizeView>
     <Authorized>
@@ -16,6 +16,7 @@
             <div class="row mb-2">
                 <div class="col">
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser">+</button>
+                    <button type="button" class="btn btn-primary" @onclick="SyncUsers">@TitleSyncButton</button>
                 </div>
             </div>
             <div class="row" style="overflow: scroll;">
@@ -132,6 +133,7 @@
     private List<UserRole> UserRoles = new();
     private List<UserDepartment> UserDepartments = new();
     private RegisterDTO RegisterDTO = new();
+    private string TitleSyncButton = "Sync";
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
 
@@ -162,5 +164,16 @@
             RegisterDTO = new();
             UsersList = await userService.GetAllAsync();
         }
+    }
+    private async Task SyncUsers()
+    {
+        try
+        {
+            TitleSyncButton = "Идёт синхронизация ...";
+            var response = await userService.SyncUsersAsync();
+            UsersList = await userService.GetAllAsync();
+            TitleSyncButton = "Sync";
+        }
+        catch{}
     }
 }

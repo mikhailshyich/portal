@@ -34,9 +34,11 @@ namespace Portal.WEB.Services
             return response!;
         }
 
-        public Task<CustomAuthResponses> LoginAsync(LoginDTO request)
+        public async Task<CustomAuthResponses> LoginAsync(LoginDTO request)
         {
-            throw new NotImplementedException();
+            var user = await httpClient.PostAsJsonAsync($"{BaseURI}/login", request);
+            var response = await user.Content.ReadFromJsonAsync<CustomAuthResponses>();
+            return response!;
         }
 
         public async Task<CustomGeneralResponses> RegisterAsync(RegisterDTO request)
@@ -50,6 +52,13 @@ namespace Portal.WEB.Services
         {
             var roles = await httpClient.GetAsync($"{BaseURI}/roles");
             var response = await roles.Content.ReadFromJsonAsync<List<UserRole>>();
+            return response!;
+        }
+
+        public async Task<CustomGeneralResponses> SyncUsersAsync()
+        {
+            var users = await httpClient.PostAsync($"{BaseURI}/sync", null);
+            var response = await users.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }
     }

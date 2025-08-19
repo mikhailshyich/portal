@@ -20,26 +20,33 @@
     <button type="submit" class="btn btn-success mt-3">Войти</button>
 </EditForm>
 
-<div>@ExMessage</div>
+<div class="alert mt-2 @ClassesAlert" role="alert">
+    @ResponseMessage
+</div>
 
 @code {
     public LoginDTO loginModel = new();
-    public string ExMessage = "";
+    private string ResponseMessage = string.Empty;
+    private string ClassesAlert = string.Empty;
 
     public async Task HandleLogin()
     {
         try
         {
-            var result = await authService.LoginAsync(loginModel);
-            if (result != null && result.Token != null)
+            var response = await authService.LoginAsync(loginModel);
+            if (response != null && response.Token != null)
             {
-                await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(result.Token);
+                await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(response.Token);
                 navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                ResponseMessage = response.Message;
+                ClassesAlert = "alert-warning";
             }
         }
         catch(Exception ex)
         {
-            ExMessage = ex.Message;
         }
     }
 }

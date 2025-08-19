@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Utilities.Collections;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Entities.Warehouses;
@@ -11,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.DirectoryServices.AccountManagement;
 
 namespace Portal.Infrastructure.Repositories
 {
@@ -29,7 +31,7 @@ namespace Portal.Infrastructure.Repositories
                 return new CustomAuthResponses(false, $"Пользователь равен null.");
 
             var userDB = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
-            if (userDB is null)
+            if (userDB is null || userDB.IsActive == false)
                 return new CustomAuthResponses(false, $"Проверьте введённые данные.");
 
             if (new PasswordHasher<User>().VerifyHashedPassword(userDB, userDB.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
@@ -90,7 +92,7 @@ namespace Portal.Infrastructure.Repositories
             if (userTokens != null)
             {
                 userTokens.RefreshToken = GenerateRefreshToken();
-                userTokens.DateTimeExpiredToken = DateTime.Now.AddDays(7);
+                userTokens.DateTimeExpiredToken = DateTime.Now.AddHours(8);
             }
             else
             {
@@ -98,7 +100,7 @@ namespace Portal.Infrastructure.Repositories
                 {
                     UserId = user.Id,
                     RefreshToken = GenerateRefreshToken(),
-                    DateTimeExpiredToken = DateTime.Now.AddDays(7)
+                    DateTimeExpiredToken = DateTime.Now.AddHours(8)
                 };
                 context.UserTokens.Add(refreshToken);
             }
@@ -123,7 +125,7 @@ namespace Portal.Infrastructure.Repositories
                 issuer: "Turov Dairy Industrial Complex",
                 audience: "Employees Turov Dairy Industrial Complex",
                 claims: claimsList,
-                expires: DateTime.Now.AddDays(15),
+                expires: DateTime.Now.AddHours(8),
                 signingCredentials: credentials
             );
 
@@ -189,6 +191,80 @@ namespace Portal.Infrastructure.Repositories
         public async Task<List<UserRole>> GetAllUserRolesAsync()
         {
             return await context.UserRoles.ToListAsync();
+        }
+
+        public async Task<CustomGeneralResponses> SyncUsersAsync()
+        {
+            try
+            {
+                List<User> users = new();
+                string activeDirectory = "turovmilk.by";
+                PrincipalContext principalContext = new(ContextType.Domain, activeDirectory);
+                UserPrincipal userPrincipal = new(principalContext);
+                PrincipalSearcher search = new(userPrincipal);
+                foreach (UserPrincipal result in search.FindAll().Cast<UserPrincipal>())
+                {
+
+                    string surname = Convert.ToString(result.Surname);
+                    string name = Convert.ToString(result.GivenName);
+                    string patronymic = Convert.ToString(result.MiddleName);
+                    string username = Convert.ToString(result.SamAccountName);
+                    string email = Convert.ToString(result.EmailAddress);
+
+                    if(surname is null)
+                    {
+                        surname = "";
+                    }
+                    if(patronymic is null)
+                    {
+                        patronymic = "";
+                    }
+
+                    if (result.Enabled == true & result.EmailAddress != null)
+                    {
+                        var user = await context.Users.FirstOrDefaultAsync(e => e.Username == username);
+                        if (user is null)
+                        {
+                            var newUser = new User()
+                            {
+                                UserDepartmentId = Guid.Parse("D7FA6B79-CF7B-442E-32E6-08DDD5A32CAC"),
+                                UserRoleId = Guid.Parse("D7FA6B79-CF7B-442E-37E6-08DDD5A32CAC"),
+                                FirstName = name,
+                                LastName = surname,
+                                Patronymic = patronymic,
+                                Username = username,
+                                PasswordHash = "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==",
+                                Email = email,
+                                IsActive = true
+                            };
+
+                            users.Add(newUser);
+                        }
+                        else
+                        {
+                            user.FirstName = name;
+                            user.LastName = surname;
+                            user.Patronymic = "";
+                            user.Username = username;
+                            user.Email = email;
+                        }
+                    }
+                    else if (result.Enabled == false)
+                    {
+                        var user = context.Users.FirstOrDefault(e => e.Username == username & e.IsActive == true);
+                        if (user != null)
+                        {
+                            user.IsActive = false;
+                            return new CustomGeneralResponses(true, "Пользователь успешно отключён.");
+                        }
+                    }
+                }
+                search.Dispose();
+                await context.Users.AddRangeAsync(users);
+                context.SaveChanges();
+                return new CustomGeneralResponses(true, "Пользователи успешно синхронизированы.");
+            }
+            catch(Exception ex) { return new CustomGeneralResponses(false, ex.Message); }
         }
     }
 }

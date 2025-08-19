@@ -330,6 +330,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.UserController",
+    "Method": "SyncUsers",
+    "RelativePath": "api/User/sync",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.UserDepartmentController",
     "Method": "GetById",
     "RelativePath": "api/UserDepartment/{id}",

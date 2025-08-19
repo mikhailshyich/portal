@@ -66,11 +66,11 @@ namespace Portal.Infrastructure.Repositories
             {
                 iTextSharp.text.Rectangle qrSize = new(30, 30); //49,4x31,7mm 111, 84
                 Document document = new Document(qrSize, 0, 0, 0, 0);
-                var randomNumber = new byte[10];
-                using var rng = RandomNumberGenerator.Create();
-                rng.GetBytes(randomNumber);
-                var randomText = Convert.ToBase64String(randomNumber);
-                var fileName = $"{randomText}-qr.pdf";
+                //var randomNumber = new byte[10];
+                //using var rng = RandomNumberGenerator.Create();
+                //rng.GetBytes(randomNumber);
+                //var randomText = Convert.ToBase64String(randomNumber);
+                var fileName = $"{Guid.NewGuid()}.pdf";
                 var pathQR = $"labels\\{fileName}";
                 if (System.IO.File.Exists(pathQR))
                 {
@@ -116,22 +116,21 @@ namespace Portal.Infrastructure.Repositories
             try
             {
                 iTextSharp.text.Rectangle labelSize = new(111, 84); //49,4x31,7mm 111, 84
-                iTextSharp.text.Document doc = new(labelSize, 10, 5, 5, 5);
-                string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "TAHOMA.TTF");                //
+                string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "BAHNSCHRIFT.TTF");           //
                 var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);                                //нужно для отображения кирилицы
                 var font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);       //
                 var fontTmk = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);    //
                 var fontBold = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.BOLD);
-                fontTmk.Size = 5;
-                font.Size = 7;
-                fontBold.Size = 9;
+                fontTmk.Size = 6;
+                font.Size = 8;
+                fontBold.Size = 10;
 
                 Document document = new Document(labelSize, 0, 0, 0, 0);
-                var randomNumber = new byte[10];
-                using var rng = RandomNumberGenerator.Create();
-                rng.GetBytes(randomNumber);
-                var randomText = Convert.ToBase64String(randomNumber);
-                var fileName = $"{randomText}-label.pdf";
+                //var randomNumber = new byte[10];
+                //using var rng = RandomNumberGenerator.Create();
+                //rng.GetBytes(randomNumber);
+                //var randomText = Convert.ToBase64String(randomNumber);
+                var fileName = $"{Guid.NewGuid()}.pdf";
                 var pathQR = $"labels\\{fileName}";
                 if (System.IO.File.Exists(pathQR))
                 {
@@ -148,9 +147,9 @@ namespace Portal.Infrastructure.Repositories
                         {
                             var hardware = context.Hardwares.Find(hardwareId);
 
-                            Paragraph tmk = new("ОАО \"Туровский молочный комбинат\"", fontTmk);
+                            Paragraph tmk = new("ОАО Туровский молочный комбинат", fontTmk);
                             tmk.Alignment = Element.ALIGN_CENTER;
-                            tmk.SpacingAfter = 2;
+                            tmk.SpacingAfter = 0;
 
                             string invExt = "";
                             if (hardware.InventoryNumberExternalSystem != "")
@@ -159,10 +158,10 @@ namespace Portal.Infrastructure.Repositories
                             }
                             Paragraph title = new($"{hardware.Title}{invExt}", font);
                             title.Alignment = Element.ALIGN_CENTER;
-                            title.SpacingAfter = 2;
-                            Paragraph inventoryNumber = new($"{hardware.CombinedInvNumber}", fontBold);
+                            title.SpacingAfter = 0;
+                            Paragraph inventoryNumber = new($"Инв. {hardware.CombinedInvNumber}", fontBold);
                             inventoryNumber.Alignment = Element.ALIGN_CENTER;
-                            title.SpacingAfter = 2;
+                            title.SpacingAfter = 0;
 
                             // URL or text to be encoded in the QR code
                             string qrText = hardware?.CombinedInvNumber;
@@ -178,7 +177,6 @@ namespace Portal.Infrastructure.Repositories
                             document.Add(title);
                             document.Add(inventoryNumber);
                             document.NewPage();
-
                         }
                     }
                     document.Close();
