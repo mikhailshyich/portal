@@ -204,6 +204,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "Method": "Move",
+    "RelativePath": "api/Hardware/move/{userID}/{userWarehouseID}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "hardwaresID",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      },
+      {
+        "Name": "userID",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "userWarehouseID",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.MainWarehouseController",
     "Method": "GetById",
     "RelativePath": "api/MainWarehouse/{id}",

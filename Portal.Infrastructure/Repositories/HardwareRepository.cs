@@ -3,10 +3,11 @@ using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
+using Portal.Domain.Entities.Users;
+using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
-using System.Security.Cryptography;
 
 namespace Portal.Infrastructure.Repositories
 {
@@ -193,6 +194,42 @@ namespace Portal.Infrastructure.Repositories
         public async Task<List<Hardware>> GetAllAsync()
         {
             return await context.Hardwares.ToListAsync();
+        }
+
+        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid userID, Guid userWarehouseID)
+        {
+            if (hardwaresID is null) return new CustomGeneralResponses(false, "Список перемещаемого оборудования равен null.");
+            if (userID == Guid.Empty) return new CustomGeneralResponses(false, "Пользователь на которого перемещаем оборудование равен null.");
+
+            var userDB = await context.Users.FindAsync(userID);
+            if (userDB is null) return new CustomGeneralResponses(false, "Пользователь на которого перемещаем оборудование не найден в базе данных.");
+
+            var userWarehouseDB = await context.UserWarehouses.FindAsync(userWarehouseID);
+            if (userWarehouseDB is null) return new CustomGeneralResponses(false, $"У пользователя {userDB.Username} нет такого склада.");
+
+            List<Hardware> displacedHardware = new();
+
+            foreach (var hardwareID in hardwaresID)
+            {
+                var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId == null);
+                if(hardwareDB != null)
+                {
+                    hardwareDB.UserId = userDB.Id;
+                    hardwareDB.User = userDB;
+                    hardwareDB.UserWarehouseId = userWarehouseDB.Id;
+                    hardwareDB.UserWarehouse = userWarehouseDB;
+
+                    displacedHardware.Add(hardwareDB);
+                    var userHardware = new UserHardware()
+                    {
+                        HardwareId = hardwareDB.Id,
+                        UserId = userDB.Id
+                    };
+                    context.UsersHardware.Add(userHardware);
+                }
+            }
+            await context.SaveChangesAsync();
+            return new CustomGeneralResponses(true, $"Оборудование в количестве {displacedHardware.Count} перемещено на {userDB.Username}", displacedHardware);
         }
     }
 }

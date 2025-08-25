@@ -1,5 +1,7 @@
 ﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
+using Portal.Domain.Entities.Users;
+using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 
@@ -32,6 +34,11 @@ namespace Portal.Application.Services
         public async Task<List<Hardware>> GetAllAsync()
         {
             return await hardwareDomain.GetAllAsync();
+        }
+
+        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid userID, Guid userWarehouseID)
+        {
+            return await hardwareDomain.MoveToUserAsync(hardwaresID, userID, userWarehouseID);
         }
     }
 }
