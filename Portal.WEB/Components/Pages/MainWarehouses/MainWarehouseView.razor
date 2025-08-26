@@ -45,6 +45,7 @@
                                             <td>@hardware.InventoryNumberExternalSystem</td>
                                             <td>@hardware.DocumentExternalSystem.ShortTitle</td>
                                             <td>@hardware.DateTimeAdd</td>
+                                            <td>@hardware.User?.LastName @hardware.User?.FirstName</td>
                                             <td><button class="btn btn-secondary btn-sm mx-1">Подробнее</button></td>
                                         </tr>
                                     }
@@ -174,7 +175,7 @@
     private string ClassesAlert = string.Empty;
     private readonly string host = "http://hardware-vm:81";
     //private readonly string host = "https://localhost:7266";
-    private List<string> TableHeaders = ["Наименование", "Категория", "Инвентарный", "Номер у/с", "Документ у/с", "Дата добавления", ""];
+    private List<string> TableHeaders = ["Наименование", "Категория", "Инвентарный", "Номер у/с", "Документ у/с", "Дата добавления", "МОЛ", ""];
 
     protected override async Task OnInitializedAsync()
     {

@@ -75,6 +75,11 @@ namespace Portal.Infrastructure.Repositories
             {
                 var category = await context.CategoriesHardware.FindAsync(hardware.CategoryHardwareId);
                 var document = await context.DocumentsExternalSystem.FindAsync(hardware.DocumentExternalSystemId);
+                if (hardware.UserId != null)
+                {
+                    var user = await context.Users.FindAsync(hardware.UserId);
+                    hardware.User = user;
+                }
                 hardware.CategoryHardware = category;
                 hardware.DocumentExternalSystem = document;
             }
