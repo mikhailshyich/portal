@@ -7,7 +7,9 @@ namespace Portal.Domain.Entities.Users
     {
         [Key]
         public Guid Id { get; set; }
+        [MaxLength(100)]
         public string Title { get; set; } = string.Empty;
+        [MaxLength(50)]
         public string ShortTitle { get; set; } = string.Empty;
 
         public List<User> Users { get; set; } = [];

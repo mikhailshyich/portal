@@ -6,6 +6,8 @@
 @inject MainWarehouseServiceWEB MainWarehouseService
 @inject CategoryHardwareServiceWEB CategoryHardwareService
 @inject DocumentExternalSystemServiceWEB DocumentExternalSystem
+@inject UserServiceWEB UserService
+@inject UserWarehouseServiceWEB UserWarehouseService
 @inject HardwareServiceWEB HardwareService
 @inject NavigationManager navigationManager
 
@@ -17,7 +19,8 @@
                 <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
                 <div class="card mb-3">
                     <div class="card-header">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+</b></button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+ Добавить</b></button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware"><b>Переместить</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
                     </div>
@@ -60,7 +63,7 @@
                 </div>
 
 
-                <!-- Modal -->
+                <!-- Modal ADD HARDWARE-->
                 <div class="modal fade" id="addHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addHardwareTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -142,6 +145,59 @@
                     </div>
                 </div>
                 <!-- End modal -->
+
+                <!-- Modal MOVE HARDWARE -->
+                <div class="modal fade" id="moveHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="moveHardwareTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="moveHardwareTitle">Переместить оборудование на сотрудника</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <EditForm Model="hardwareDTO" FormName="MoveHardware" Context="MoveHardware" OnValidSubmit="MoveHardware">
+                                <div class="modal-body">
+                                    <DataAnnotationsValidator />
+
+                                    <!-- Alert -->
+                                    <div class="alert @ClassesAlert" role="alert">
+                                        @ResponseMessage
+                                    </div>
+                                    <!-- End alert -->
+
+                                    <div class="form-group">
+                                        <label for="user">Сотрудник</label>
+                                        <InputSelect id="user" class="form-control" @oninput="SelectedUser" @bind-Value="hardwareDTO.UserId">
+                                            <option value="">Выберите нужного сотрудника</option>
+                                            @foreach (User user in UsersList)
+                                            {
+                                                <option value="@user.Id">@user.LastName @user.FirstName</option>
+                                            }
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => hardwareDTO.UserId)" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="user">Склад сотрудника</label>
+                                        <InputSelect id="user" class="form-control" @bind-Value="hardwareDTO.UserWarehouseId">
+                                            <option value="">Выберите нужный склад</option>
+                                            @foreach (UserWarehouse warehouse in UserWarehousesList)
+                                            {
+                                                <option value="@warehouse.Id">@warehouse.Title</option>
+                                            }
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => hardwareDTO.UserWarehouseId)" />
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                                    <button type="submit" class="btn btn-success" id="submit">Переместить</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+                <!--End modal -->
             }
             else
             {
@@ -173,9 +229,11 @@
     private bool IsChecked = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    private readonly string host = "http://hardware-vm:81";
-    //private readonly string host = "https://localhost:7266";
+    //private readonly string host = "http://hardware-vm:81";
+    private readonly string host = "https://localhost:7266";
     private List<string> TableHeaders = ["Наименование", "Категория", "Инвентарный", "Номер у/с", "Документ у/с", "Дата добавления", "МОЛ", ""];
+    private List<User> UsersList = new();
+    private List<UserWarehouse> UserWarehousesList = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -188,6 +246,7 @@
                 MainWarehouse = response;
                 Categories = await CategoryHardwareService.GetAllAsync();
                 Documents = await DocumentExternalSystem.GetAllAsync();
+                UsersList = await UserService.GetAllAsync();
             }
         }
         catch (Exception ex) { }
@@ -222,6 +281,11 @@
         {
             ResponseMessage = ex.Message;
         }
+
+    }
+
+    private async Task MoveHardware()
+    {
 
     }
 
@@ -268,5 +332,12 @@
         {
             IsChecked = false;
         }
+    }
+    private async Task SelectedUser(ChangeEventArgs args)
+    {
+        var userId = args.Value.ToString();
+        Guid.TryParse(userId, out Guid id);
+        UserWarehousesList.Clear();
+        UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(id);
     }
 }

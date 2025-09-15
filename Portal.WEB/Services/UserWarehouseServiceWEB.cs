@@ -1,0 +1,46 @@
+﻿using Portal.Domain.DTOs;
+using Portal.Domain.Entities.Users;
+using Portal.Domain.Entities.Warehouses;
+using Portal.Domain.Responses;
+
+namespace Portal.WEB.Services
+{
+    public class UserWarehouseServiceWEB : IUserWarehouseServiceWEB
+    {
+        private readonly HttpClient httpClient;
+
+        public UserWarehouseServiceWEB(HttpClient httpClient)
+        {
+            this.httpClient = httpClient;
+        }
+
+        private readonly string BaseURI = "api/UserWarehouse";
+
+        public Task<CustomGeneralResponses> AddAsync(UserWarehouseDTO request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CustomGeneralResponses> UpdateAsync(UserWarehouse request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CustomGeneralResponses> DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<UserWarehouse>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<UserWarehouse>> GetAllByUserIdAsync(Guid id)
+        {
+            var warehouses = await httpClient.GetAsync($"{BaseURI}/get/user/{id}");
+            var response = await warehouses.Content.ReadFromJsonAsync<List<UserWarehouse>>();
+            return response!;
+        }
+    }
+}

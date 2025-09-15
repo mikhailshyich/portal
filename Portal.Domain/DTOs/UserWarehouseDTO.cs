@@ -7,6 +7,7 @@ namespace Portal.Domain.DTOs
         [Required]
         public Guid UserId { get; set; }
         [Required]
+        [MaxLength(60)]
         public string Title { get; set; } = string.Empty;
     }
 }

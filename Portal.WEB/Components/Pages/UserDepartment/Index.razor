@@ -8,19 +8,52 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            <div class="row mb-2 text-center">
-                <div class="col"><h3>Подразделения</h3></div>
-            </div>
-            <div class="row mb-2">
+            <div class="row mt-3 mb-3">
                 <div class="col">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDepartment">+</button>
+                    <h3 class="m-0">Подразделения</h3>
+                    <p class="m-0">Таблица добавленных подразделений (отделов).</p>
+                </div>
+                <div class="col">
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDepartment"><b>+ Добавить</b></button>
                 </div>
             </div>
-            <div class="row" style="overflow: scroll;">
-                <QuickGrid Items="UserDepartments.AsQueryable()">
-                    <PropertyColumn Property="@(p => p.Title)" Title="Полное наименование" Sortable="true" />
-                    <PropertyColumn Property="@(p => p.ShortTitle)" Title="Краткое наименование" Sortable="true" />
-                </QuickGrid>
+            <div class="row">
+                <div class="col">
+                    @if (UserDepartments.Count > 0)
+                    {
+                        <table class="table table-hover text-center">
+                            <thead>
+                                <tr>
+                                    @foreach (var header in TableHeaders)
+                                    {
+                                        <th scope="col">@header</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (UserDepartment department in UserDepartments)
+                                {
+                                    <tr>
+                                        <td>@department.Title</td>
+                                        <td>@department.ShortTitle</td>
+                                        <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Загрузка...</span>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
 
             <!-- Modal -->
@@ -76,13 +109,17 @@
     private UserDepartmentDTO DepartmentDTO = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
+    private List<string> TableHeaders = ["Полное наименование", "Краткое наименование", ""];
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
-            UserDepartments = await userDepartmentService.GetAllAsync();
+            var authState = await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                UserDepartments = await userDepartmentService.GetAllAsync();
+            }
         }
         catch (Exception ex) { }
     }

@@ -22,5 +22,12 @@ namespace Portal.API.Controllers
             var result = await userWarehouse.AddAsync(request);
             return Ok(result);
         }
+
+        [HttpGet("get/user/{id}")]
+        public async Task<IActionResult> GetAllByUserId(Guid id)
+        {
+            var result = await userWarehouse.GetAllByUserIdAsync(id);
+            return Ok(result);
+        }
     }
 }

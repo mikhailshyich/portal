@@ -7,7 +7,9 @@ namespace Portal.Domain.DTOs
     {
         [Required(ErrorMessage = "Обязательное поле для заполнения.")]
         [Display(Name = "Полное наименование")]
+        [MaxLength(100)]
         public string Title { get; set; } = string.Empty;
+        [MaxLength(50)]
         public string ShortTitle { get; set; } = string.Empty;
     }
 }

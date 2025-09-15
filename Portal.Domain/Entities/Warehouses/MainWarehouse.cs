@@ -8,7 +8,9 @@ namespace Portal.Domain.Entities.Warehouses
         [Key]
         public Guid Id { get; set; }
         public Guid UserDepartmentId { get; set; }
+        [MaxLength(60)]
         public string Title { get; set; } = string.Empty;
+        [MaxLength(100)]
         public string Description { get; set; } = string.Empty;
 
         public List<Hardware> Hardwares { get; set; } = [];

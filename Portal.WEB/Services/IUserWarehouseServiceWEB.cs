@@ -2,9 +2,9 @@
 using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Responses;
 
-namespace Portal.Domain.Interfaces
+namespace Portal.WEB.Services
 {
-    public interface IUserWarehouseDomain
+    public interface IUserWarehouseServiceWEB
     {
         Task<CustomGeneralResponses> AddAsync(UserWarehouseDTO request);
         Task<CustomGeneralResponses> UpdateAsync(UserWarehouse request);

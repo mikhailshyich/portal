@@ -9,6 +9,7 @@ namespace Portal.Domain.Entities.Warehouses
         [Key]
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
+        [MaxLength(60)]
         public string Title { get; set; } = string.Empty;
 
         public User? User { get; set; }

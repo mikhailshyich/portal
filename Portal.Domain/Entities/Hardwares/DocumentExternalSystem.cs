@@ -6,7 +6,9 @@ namespace Portal.Domain.Entities.Hardwares
     {
         [Key]
         public Guid Id { get; set; }
+        [MaxLength(60)]
         public string Title { get; set; } = string.Empty;
+        [MaxLength(10)]
         public string ShortTitle { get; set; } = string.Empty;
 
         public List<Hardware> Hardwares { get; set; } = [];

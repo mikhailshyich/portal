@@ -1,7 +1,6 @@
 ﻿@page "/users"
 
 @inject UserDepartmentServiceWEB userDepartment
-@inject AuthenticationStateProvider AuthStateProvider
 @inject UserServiceWEB userService
 @inject AuthenticationStateProvider AuthStateProvider
 
@@ -10,24 +9,67 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            <div class="row mb-2 text-center">
-                <div class="col"><h3>Пользователи</h3></div>
-            </div>
-            <div class="row mb-2">
-                <div class="col">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser">+</button>
-                    <button type="button" class="btn btn-primary" @onclick="SyncUsers">@TitleSyncButton</button>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm">
+                            <h3 class="m-0">Пользователи</h3>
+                            <p class="m-0">Таблица добавленных сотрудников.</p>
+                        </div>
+                        <div class="col-sm">
+
+                        </div>
+                        <div class="col-sm d-flex align-items-center justify-content-end">
+                            <div class="row">
+                                <div class="p-0 m-1 col-auto">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
+                                </div>
+                                <div class="p-0 m-1 col-auto">
+                                    <button type="button" class="btn btn-primary" @onclick="SyncUsers"><b>@TitleSyncButton</b></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+                    @if (UsersList.Count > 0)
+                    {
+                        <table class="table table-hover text-center">
+                            <thead>
+                                <tr>
+                                    @foreach (var header in TableHeaders)
+                                    {
+                                        <th scope="col">@header</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (User user in UsersList)
+                                {
+                                    <tr>
+                                        <td>@user.LastName</td>
+                                        <td>@user.FirstName</td>
+                                        <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Загрузка...</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
                 </div>
             </div>
-            <div class="row" style="overflow: scroll;">
-                <QuickGrid Items="UsersList.AsQueryable()">
-                    <PropertyColumn Property="@(p => p.LastName)" Title="Фамилия" Sortable="true" />
-                    <PropertyColumn Property="@(p => p.FirstName)" Title="Имя" Sortable="true" />
-                    <PropertyColumn Property="@(p => p.Patronymic)" Title="Отчество" Sortable="true" />
-                </QuickGrid>
-            </div>
 
-            <!-- Modal -->
+
+            <!-- Modal Add user -->
             <div class="modal fade" id="addUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -136,15 +178,19 @@
     private string TitleSyncButton = "Sync";
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
+    private List<string> TableHeaders = ["Фамилия", "Имя", ""];
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
-            UsersList = await userService.GetAllAsync();
-            UserRoles = await userService.GetAllUserRolesAsync();
-            UserDepartments = await userDepartment.GetAllAsync();
+            var authState = await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                UsersList = await userService.GetAllAsync();
+                UserRoles = await userService.GetAllUserRolesAsync();
+                UserDepartments = await userDepartment.GetAllAsync();
+            }
         }
         catch(Exception ex){ }
     }

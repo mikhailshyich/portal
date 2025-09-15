@@ -44,9 +44,13 @@ namespace Portal.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<List<UserWarehouse>> GetAllByUserIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty) return null;
+
+            var warehouses = await context.UserWarehouses.Where(r => r.UserId == id).ToListAsync();
+
+            return warehouses;
         }
 
         public Task<CustomGeneralResponses> UpdateAsync(UserWarehouse request)
