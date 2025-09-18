@@ -10,5 +10,6 @@ namespace Portal.WEB.Services
         Task<List<Hardware>> GetAllAsync();
         Task<string> GenerateQR(List<Guid>? idList);
         Task<string> GenerateLabel(List<Guid>? idList);
+        Task<List<Hardware>> GetByUserIdAsync(Guid userId);
     }
 }

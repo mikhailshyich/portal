@@ -12,7 +12,6 @@ namespace Portal.Infrastructure.Data
             Database.EnsureCreated();
             }
 
-        public DbSet<Game> Games { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserDepartment> UserDepartments { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
@@ -29,8 +28,8 @@ namespace Portal.Infrastructure.Data
             //passwordHash admin %*Rfrnfrdsikj017(:
             //passwordHash user %*Rfrnfrdsikj@
             modelBuilder.Entity<User>().HasData(
-                    new User { Id = Guid.Parse("F29533DD-9A3C-4889-D468-08DDD5A47B7A"), UserDepartmentId = Guid.Parse("D7FA6B79-CF7B-442E-32E6-08DDD5A32CAC"), Username = "admin", UserRoleId = Guid.Parse("F29533DD-9A3C-4899-D468-08DDD5A47B7A"), Email = "admin@admin.by", PasswordHash = "AQAAAAIAAYagAAAAEEnHKp66I1iY4a6WutPESx3dIQF0V/ITse74a7euQmBiSo8E516lhTSbFbEqJVAKQw==", IsActive = true },
-                    new User { Id = Guid.Parse("D7FA6B79-CF3B-442E-37E6-08DDD5A32CAC"), UserDepartmentId = Guid.Parse("D7FA6B79-CF7B-442E-32E6-08DDD5A32CAC"), Username = "user", UserRoleId = Guid.Parse("D7FA6B79-CF7B-442E-37E6-08DDD5A32CAC"), Email = "user@user.by", PasswordHash = "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==", IsActive = true }
+                    new User { Id = Guid.Parse("F29533DD-9A3C-4889-D468-08DDD5A47B7A"), UserDepartmentId = Guid.Parse("D7FA6B79-CF7B-442E-32E6-08DDD5A32CAC"), LastName="Администратор", Username = "admin", UserRoleId = Guid.Parse("F29533DD-9A3C-4899-D468-08DDD5A47B7A"), Email = "admin@admin.by", PasswordHash = "AQAAAAIAAYagAAAAEEnHKp66I1iY4a6WutPESx3dIQF0V/ITse74a7euQmBiSo8E516lhTSbFbEqJVAKQw==", IsActive = true },
+                    new User { Id = Guid.Parse("D7FA6B79-CF3B-442E-37E6-08DDD5A32CAC"), UserDepartmentId = Guid.Parse("D7FA6B79-CF7B-442E-32E6-08DDD5A32CAC"), LastName="Пользователь", Username = "user", UserRoleId = Guid.Parse("D7FA6B79-CF7B-442E-37E6-08DDD5A32CAC"), Email = "user@user.by", PasswordHash = "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==", IsActive = true }
             );
 
             modelBuilder.Entity<UserRole>().HasData(

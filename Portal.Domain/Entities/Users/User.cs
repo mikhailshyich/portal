@@ -24,6 +24,8 @@ namespace Portal.Domain.Entities.Users
         public bool IsActive { get; set; }
 
         public UserRole? UserRole {  get; set; }
+        [MaxLength(50)]
+        public string Specialization { get; set; } = string.Empty;
         public UserDepartment? UserDepartment { get; set; }
         //public List<Hardware> Hardwares { get; set; } = [];
         public List<UserWarehouse> UserWarehouses { get; set; } = [];

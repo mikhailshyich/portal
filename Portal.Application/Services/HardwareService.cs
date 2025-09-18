@@ -36,6 +36,11 @@ namespace Portal.Application.Services
             return await hardwareDomain.GetAllAsync();
         }
 
+        public async Task<List<Hardware>> GetByUserIdAsync(Guid userId)
+        {
+            return await hardwareDomain.GetByUserIdAsync(userId);
+        }
+
         public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid userID, Guid userWarehouseID)
         {
             return await hardwareDomain.MoveToUserAsync(hardwaresID, userID, userWarehouseID);

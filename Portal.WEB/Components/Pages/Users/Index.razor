@@ -3,6 +3,7 @@
 @inject UserDepartmentServiceWEB userDepartment
 @inject UserServiceWEB userService
 @inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager navigationManager
 
 @* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
 
@@ -49,7 +50,7 @@
                                     <tr>
                                         <td>@user.LastName</td>
                                         <td>@user.FirstName</td>
-                                        <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
+                                        <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => ShowUser(user.Id)">Перейти</button></td>
                                     </tr>
                                 }
                             </tbody>
@@ -171,7 +172,7 @@
 </AuthorizeView>
 
 @code {
-    private List<User> UsersList = new();
+                        private List<User> UsersList = new();
     private List<UserRole> UserRoles = new();
     private List<UserDepartment> UserDepartments = new();
     private RegisterDTO RegisterDTO = new();
@@ -187,9 +188,9 @@
             var authState = await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
             if (authState.User.Identity.IsAuthenticated)
             {
-                UsersList = await userService.GetAllAsync();
-                UserRoles = await userService.GetAllUserRolesAsync();
-                UserDepartments = await userDepartment.GetAllAsync();
+                        UsersList = await userService.GetAllAsync();
+                        UserRoles = await userService.GetAllUserRolesAsync();
+                        UserDepartments = await userDepartment.GetAllAsync();
             }
         }
         catch(Exception ex){ }
@@ -221,5 +222,10 @@
             TitleSyncButton = "Sync";
         }
         catch{}
+    }
+
+    private void ShowUser(Guid id)
+    {
+        navigationManager.NavigateTo($"/user/{id}");
     }
 }

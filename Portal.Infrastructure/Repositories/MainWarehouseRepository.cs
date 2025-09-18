@@ -35,11 +35,6 @@ namespace Portal.Infrastructure.Repositories
             return new CustomGeneralResponses(true, "Склад успешно добавлен.", mainWarehouse);
         }
 
-        public Task<MainWarehouse> EditGameAsync(MainWarehouse request)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<MainWarehouse>> GetAllAsync()
         {
             var mainWarehouses = await context.MainWarehouses.ToListAsync();

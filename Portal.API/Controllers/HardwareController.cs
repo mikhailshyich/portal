@@ -63,10 +63,17 @@ namespace Portal.API.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-        [HttpPost("move/{userID}/{userWarehouseID}")]
-        public async Task<IActionResult> Move(List<Guid> hardwaresID, Guid userID, Guid userWarehouseID)
+        [HttpPost("move/{userId}/{userWarehouseId}")]
+        public async Task<IActionResult> Move(List<Guid> hardwaresId, Guid userId, Guid userWarehouseId)
         {
-            var result = await hardwareInterface.MoveToUserAsync(hardwaresID, userID, userWarehouseID);
+            var result = await hardwareInterface.MoveToUserAsync(hardwaresId, userId, userWarehouseId);
+            return Ok(result);
+        }
+
+        [HttpGet("get/{userId}")]
+        public async Task<IActionResult> GetByUserId(Guid userId)
+        {
+            var result = await hardwareInterface.GetByUserIdAsync(userId);
             return Ok(result);
         }
     }

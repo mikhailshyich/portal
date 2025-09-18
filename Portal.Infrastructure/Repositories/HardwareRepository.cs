@@ -231,5 +231,15 @@ namespace Portal.Infrastructure.Repositories
             await context.SaveChangesAsync();
             return new CustomGeneralResponses(true, $"Оборудование в количестве {displacedHardware.Count} перемещено на {userDB.Username}", displacedHardware);
         }
+
+        public async Task<List<Hardware>> GetByUserIdAsync(Guid userId)
+        {
+            if (userId == Guid.Empty) return null!;
+
+            var userDB = await context.Users.FindAsync(userId);
+            if (userDB is null) return null!;
+
+            return await context.Hardwares.Where(h => h.UserId == userId).ToListAsync();
+        }
     }
 }

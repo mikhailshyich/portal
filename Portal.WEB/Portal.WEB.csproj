@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Portal.Application\Portal.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Новая папка\" />
+  </ItemGroup>
+
 </Project>

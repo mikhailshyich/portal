@@ -20,9 +20,6 @@ builder.Services.AddDbContext<PortalDbContext>(options =>
 builder.Services.AddControllersWithViews()
                 .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddScoped<IGameService, GameService>();
-builder.Services.AddScoped<IGame, GameRepository>();
-
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserDomain, UserRepository>();
 

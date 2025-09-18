@@ -1,0 +1,98 @@
+﻿@page "/user/{Id:guid}"
+@inject UserServiceWEB userService
+@inject HardwareServiceWEB hardwareService
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <img class="img-thumbnail" style="max-height: 250px;" src="img/user_profile/default.png" />
+        </div>
+        <div class="col-sm">
+            <table class="table table-th-block">
+                <tbody>
+                    <tr><td class="active">Фамилия:</td><td><b>@User.LastName</b></td></tr>
+                    <tr><td class="active">Имя:</td><td><b>@User.FirstName</b></td></tr>
+                    <tr><td class="active">Email:</td><td><a style="text-decoration: none; color: black;" href="mailto:@User.Email"><b>@User.Email</b></a></td></tr>
+                    <tr><td class="active">Мобильный телефон:</td><td><a style="text-decoration: none; color: black;" href="tel:"><b>телефон????</b></a></td></tr>
+                    <tr><td class="active">Должность:</td><td><b>Должность???</b></td></tr>
+                    <tr><td class="active">Отдел:</td><td><b>@User.UserDepartment?.Title</b></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @if (UserHardwaresList.Count > 0)
+    {
+        <div class="row">
+            <h4 class="text-center mb-3">Закреплённое за сотрудником оборудование</h4>
+            <div class="col">
+                <button class="btn btn-primary d-none" id="print" type="submit" onclick="goToLabel()" title="Распечатать выделенные" asp-controller="Employee" asp-action="PrintSelectLabel"><img class="m-1" src="~/img/print.png"></button>
+            </div>
+            <div class="col pull-right">
+                <input type="text" class="search form-control" onkeyup="myFunction()" id="search" placeholder="Поиск по всей таблице">
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" title="Выбрать всё" /></th>
+                            <th>Изображение</th>
+                            <th>Наименование</th>
+                            <th>Описание</th>
+                            <th>№ вн. систем</th>
+                            <th>Инв. №</th>
+                            <th>ТТН</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hardware">
+                        @foreach (var userHardware in UserHardwaresList)
+                        {
+                            <tr>
+                                <td><input value="@userHardware.Id" class="checkbox" type="checkbox" name="items" id="item" /></td>
+                                @if (userHardware.FileNameImage != null)
+                                {
+                                    <td><a href="hardware_img/@userHardware.FileNameImage" target="_blank"><img src="~/hardware_img/@userHardware.FileNameImage" width="80" height="80" /></a></td>
+                                }
+                                else
+                                {
+                                    <td><img src="img/noimage.png" width="80" height="80" /></td>
+                                }
+                                <td>@userHardware.Title</td>
+                                <td>@userHardware.Description</td>
+                                <td>@userHardware.InventoryNumberExternalSystem</td>
+                                <td>@userHardware.CombinedInvNumber</td>
+                                <td>@userHardware.TTN</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm mb-1" id="qrcode" title="Печать QR-кода" asp-controller="Employee" asp-action="PrintQr" asp-route-id="@userHardware.Id" onclick="setTimeout(window.open('/files/qrcode.pdf'),1000)"><img src="~/img/qr.png"></a>
+                                    <a class="btn btn-primary btn-sm mb-1" title="Переместить на другого сотрудника" asp-controller="Hardware" asp-action="Move" asp-route-id="@userHardware.Id"><img src="~/img/employee.png"></a>
+                                    @* <button class="btn btn-primary btn-sm mb-1" onclick="goTo()">Открыть</button> *@
+                                    @* <a class="btn btn-info btn-sm mb-1" title="Вернуть на склад" asp-controller="Hardware" asp-action="Return" asp-route-id="@employeeHdw.Id"><img src="~/img/return.png"></a> *@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <h4 class="text-center">У сотрудника нет закреплённого оборудования.</h4>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private User User = new();
+    private List<Hardware> UserHardwaresList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await userService.GetByIdAsync(Id);
+        UserHardwaresList = await hardwareService.GetByUserIdAsync(Id);
+    }
+}

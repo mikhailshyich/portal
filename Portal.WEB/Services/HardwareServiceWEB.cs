@@ -42,5 +42,12 @@ namespace Portal.WEB.Services
             var response = await hardwares.Content.ReadFromJsonAsync<List<Hardware>>();
             return response!;
         }
+
+        public async Task<List<Hardware>> GetByUserIdAsync(Guid userId)
+        {
+            var hardwares = await httpClient.GetAsync($"{BaseURI}/get/{userId}");
+            var response = await hardwares.Content.ReadFromJsonAsync<List<Hardware>>();
+            return response!;
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace Portal.Application.Services
         Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid userID, Guid userWarehouseID);
         Task<string> GenerateQR(List<Guid>? idList);
         Task<string> GenerateLabel(List<Guid>? idList);
+        Task<List<Hardware>> GetByUserIdAsync(Guid userId);
     }
 }
