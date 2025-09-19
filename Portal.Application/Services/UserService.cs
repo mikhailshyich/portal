@@ -24,7 +24,7 @@ namespace Portal.Application.Services
             return await userInterface.GetAllUserRolesAsync();
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<UserView>> GetAllAsync()
         {
             return await userInterface.GetAllAsync();
         }
@@ -47,6 +47,11 @@ namespace Portal.Application.Services
         public async Task<CustomGeneralResponses> SyncUsersAsync()
         {
             return await userInterface.SyncUsersAsync();
+        }
+
+        public async Task<UserView> GetByUsernameAsync(string username)
+        {
+            return await userInterface.GetByUsernameAsync(username);
         }
     }
 }

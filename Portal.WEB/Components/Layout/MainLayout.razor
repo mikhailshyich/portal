@@ -1,53 +1,79 @@
 ﻿@inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavigationManager
+@inject UserServiceWEB userService
 @inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    <div> @context.User.Identity?.Name!</div>
-                    <a href="/logout">Выйти</a>
-                </Authorized>
-                <NotAuthorized>
-                    <div>Не авторизован</div>
-                    <a href="/login">Войти</a>
-                </NotAuthorized>
-            </AuthorizeView>
+<AuthorizeView>
+    <Authorized>
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <main>
+            <div class="top-row">
+                <div class="row align-items-center justify-content-end" style="width: 100%;">
+                    <div class="col-auto">
+                        <p class="m-0"><b>@userView.LastName @userView.FirstName</b></p>
+                        <p class="m-0">@userView.Specialization</p>
+                    </div>
+                    <div class="col-auto">
+                        <a href="/logout">Выйти</a>
+                    </div>
+                </div>
+            </div>
 
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
-</div>
+            <article class="content">
+                @Body
+            </article>
+        </main>
+    </div>
+
+    <div id="blazor-error-ui" data-nosnippet>
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+    </Authorized>
+</AuthorizeView>
+
 
 @code{
     [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
 
     private ClaimsPrincipal user = new();
+    public UserView userView = new();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender)
+    //     {
+    //         user = (await AuthStat).User;
+    //         await SetUser(user.Identity.Name);
+    //         if (user.Identity is null || !user.Identity.IsAuthenticated)
+    //         {
+    //             NavigationManager.NavigateTo("/login");
+    //         }
+    //     }
+    // }
+
+    protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
+        var claims = await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+        if(claims.User.Identity != null)
         {
-            user = (await AuthStat).User;
-            if (user.Identity is null || !user.Identity.IsAuthenticated)
-            {
-                NavigationManager.NavigateTo("/login");
-            }
+            await SetUser(claims.User.Identity.Name);
         }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+
+    private async Task SetUser(string username)
+    {
+        if(username != string.Empty)
+            userView = await userService.GetByUsernameAsync(username);
     }
 }
 

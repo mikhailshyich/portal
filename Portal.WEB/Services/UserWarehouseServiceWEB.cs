@@ -31,9 +31,11 @@ namespace Portal.WEB.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<UserWarehouse>> GetAllAsync()
+        public async Task<List<UserWarehouse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var warehouses = await httpClient.GetAsync($"{BaseURI}/all");
+            var response = await warehouses.Content.ReadFromJsonAsync<List<UserWarehouse>>();
+            return response!;
         }
 
         public async Task<List<UserWarehouse>> GetAllByUserIdAsync(Guid id)

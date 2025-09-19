@@ -168,7 +168,7 @@
                                         <label for="user">Сотрудник</label>
                                         <InputSelect id="user" class="form-control" @oninput="SelectedUser" @bind-Value="hardwareDTO.UserId">
                                             <option value="">Выберите нужного сотрудника</option>
-                                            @foreach (User user in UsersList)
+                                            @foreach (UserView user in UsersList)
                                             {
                                                 <option value="@user.Id">@user.LastName @user.FirstName</option>
                                             }
@@ -232,7 +232,7 @@
     //private readonly string host = "http://hardware-vm:81";
     private readonly string host = "https://localhost:7266";
     private List<string> TableHeaders = ["Наименование", "Категория", "Инвентарный", "Номер у/с", "Документ у/с", "Дата добавления", "МОЛ", ""];
-    private List<User> UsersList = new();
+    private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
 
     protected override async Task OnInitializedAsync()

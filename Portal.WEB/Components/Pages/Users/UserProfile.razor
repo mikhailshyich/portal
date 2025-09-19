@@ -50,13 +50,13 @@
                         {
                             <tr>
                                 <td><input value="@userHardware.Id" class="checkbox" type="checkbox" name="items" id="item" /></td>
-                                @if (userHardware.FileNameImage != null)
+                                @if (userHardware.FileNameImage != string.Empty)
                                 {
-                                    <td><a href="hardware_img/@userHardware.FileNameImage" target="_blank"><img src="~/hardware_img/@userHardware.FileNameImage" width="80" height="80" /></a></td>
+                                    <td><a href="img/hardware/@userHardware.FileNameImage" target="_blank"><img src="img/hardware/@userHardware.FileNameImage" width="80" height="80" /></a></td>
                                 }
                                 else
                                 {
-                                    <td><img src="img/noimage.png" width="80" height="80" /></td>
+                                    <td><img src="img/hardware/default.png" width="80" height="80" /></td>
                                 }
                                 <td>@userHardware.Title</td>
                                 <td>@userHardware.Description</td>

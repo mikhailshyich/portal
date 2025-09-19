@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.StaticFiles;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
-using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.Users;
-using Portal.Domain.Entities.Warehouses;
 
 namespace Portal.API.Controllers
 {
@@ -63,7 +60,7 @@ namespace Portal.API.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-        [HttpPost("move/{userId}/{userWarehouseId}")]
+        [HttpPost("move")]
         public async Task<IActionResult> Move(List<Guid> hardwaresId, Guid userId, Guid userWarehouseId)
         {
             var result = await hardwareInterface.MoveToUserAsync(hardwaresId, userId, userWarehouseId);

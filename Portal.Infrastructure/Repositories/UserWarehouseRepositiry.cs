@@ -39,14 +39,21 @@ namespace Portal.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<UserWarehouse>> GetAllAsync()
+        public async Task<List<UserWarehouse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var warehouses = await context.UserWarehouses.ToListAsync();
+            foreach (var w in warehouses)
+            {
+                var user = await context.Users.FindAsync(w.UserId);
+                if(user != null)
+                    w.User = user;
+            }
+            return warehouses;
         }
 
         public async Task<List<UserWarehouse>> GetAllByUserIdAsync(Guid id)
         {
-            if (id == Guid.Empty) return null;
+            if (id == Guid.Empty) return null!;
 
             var warehouses = await context.UserWarehouses.Where(r => r.UserId == id).ToListAsync();
 

@@ -204,7 +204,7 @@ namespace Portal.Infrastructure.Repositories
             var userDB = await context.Users.FindAsync(userID);
             if (userDB is null) return new CustomGeneralResponses(false, "Пользователь на которого перемещаем оборудование не найден в базе данных.");
 
-            var userWarehouseDB = await context.UserWarehouses.FindAsync(userWarehouseID);
+            var userWarehouseDB = await context.UserWarehouses.FirstOrDefaultAsync(u => u.Id == userWarehouseID & u.UserId == userID);
             if (userWarehouseDB is null) return new CustomGeneralResponses(false, $"У пользователя {userDB.Username} нет такого склада.");
 
             List<Hardware> displacedHardware = new();

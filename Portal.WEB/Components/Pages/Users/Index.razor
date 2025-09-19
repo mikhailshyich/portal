@@ -5,7 +5,7 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager navigationManager
 
-@* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <AuthorizeView>
     <Authorized>
@@ -14,11 +14,8 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm">
-                            <h3 class="m-0">Пользователи</h3>
+                            <h3 class="m-0">Сотрудники</h3>
                             <p class="m-0">Таблица добавленных сотрудников.</p>
-                        </div>
-                        <div class="col-sm">
-
                         </div>
                         <div class="col-sm d-flex align-items-center justify-content-end">
                             <div class="row">
@@ -45,7 +42,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (User user in UsersList)
+                                @foreach (UserView user in UsersList)
                                 {
                                     <tr>
                                         <td>@user.LastName</td>
@@ -172,7 +169,7 @@
 </AuthorizeView>
 
 @code {
-                        private List<User> UsersList = new();
+    private List<UserView> UsersList = new();
     private List<UserRole> UserRoles = new();
     private List<UserDepartment> UserDepartments = new();
     private RegisterDTO RegisterDTO = new();
@@ -186,11 +183,15 @@
         try
         {
             var authState = await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
-            if (authState.User.Identity.IsAuthenticated)
+            if (authState.User.Identity != null)
             {
-                        UsersList = await userService.GetAllAsync();
-                        UserRoles = await userService.GetAllUserRolesAsync();
-                        UserDepartments = await userDepartment.GetAllAsync();
+                UsersList = await userService.GetAllAsync();
+                UserRoles = await userService.GetAllUserRolesAsync();
+                UserDepartments = await userDepartment.GetAllAsync();
+            }
+            else
+            {
+                navigationManager.NavigateTo("/login");
             }
         }
         catch(Exception ex){ }

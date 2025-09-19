@@ -1,23 +1,30 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.QuickGrid
-@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.JSInterop
+
 @using Portal.WEB
 @using Portal.WEB.Components
+@using Portal.WEB.Components.Pages
+@using Portal.WEB.Components.Pages.Authentication
+@using Portal.WEB.Components.Pages.Errors
 @using Portal.WEB.Components.Pages.General
-@using Microsoft.AspNetCore.Components.Authorization
+@using Portal.WEB.Components.Layout
+@using Portal.WEB.Authentication
+@using Portal.WEB.Services
 @using Portal.Domain.DTOs
 @using Portal.Domain.Entities.Users
 @using Portal.Domain.Entities.Hardwares
 @using Portal.Domain.Entities.Warehouses
-@using Portal.WEB.Authentication
-@using Portal.WEB.Services
-@using System.Security.Claims
-@using Portal.WEB.Components.Layout
+
+
+
 
 

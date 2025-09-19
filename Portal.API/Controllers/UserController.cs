@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
-using System.Security.Cryptography;
 
 namespace Portal.API.Controllers
 {
@@ -74,6 +73,13 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> SyncUsers()
         {
             var result = await userService.SyncUsersAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("username/{username}")]
+        public async Task<IActionResult> GetByUsername(string username)
+        {
+            var result = await userService.GetByUsernameAsync(username);
             return Ok(result);
         }
     }

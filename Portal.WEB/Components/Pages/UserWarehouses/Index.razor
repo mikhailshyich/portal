@@ -1,28 +1,38 @@
-﻿@page "/main-warehouses"
+﻿@page "/user-warehouses"
 
 @inject AuthenticationStateProvider AuthStateProvider
-@inject MainWarehouseServiceWEB MainWarehouseService
-@inject UserDepartmentServiceWEB userDepartment
 @inject NavigationManager navigationManager
+@inject UserWarehouseServiceWEB userWarehouseService
 
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            @if(MainWarehouses.Count != 0)
+            @if (UserWarehouses.Count != 0)
             {
-                <h3>Склады по подразделениям</h3>
                 <div class="card mb-3">
-                    <div class="card-header d-flex flex-row">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+ Добавить</b></button>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm">
+                                <h3 class="m-0">Склады сотрудников</h3>
+                                <p class="m-0">Таблица личных складов сотрудников.</p>
+                            </div>
+                            <div class="col-sm d-flex align-items-center justify-content-end">
+                                <div class="row">
+                                    <div class="p-0 m-1 col-auto">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-                        <TableView MainWarehouses="MainWarehouses" TableHeader="TableHeaders" />
+                        <TableView UserWarehouses="UserWarehouses" TableHeader="TableHeaders" />
                     </div>
                     <div class="card-footer">
                     </div>
                 </div>
 
-                <!-- Modal -->
+                @* <!-- Modal -->
                 <div class="modal fade" id="addMainwarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addMainwarehouseTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -73,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- End modal -->
+                <!-- End modal --> *@
             }
             else
             {
@@ -91,44 +101,20 @@
     </NotAuthorized>
 </AuthorizeView>
 
-@code {
-    private MainWarehouseDTO mainWarehouseDTO = new();
-    private List<MainWarehouse> MainWarehouses = new();
-    private List<UserDepartment> UserDepartments = new();
+@code{
+    private UserWarehouseDTO userWarehouseDTO = new();
+    private List<UserWarehouse> UserWarehouses = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    private List<string> TableHeaders = ["", "Склад", "Подразделение", "Описание", ""];
+    private List<string> TableHeaders = ["Сотрудник", "Наименование", ""];
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
-            MainWarehouses = await MainWarehouseService.GetAllAsync();
-            UserDepartments = await userDepartment.GetAllAsync();
+            UserWarehouses = await userWarehouseService.GetAllAsync();
         }
         catch (Exception ex) { }
-    }
-
-    private async Task AddMainwarehouse()
-    {
-        var response = await MainWarehouseService.AddAsync(mainWarehouseDTO);
-        if (!response.Flag)
-        {
-            ResponseMessage = response.Message;
-            ClassesAlert = "alert-warning";
-        }
-        else
-        {
-            ResponseMessage = response.Message;
-            ClassesAlert = "alert-success";
-            mainWarehouseDTO = new();
-            MainWarehouses = await MainWarehouseService.GetAllAsync();
-        }
-    }
-
-    private void GoToMainWarehouse(Guid id)
-    {
-        navigationManager.NavigateTo($"/main-warehouse/{id}");
     }
 }

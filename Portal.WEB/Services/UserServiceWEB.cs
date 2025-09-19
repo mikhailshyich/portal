@@ -20,10 +20,10 @@ namespace Portal.WEB.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<UserView>> GetAllAsync()
         {
             var users = await httpClient.GetAsync($"{BaseURI}/all");
-            var response = await users.Content.ReadFromJsonAsync<List<User>>();
+            var response = await users.Content.ReadFromJsonAsync<List<UserView>>();
             return response!;
         }
 
@@ -59,6 +59,13 @@ namespace Portal.WEB.Services
         {
             var users = await httpClient.PostAsync($"{BaseURI}/sync", null);
             var response = await users.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
+        }
+
+        public async Task<UserView> GetByUsernameAsync(string username)
+        {
+            var user = await httpClient.GetAsync($"{BaseURI}/username/{username}");
+            var response = await user.Content.ReadFromJsonAsync<UserView>();
             return response!;
         }
     }

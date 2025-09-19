@@ -161,9 +161,24 @@ namespace Portal.Infrastructure.Repositories
             return new CustomGeneralResponses(true, $"Роль {roleTitle} успешно создана.");
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<UserView>> GetAllAsync()
         {
-            return await context.Users.ToListAsync();
+            var users = await context.Users.ToListAsync();
+            var userslist = new List<UserView>();
+            if(users.Count > 0)
+            {
+                foreach (var user in users)
+                {
+                    var department = await context.UserDepartments.FindAsync(user.UserDepartmentId);
+                    if (department != null)
+                    {
+                        department.Users = null!;
+                    }
+                    UserView userView = new(user.Id, user.UserDepartmentId, user.FirstName, user.LastName, user.Specialization, user.Email, user.IsActive, department!);
+                    userslist.Add(userView);
+                }
+            }
+            return userslist;
         }
 
         public async Task<User> GetByIdAsync(Guid id)
@@ -265,6 +280,20 @@ namespace Portal.Infrastructure.Repositories
                 return new CustomGeneralResponses(true, "Пользователи успешно синхронизированы.");
             }
             catch(Exception ex) { return new CustomGeneralResponses(false, ex.Message); }
+        }
+
+        public async Task<UserView> GetByUsernameAsync(string username)
+        {
+            if (username == string.Empty) return null!;
+            var user = context.Users.FirstOrDefault(u => u.Username == username);
+            if (user == null) return null!;
+            var department = await context.UserDepartments.FindAsync(user.UserDepartmentId);
+            if (department != null)
+            {
+                department.Users = null!;
+            }
+            UserView userView = new(user.Id, user.UserDepartmentId, user.FirstName, user.LastName, user.Specialization, user.Email, user.IsActive, department!);
+            return userView;
         }
     }
 }

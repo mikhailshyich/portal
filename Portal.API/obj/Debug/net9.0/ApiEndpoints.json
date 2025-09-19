@@ -164,7 +164,7 @@
   {
     "ContainingType": "Portal.API.Controllers.HardwareController",
     "Method": "Move",
-    "RelativePath": "api/Hardware/move/{userId}/{userWarehouseId}",
+    "RelativePath": "api/Hardware/move",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -177,12 +177,12 @@
       {
         "Name": "userId",
         "Type": "System.Guid",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "userWarehouseId",
         "Type": "System.Guid",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -324,6 +324,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.UserController",
+    "Method": "GetByUsername",
+    "RelativePath": "api/User/username/{username}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.UserDepartmentController",
     "Method": "GetById",
     "RelativePath": "api/UserDepartment/{id}",
@@ -411,6 +427,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UserWarehouseController",
+    "Method": "GetAll",
+    "RelativePath": "api/UserWarehouse/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

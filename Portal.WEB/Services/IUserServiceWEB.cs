@@ -6,10 +6,10 @@ namespace Portal.WEB.Services
 {
     public interface IUserServiceWEB
     {
-        Task<List<User>> GetAllAsync();
+        Task<List<UserView>> GetAllAsync();
         Task<User> GetByIdAsync(Guid id);
         //Task<User> GetByEmailAsync(string email);
-        //Task<User> GetByUsernameAsync(string username);
+        Task<UserView> GetByUsernameAsync(string username);
         Task<CustomGeneralResponses> RegisterAsync(RegisterDTO request);
         Task<CustomAuthResponses> LoginAsync(LoginDTO request);
         Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request);

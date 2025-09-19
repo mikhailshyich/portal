@@ -29,9 +29,9 @@ namespace Portal.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<UserWarehouse>> GetAllAsync()
+        public async Task<List<UserWarehouse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await userWarehouseDomain.GetAllAsync();
         }
 
         public async Task<List<UserWarehouse>> GetAllByUserIdAsync(Guid id)
