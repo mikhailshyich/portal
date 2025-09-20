@@ -7,7 +7,7 @@ namespace Portal.Application.Services
     public interface IUserService
     {
         Task<List<UserView>> GetAllAsync();
-        Task<User> GetByIdAsync(Guid id);
+        Task<UserView> GetByIdAsync(Guid id);
         //Task<User> GetByEmailAsync(string email);
         Task<UserView> GetByUsernameAsync(string username);
         Task<CustomGeneralResponses> RegisterAsync(RegisterDTO request);
@@ -15,6 +15,7 @@ namespace Portal.Application.Services
         Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request);
         Task<List<UserRole>> GetAllUserRolesAsync();
         Task<CustomGeneralResponses> SyncUsersAsync();
+        Task<CustomGeneralResponses> EditUserAsync(UserView request);
         //Task CheckTokens(LoginDTO request);
     }
 }

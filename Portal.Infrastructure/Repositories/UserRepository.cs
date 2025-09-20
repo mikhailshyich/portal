@@ -25,6 +25,11 @@ namespace Portal.Infrastructure.Repositories
             this.context = context;
         }
 
+        /// <summary>
+        /// Авторизация пользователя
+        /// </summary>
+        /// <param name="request">Объект класса LoginDTO</param>
+        /// <returns></returns>
         public async Task<CustomAuthResponses> LoginAsync(LoginDTO request)
         {
             if (request is null)
@@ -48,6 +53,11 @@ namespace Portal.Infrastructure.Repositories
             return new CustomAuthResponses(true, $"Пользователь {userDB.Username} успешно авторизован.", jwtToken);
         }
 
+        /// <summary>
+        /// Регистрация нового пользователя
+        /// </summary>
+        /// <param name="request">Объект класса RegisterDTO</param>
+        /// <returns></returns>
         public async Task<CustomGeneralResponses> RegisterAsync(RegisterDTO request)
         {
             if (request is null)
@@ -85,6 +95,12 @@ namespace Portal.Infrastructure.Repositories
             return new CustomGeneralResponses(true, "Пользователь успешно добавлен.", newUser);
         }
 
+        /// <summary>
+        /// Генерируем и сохраняем токен доступа
+        /// </summary>
+        /// <param name="user">Объект класса User</param>
+        /// <param name="jwtToken">JWT токен доступа</param>
+        /// <returns></returns>
         private async Task GenerateAndSaveTokensAsync(User user, string jwtToken)
         {
             var userTokens = await context.UserTokens.FirstOrDefaultAsync(t => t.UserId == user.Id);
@@ -108,6 +124,11 @@ namespace Portal.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Создаём токен доступа для пользователя
+        /// </summary>
+        /// <param name="user">Объект класса User</param>
+        /// <returns>Возвращаем токен доступа</returns>
         private string CreateToken(User user)
         {
             var claimsList = new List<Claim>()
@@ -131,6 +152,11 @@ namespace Portal.Infrastructure.Repositories
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
+
+        /// <summary>
+        /// Генерируем рефреш токен
+        /// </summary>
+        /// <returns>Рефреш токен</returns>
         private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
@@ -139,6 +165,11 @@ namespace Portal.Infrastructure.Repositories
             return Convert.ToBase64String(randomNumber);
         }
 
+        /// <summary>
+        /// Добавляем роль для пользователей
+        /// </summary>
+        /// <param name="request">Объект класса UserRoleDTO</param>
+        /// <returns></returns>
         public async Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request)
         {
             if(request is null)
@@ -161,9 +192,13 @@ namespace Portal.Infrastructure.Repositories
             return new CustomGeneralResponses(true, $"Роль {roleTitle} успешно создана.");
         }
 
+        /// <summary>
+        /// Получаем всех пользователей
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<UserView>> GetAllAsync()
         {
-            var users = await context.Users.ToListAsync();
+            var users = await context.Users.Where(u => u.IsActive == true).ToListAsync();
             var userslist = new List<UserView>();
             if(users.Count > 0)
             {
@@ -174,14 +209,20 @@ namespace Portal.Infrastructure.Repositories
                     {
                         department.Users = null!;
                     }
-                    UserView userView = new(user.Id, user.UserDepartmentId, user.FirstName, user.LastName, user.Specialization, user.Email, user.IsActive, department!);
+                    UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName, 
+                                            user.Patronymic, user.Specialization, user.Email, user.IsActive);
                     userslist.Add(userView);
                 }
             }
             return userslist;
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        /// <summary>
+        /// Получаем пользователя по id
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя</param>
+        /// <returns>Объект класса User</returns>
+        public async Task<UserView> GetByIdAsync(Guid id)
         {
             if (id == Guid.Empty) return null!;
 
@@ -192,22 +233,25 @@ namespace Portal.Infrastructure.Repositories
             if (userRole != null)
                 user.UserRole = userRole;
 
-            var userDepartment = await context.UserDepartments.FindAsync(user.UserDepartmentId);
-            if (userDepartment != null)
-                user.UserDepartment = userDepartment;
+            UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
+                                    user.Patronymic, user.Specialization, user.Email, user.IsActive);
 
-            var userWarehouse = context.UserWarehouses.Where(w => w.UserId == user.Id).ToList();
-            if (userWarehouse != null)
-                user.UserWarehouses = userWarehouse;
-
-            return user;
+            return userView;
         }
 
+        /// <summary>
+        /// Получаем все роли пользователей
+        /// </summary>
+        /// <returns>Список ролей пользователей</returns>
         public async Task<List<UserRole>> GetAllUserRolesAsync()
         {
             return await context.UserRoles.ToListAsync();
         }
 
+        /// <summary>
+        /// Синхронизируем пользователей из Active Directory
+        /// </summary>
+        /// <returns></returns>
         public async Task<CustomGeneralResponses> SyncUsersAsync()
         {
             try
@@ -259,9 +303,9 @@ namespace Portal.Infrastructure.Repositories
                         {
                             user.FirstName = name;
                             user.LastName = surname;
-                            user.Patronymic = "";
                             user.Username = username;
                             user.Email = email;
+                            user.IsActive = true;
                         }
                     }
                     else if (result.Enabled == false)
@@ -270,18 +314,24 @@ namespace Portal.Infrastructure.Repositories
                         if (user != null)
                         {
                             user.IsActive = false;
+                            await context.SaveChangesAsync();
                             return new CustomGeneralResponses(true, "Пользователь успешно отключён.");
                         }
                     }
                 }
                 search.Dispose();
                 await context.Users.AddRangeAsync(users);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return new CustomGeneralResponses(true, "Пользователи успешно синхронизированы.");
             }
             catch(Exception ex) { return new CustomGeneralResponses(false, ex.Message); }
         }
 
+        /// <summary>
+        /// Получаем пользователя по username
+        /// </summary>
+        /// <param name="username">Имя пользователя</param>
+        /// <returns>Объект класса UserView</returns>
         public async Task<UserView> GetByUsernameAsync(string username)
         {
             if (username == string.Empty) return null!;
@@ -292,8 +342,40 @@ namespace Portal.Infrastructure.Repositories
             {
                 department.Users = null!;
             }
-            UserView userView = new(user.Id, user.UserDepartmentId, user.FirstName, user.LastName, user.Specialization, user.Email, user.IsActive, department!);
+            UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
+                                    user.Patronymic, user.Specialization, user.Email, user.IsActive);
             return userView;
+        }
+
+        /// <summary>
+        /// Редактирование данных пользователя
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CustomGeneralResponses> EditUserAsync(UserView request)
+        {
+            try
+            {
+                if (request is null) return new CustomGeneralResponses(false, "Объект равен null.");
+                var user = await context.Users.FindAsync(request.Id);
+                if (user is null) return new CustomGeneralResponses(false, "Пользователь с переданным ID не найден");
+
+                user.UserRoleId = request.UserRoleId;
+                user.UserDepartmentId = request.UserDepartmentId;
+                user.FirstName = request.FirstName!;
+                user.LastName = request.LastName!;
+                user.Patronymic = request.Patronymic!;
+                user.Specialization = request.Specialization!;
+                user.Email = request.Email!;
+                user.IsActive = request.IsActive;
+
+
+                await context.SaveChangesAsync();
+                return new CustomGeneralResponses(true, "Данные о пользователе успешно обновлены!");
+            }
+            catch (Exception ex)
+            {
+                return new CustomGeneralResponses(false, ex.Message);
+            }
         }
     }
 }

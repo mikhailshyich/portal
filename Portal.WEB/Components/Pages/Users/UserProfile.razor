@@ -1,5 +1,6 @@
 ﻿@page "/user/{Id:guid}"
 @inject UserServiceWEB userService
+@inject UserDepartmentServiceWEB userDepartmentService
 @inject HardwareServiceWEB hardwareService
 
 
@@ -13,10 +14,11 @@
                 <tbody>
                     <tr><td class="active">Фамилия:</td><td><b>@User.LastName</b></td></tr>
                     <tr><td class="active">Имя:</td><td><b>@User.FirstName</b></td></tr>
+                    <tr><td class="active">Отчество:</td><td><b>@User.Patronymic</b></td></tr>
                     <tr><td class="active">Email:</td><td><a style="text-decoration: none; color: black;" href="mailto:@User.Email"><b>@User.Email</b></a></td></tr>
                     <tr><td class="active">Мобильный телефон:</td><td><a style="text-decoration: none; color: black;" href="tel:"><b>телефон????</b></a></td></tr>
-                    <tr><td class="active">Должность:</td><td><b>Должность???</b></td></tr>
-                    <tr><td class="active">Отдел:</td><td><b>@User.UserDepartment?.Title</b></td></tr>
+                    <tr><td class="active">Должность:</td><td><b>@User.Specialization</b></td></tr>
+                    <tr><td class="active">Отдел:</td><td><b>@Department.Title</b></td></tr>
                 </tbody>
             </table>
         </div>
@@ -87,12 +89,16 @@
     [Parameter]
     public Guid Id { get; set; }
 
-    private User User = new();
+    private UserView User = new();
+    private UserDepartment Department = new();
     private List<Hardware> UserHardwaresList = new();
 
     protected override async Task OnInitializedAsync()
     {
         User = await userService.GetByIdAsync(Id);
+        var department = await userDepartmentService.GetByIdAsync(User.UserDepartmentId);
+        if (department != null)
+            Department = department;
         UserHardwaresList = await hardwareService.GetByUserIdAsync(Id);
     }
 }

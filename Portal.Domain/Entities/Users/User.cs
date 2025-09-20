@@ -20,12 +20,12 @@ namespace Portal.Domain.Entities.Users
         public string Username { get; set; } = string.Empty;
         [MaxLength(50)]
         public string Email { get; set; } = string.Empty;
+        [MaxLength(50)]
+        public string Specialization { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 
         public UserRole? UserRole {  get; set; }
-        [MaxLength(50)]
-        public string Specialization { get; set; } = string.Empty;
         public UserDepartment? UserDepartment { get; set; }
         //public List<Hardware> Hardwares { get; set; } = [];
         public List<UserWarehouse> UserWarehouses { get; set; } = [];

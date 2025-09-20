@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
+using Portal.Domain.Entities.Users;
 
 namespace Portal.API.Controllers
 {
@@ -80,6 +81,13 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> GetByUsername(string username)
         {
             var result = await userService.GetByUsernameAsync(username);
+            return Ok(result);
+        }
+
+        [HttpPut("edit")]
+        public async Task<IActionResult> EditUser(UserView request)
+        {
+            var result = await userService.EditUserAsync(request);
             return Ok(result);
         }
     }

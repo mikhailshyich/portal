@@ -27,10 +27,10 @@ namespace Portal.WEB.Services
             return response!;
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        public async Task<UserView> GetByIdAsync(Guid id)
         {
             var user = await httpClient.GetAsync($"{BaseURI}/{id}");
-            var response = await user.Content.ReadFromJsonAsync<User>();
+            var response = await user.Content.ReadFromJsonAsync<UserView>();
             return response!;
         }
 

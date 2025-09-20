@@ -239,7 +239,7 @@
     {
         try
         {
-            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            //await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
             var response = await MainWarehouseService.GetByIdAsync(Id);
             if (response != null)
             {

@@ -10,6 +10,6 @@ namespace Portal.Application.Services
         Task<CustomGeneralResponses> UpdateAsync(UserDepartment request);
         Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<UserDepartment>> GetAllAsync();
-        Task<CustomGeneralResponses> GetByIdAsync(Guid id);
+        Task<UserDepartment> GetByIdAsync(Guid id);
     }
 }

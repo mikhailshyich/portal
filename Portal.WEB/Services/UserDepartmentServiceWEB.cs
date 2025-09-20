@@ -33,9 +33,11 @@ namespace Portal.WEB.Services
             return response!;
         }
 
-        public Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<UserDepartment> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var department = await httpClient.GetAsync($"{BaseURI}/{id}");
+            var response = await department.Content.ReadFromJsonAsync<UserDepartment>();
+            return response!;
         }
 
         public Task<CustomGeneralResponses> UpdateAsync(UserDepartment request)

@@ -29,7 +29,7 @@ namespace Portal.Application.Services
             return await userInterface.GetAllAsync();
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        public async Task<UserView> GetByIdAsync(Guid id)
         {
             return await userInterface.GetByIdAsync(id);
         }
@@ -52,6 +52,11 @@ namespace Portal.Application.Services
         public async Task<UserView> GetByUsernameAsync(string username)
         {
             return await userInterface.GetByUsernameAsync(username);
+        }
+
+        public async Task<CustomGeneralResponses> EditUserAsync(UserView request)
+        {
+            return await userInterface.EditUserAsync(request);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Portal.Application.Services
             return await userDepartment.GetAllAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<UserDepartment> GetByIdAsync(Guid id)
         {
             return await userDepartment.GetByIdAsync(id);
         }

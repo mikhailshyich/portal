@@ -51,12 +51,12 @@ namespace Portal.Infrastructure.Repositories
             return await context.UserDepartments.ToListAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<UserDepartment> GetByIdAsync(Guid id)
         {
-            if (id == Guid.Empty) return new CustomGeneralResponses(false, "Guid не может быть пустым.");
+            if (id == Guid.Empty) return null!;
 
             var department = await context.UserDepartments.FindAsync(id);
-            if (department is null) return new CustomGeneralResponses(false, "Отдел не найден.");
+            if (department is null) return null!;
 
             var users = context.Users.Where(d => d.UserDepartmentId == department.Id).ToList();
             if (users != null)
@@ -70,7 +70,7 @@ namespace Portal.Infrastructure.Repositories
                 department.MainWarehouses = mainWarehouse;
             }
 
-            return new CustomGeneralResponses(true, "Департамент успешно найден.", department);
+            return department;
         }
 
         public async Task<CustomGeneralResponses> UpdateAsync(UserDepartment request)
