@@ -60,8 +60,8 @@ namespace Portal.API.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-        [HttpPost("move")]
-        public async Task<IActionResult> Move(List<Guid> hardwaresId, Guid userId, Guid userWarehouseId)
+        [HttpPost("move/{userId}/{userWarehouseId}")]
+        public async Task<IActionResult> Move(List<Guid>? hardwaresId, Guid? userId, Guid? userWarehouseId)
         {
             var result = await hardwareInterface.MoveToUserAsync(hardwaresId, userId, userWarehouseId);
             return Ok(result);
@@ -71,6 +71,13 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
             var result = await hardwareInterface.GetByUserIdAsync(userId);
+            return Ok(result);
+        }
+
+        [HttpPost("return")]
+        public async Task<IActionResult> Return(List<Guid> hardwaresId)
+        {
+            var result = await hardwareInterface.ReturnAsync(hardwaresId);
             return Ok(result);
         }
     }

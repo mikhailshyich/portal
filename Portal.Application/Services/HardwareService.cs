@@ -1,7 +1,5 @@
 ﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.Users;
-using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 
@@ -41,9 +39,14 @@ namespace Portal.Application.Services
             return await hardwareDomain.GetByUserIdAsync(userId);
         }
 
-        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid userID, Guid userWarehouseID)
+        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid>? hardwaresID, Guid? userID, Guid? userWarehouseID)
         {
             return await hardwareDomain.MoveToUserAsync(hardwaresID, userID, userWarehouseID);
+        }
+
+        public async Task<CustomGeneralResponses> ReturnAsync(List<Guid> hardwaresID)
+        {
+            return await hardwareDomain.ReturnAsync(hardwaresID);
         }
     }
 }

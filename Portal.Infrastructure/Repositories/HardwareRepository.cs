@@ -3,8 +3,6 @@ using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.Users;
-using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
@@ -196,7 +194,7 @@ namespace Portal.Infrastructure.Repositories
             return await context.Hardwares.ToListAsync();
         }
 
-        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid userID, Guid userWarehouseID)
+        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid>? hardwaresID, Guid? userID, Guid? userWarehouseID)
         {
             if (hardwaresID is null) return new CustomGeneralResponses(false, "Список перемещаемого оборудования равен null.");
             if (userID == Guid.Empty) return new CustomGeneralResponses(false, "Пользователь на которого перемещаем оборудование равен null.");
@@ -211,7 +209,7 @@ namespace Portal.Infrastructure.Repositories
 
             foreach (var hardwareID in hardwaresID)
             {
-                var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId == null);
+                var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId != userDB.Id);
                 if(hardwareDB != null)
                 {
                     hardwareDB.UserId = userDB.Id;
@@ -240,6 +238,24 @@ namespace Portal.Infrastructure.Repositories
             if (userDB is null) return null!;
 
             return await context.Hardwares.Where(h => h.UserId == userId).ToListAsync();
+        }
+
+        public async Task<CustomGeneralResponses> ReturnAsync(List<Guid> hardwaresID)
+        {
+            if(hardwaresID.Count == 0) return new CustomGeneralResponses(false, "Список с оборудованием для возврата равен 0.");
+
+            foreach(var hardwareID in hardwaresID)
+            {
+                var hardwareDB = await context.Hardwares.FindAsync(hardwareID);
+                if (hardwareDB != null)
+                {
+                    hardwareDB.UserId = null;
+                    hardwareDB.UserWarehouseId = null;
+                }
+            }
+            await context.SaveChangesAsync();
+
+            return new CustomGeneralResponses(true, $"Оборудование в количестве {hardwaresID.Count} возвращено на склад!");
         }
     }
 }

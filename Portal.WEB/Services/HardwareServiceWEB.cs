@@ -1,6 +1,6 @@
-﻿using Portal.Application.Services;
-using Portal.Domain.DTOs;
+﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
+using Portal.Domain.Entities.Users;
 using Portal.Domain.Responses;
 
 namespace Portal.WEB.Services
@@ -47,6 +47,13 @@ namespace Portal.WEB.Services
         {
             var hardwares = await httpClient.GetAsync($"{BaseURI}/get/{userId}");
             var response = await hardwares.Content.ReadFromJsonAsync<List<Hardware>>();
+            return response!;
+        }
+
+        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid? userID, Guid? userWarehouseID)
+        {
+            var hardwares = await httpClient.PostAsJsonAsync($"{BaseURI}/move/{userID}/{userWarehouseID}", hardwaresID);
+            var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }
     }

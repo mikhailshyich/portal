@@ -21,6 +21,8 @@
                     <div class="card-header">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+ Добавить</b></button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware"><b>Переместить</b></button>
+                        <button type="button" class="btn btn-secondary"><b>Вернуть</b></button>
+                        <button type="button" class="btn btn-danger"><b>Списать</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
                     </div>
@@ -48,7 +50,7 @@
                                             <td>@hardware.InventoryNumberExternalSystem</td>
                                             <td>@hardware.DocumentExternalSystem.ShortTitle</td>
                                             <td>@hardware.DateTimeAdd</td>
-                                            <td>@hardware.User?.LastName @hardware.User?.FirstName</td>
+                                            <td><a href="/user/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
                                             <td><button class="btn btn-secondary btn-sm mx-1">Подробнее</button></td>
                                         </tr>
                                     }
@@ -154,7 +156,7 @@
                                 <h5 class="modal-title" id="moveHardwareTitle">Переместить оборудование на сотрудника</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <EditForm Model="hardwareDTO" FormName="MoveHardware" Context="MoveHardware" OnValidSubmit="MoveHardware">
+                            <EditForm Model="hardwareMoveDTO" FormName="MoveHardware" Context="MoveHardware" OnValidSubmit="MoveHardware">
                                 <div class="modal-body">
                                     <DataAnnotationsValidator />
 
@@ -166,26 +168,26 @@
 
                                     <div class="form-group">
                                         <label for="user">Сотрудник</label>
-                                        <InputSelect id="user" class="form-control" @oninput="SelectedUser" @bind-Value="hardwareDTO.UserId">
+                                        <InputSelect id="user" class="form-control" @oninput="SelectedUser" @bind-Value="hardwareMoveDTO.UserId">
                                             <option value="">Выберите нужного сотрудника</option>
                                             @foreach (UserView user in UsersList)
                                             {
                                                 <option value="@user.Id">@user.LastName @user.FirstName</option>
                                             }
                                         </InputSelect>
-                                        <ValidationMessage For="@(() => hardwareDTO.UserId)" />
+                                        <ValidationMessage For="@(() => hardwareMoveDTO.UserId)" />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="user">Склад сотрудника</label>
-                                        <InputSelect id="user" class="form-control" @bind-Value="hardwareDTO.UserWarehouseId">
+                                        <InputSelect id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
                                             <option value="">Выберите нужный склад</option>
                                             @foreach (UserWarehouse warehouse in UserWarehousesList)
                                             {
                                                 <option value="@warehouse.Id">@warehouse.Title</option>
                                             }
                                         </InputSelect>
-                                        <ValidationMessage For="@(() => hardwareDTO.UserWarehouseId)" />
+                                        <ValidationMessage For="@(() => hardwareMoveDTO.UserWarehouseId)" />
                                     </div>
 
                                 </div>
@@ -223,6 +225,7 @@
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
     private MainWarehouse MainWarehouse = new();
     private HardwareDTO hardwareDTO = new();
+    private HardwareMoveDTO hardwareMoveDTO = new();
     private List<CategoryHardware> Categories = new();
     private List<DocumentExternalSystem> Documents = new();
     private List<Guid> HardwaresId = new();
@@ -286,7 +289,29 @@
 
     private async Task MoveHardware()
     {
-
+        try
+        {
+            if(HardwaresId.Count > 0)
+            {
+                var response = await HardwareService.MoveToUserAsync(HardwaresId, hardwareMoveDTO.UserId, hardwareMoveDTO.UserWarehouseId);
+                if (!response.Flag)
+                {
+                    ResponseMessage = response.Message;
+                    ClassesAlert = "alert-warning";
+                }
+                else
+                {
+                    ResponseMessage = response.Message;
+                    ClassesAlert = "alert-success";
+                    HardwaresId.Clear();
+                    MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            
+        }
     }
 
     private async Task GenerateQR()

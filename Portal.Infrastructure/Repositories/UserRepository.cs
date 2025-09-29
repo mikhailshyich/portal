@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Utilities.Collections;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
+using System.DirectoryServices.AccountManagement;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.DirectoryServices.AccountManagement;
 
 namespace Portal.Infrastructure.Repositories
 {

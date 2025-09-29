@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Components\Pages\Users\EditUser.razor~RFda6cde.TMP" />
+    <Compile Remove="wwwroot\Новая папка\**" />
+    <Content Remove="wwwroot\Новая папка\**" />
+    <EmbeddedResource Remove="wwwroot\Новая папка\**" />
+    <None Remove="wwwroot\Новая папка\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Новая папка\" />
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
 </Project>

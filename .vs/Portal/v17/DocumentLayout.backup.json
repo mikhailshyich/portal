@@ -3,88 +3,52 @@
   "WorkspaceRootPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8197A6B9-0DF8-4216-BD19-B5D889085DD4}|Portal.Infrastructure\\Portal.Infrastructure.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8197A6B9-0DF8-4216-BD19-B5D889085DD4}|Portal.Infrastructure\\Portal.Infrastructure.csproj|solutionrelative:portal.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8197A6B9-0DF8-4216-BD19-B5D889085DD4}|Portal.Infrastructure\\Portal.Infrastructure.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.infrastructure\\repositories\\hardwarerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8197A6B9-0DF8-4216-BD19-B5D889085DD4}|Portal.Infrastructure\\Portal.Infrastructure.csproj|solutionrelative:portal.infrastructure\\repositories\\hardwarerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\components\\pages\\users\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\components\\pages\\users\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.api\\controllers\\hardwarecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|solutionrelative:portal.api\\controllers\\hardwarecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\components\\pages\\users\\userprofile.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\components\\pages\\users\\userprofile.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.application\\services\\hardwareservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|solutionrelative:portal.application\\services\\hardwareservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.domain\\entities\\users\\userview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|solutionrelative:portal.domain\\entities\\users\\userview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.application\\services\\ihardware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|solutionrelative:portal.application\\services\\ihardware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\services\\userdepartmentserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\services\\userdepartmentserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.api\\controllers\\userdepartmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|solutionrelative:portal.api\\controllers\\userdepartmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\services\\iuserdepartmentserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\services\\iuserdepartmentserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.application\\services\\userdepartmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|solutionrelative:portal.application\\services\\userdepartmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.application\\services\\iuserdepartment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|solutionrelative:portal.application\\services\\iuserdepartment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.domain\\interfaces\\iuserdepartmentdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|solutionrelative:portal.domain\\interfaces\\iuserdepartmentdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8197A6B9-0DF8-4216-BD19-B5D889085DD4}|Portal.Infrastructure\\Portal.Infrastructure.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.infrastructure\\repositories\\userdepartmentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8197A6B9-0DF8-4216-BD19-B5D889085DD4}|Portal.Infrastructure\\Portal.Infrastructure.csproj|solutionrelative:portal.infrastructure\\repositories\\userdepartmentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|solutionrelative:portal.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|solutionrelative:portal.application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\services\\userserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\services\\userserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\services\\iuserserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\services\\iuserserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.application\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{985D03F2-862D-44DE-B3B9-42C34C42CE5F}|Portal.Application\\Portal.Application.csproj|solutionrelative:portal.application\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.domain\\interfaces\\iuserdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|solutionrelative:portal.domain\\interfaces\\iuserdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.domain\\entities\\users\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|solutionrelative:portal.domain\\entities\\users\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.domain\\interfaces\\ihardwaredomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|solutionrelative:portal.domain\\interfaces\\ihardwaredomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\components\\pages\\mainwarehouses\\mainwarehousehardware.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\components\\pages\\mainwarehouses\\mainwarehousehardware.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\components\\pages\\users\\modaldialogadduser.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\components\\pages\\users\\modaldialogadduser.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1E195A2D-CFA5-43E0-B886-76E3B27BB5B2}|Portal.API\\Portal.API.csproj|solutionrelative:portal.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\services\\hardwareserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\services\\hardwareserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.web\\services\\ihardwareserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DC2E5C6-6D02-4259-9D29-158004CF02BB}|Portal.WEB\\Portal.WEB.csproj|solutionrelative:portal.web\\services\\ihardwareserviceweb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.domain\\dtos\\hardwaremovedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|solutionrelative:portal.domain\\dtos\\hardwaremovedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|d:\\#disk d\\myproject\\c#\\portal\\portal.domain\\dtos\\hardwaredto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BA2BC9E-99E0-46BB-B225-73C87823121E}|Portal.Domain\\Portal.Domain.csproj|solutionrelative:portal.domain\\dtos\\hardwaredto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -94,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 21,
+          "SelectedChildIndex": 13,
           "Children": [
             {
               "$type": "Bookmark",
@@ -114,275 +78,158 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserDepartmentController.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Controllers\\UserDepartmentController.cs",
-              "RelativeDocumentMoniker": "Portal.API\\Controllers\\UserDepartmentController.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Controllers\\UserDepartmentController.cs",
-              "RelativeToolTip": "Portal.API\\Controllers\\UserDepartmentController.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:39:22.423Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UserDepartmentServiceWEB.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\UserDepartmentServiceWEB.cs",
-              "RelativeDocumentMoniker": "Portal.WEB\\Services\\UserDepartmentServiceWEB.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\UserDepartmentServiceWEB.cs",
-              "RelativeToolTip": "Portal.WEB\\Services\\UserDepartmentServiceWEB.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAowCcAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:38:26.141Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "IUserDepartmentServiceWEB.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\IUserDepartmentServiceWEB.cs",
-              "RelativeDocumentMoniker": "Portal.WEB\\Services\\IUserDepartmentServiceWEB.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\IUserDepartmentServiceWEB.cs",
-              "RelativeToolTip": "Portal.WEB\\Services\\IUserDepartmentServiceWEB.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:38:20.1Z",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\appsettings.json",
+              "RelativeDocumentMoniker": "Portal.API\\appsettings.json",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\appsettings.json",
+              "RelativeToolTip": "Portal.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-29T13:12:32.174Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "UserDepartmentService.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\UserDepartmentService.cs",
-              "RelativeDocumentMoniker": "Portal.Application\\Services\\UserDepartmentService.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\UserDepartmentService.cs",
-              "RelativeToolTip": "Portal.Application\\Services\\UserDepartmentService.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwB8AAAAoAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Program.cs",
+              "RelativeDocumentMoniker": "Portal.WEB\\Program.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Program.cs",
+              "RelativeToolTip": "Portal.WEB\\Program.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACUAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:38:10.041Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IUserDepartment.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\IUserDepartment.cs",
-              "RelativeDocumentMoniker": "Portal.Application\\Services\\IUserDepartment.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\IUserDepartment.cs",
-              "RelativeToolTip": "Portal.Application\\Services\\IUserDepartment.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:38:06.892Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "IUserDepartmentDomain.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Interfaces\\IUserDepartmentDomain.cs",
-              "RelativeDocumentMoniker": "Portal.Domain\\Interfaces\\IUserDepartmentDomain.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Interfaces\\IUserDepartmentDomain.cs",
-              "RelativeToolTip": "Portal.Domain\\Interfaces\\IUserDepartmentDomain.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:37:52.206Z",
+              "WhenOpened": "2025-09-29T13:12:22.951Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "UserDepartmentRepository.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Repositories\\UserDepartmentRepository.cs",
-              "RelativeDocumentMoniker": "Portal.Infrastructure\\Repositories\\UserDepartmentRepository.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Repositories\\UserDepartmentRepository.cs",
-              "RelativeToolTip": "Portal.Infrastructure\\Repositories\\UserDepartmentRepository.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAA5wDUAAAAoAAAAAAAAAA==",
+              "Title": "HardwareMoveDTO.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\DTOs\\HardwareMoveDTO.cs",
+              "RelativeDocumentMoniker": "Portal.Domain\\DTOs\\HardwareMoveDTO.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\DTOs\\HardwareMoveDTO.cs",
+              "RelativeToolTip": "Portal.Domain\\DTOs\\HardwareMoveDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:35:42.715Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "IUserServiceWEB.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\IUserServiceWEB.cs",
-              "RelativeDocumentMoniker": "Portal.WEB\\Services\\IUserServiceWEB.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\IUserServiceWEB.cs",
-              "RelativeToolTip": "Portal.WEB\\Services\\IUserServiceWEB.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:34:22.481Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserProfile.razor",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\Users\\UserProfile.razor",
-              "RelativeDocumentMoniker": "Portal.WEB\\Components\\Pages\\Users\\UserProfile.razor",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\Users\\UserProfile.razor",
-              "RelativeToolTip": "Portal.WEB\\Components\\Pages\\Users\\UserProfile.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-09-20T12:22:01.613Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "UserServiceWEB.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\UserServiceWEB.cs",
-              "RelativeDocumentMoniker": "Portal.WEB\\Services\\UserServiceWEB.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\UserServiceWEB.cs",
-              "RelativeToolTip": "Portal.WEB\\Services\\UserServiceWEB.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwCAAAABIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:09:38.288Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "MainLayout.razor",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Layout\\MainLayout.razor",
-              "RelativeDocumentMoniker": "Portal.WEB\\Components\\Layout\\MainLayout.razor",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Layout\\MainLayout.razor",
-              "RelativeToolTip": "Portal.WEB\\Components\\Layout\\MainLayout.razor",
-              "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-09-20T12:09:24.222Z",
+              "WhenOpened": "2025-09-29T12:05:40.54Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "Portal.API\\Controllers\\UserController.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Controllers\\UserController.cs",
-              "RelativeToolTip": "Portal.API\\Controllers\\UserController.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAuwFoAAAAeAAAAAAAAAA==",
+              "Title": "HardwareDTO.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\DTOs\\HardwareDTO.cs",
+              "RelativeDocumentMoniker": "Portal.Domain\\DTOs\\HardwareDTO.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\DTOs\\HardwareDTO.cs",
+              "RelativeToolTip": "Portal.Domain\\DTOs\\HardwareDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:08:33.891Z",
+              "WhenOpened": "2025-09-29T12:03:57.733Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "Portal.Application\\Services\\UserService.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\UserService.cs",
-              "RelativeToolTip": "Portal.Application\\Services\\UserService.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAqwAcAAAAfAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "HardwareService.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\HardwareService.cs",
+              "RelativeDocumentMoniker": "Portal.Application\\Services\\HardwareService.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\HardwareService.cs",
+              "RelativeToolTip": "Portal.Application\\Services\\HardwareService.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAA0wDAAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:08:08.24Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "IUserService.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\IUserService.cs",
-              "RelativeDocumentMoniker": "Portal.Application\\Services\\IUserService.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\IUserService.cs",
-              "RelativeToolTip": "Portal.Application\\Services\\IUserService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T12:07:58.429Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "MainWarehouseHardware.razor",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
-              "RelativeDocumentMoniker": "Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
-              "RelativeToolTip": "Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
-              "ViewState": "AgIAAL4AAAAAAAAAAAAMwKwAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-09-20T11:52:18.019Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "User.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Entities\\Users\\User.cs",
-              "RelativeDocumentMoniker": "Portal.Domain\\Entities\\Users\\User.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Entities\\Users\\User.cs",
-              "RelativeToolTip": "Portal.Domain\\Entities\\Users\\User.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAgwBEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T11:50:33.329Z",
+              "WhenOpened": "2025-09-29T11:54:03.267Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "UserView.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Entities\\Users\\UserView.cs",
-              "RelativeDocumentMoniker": "Portal.Domain\\Entities\\Users\\UserView.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Entities\\Users\\UserView.cs",
-              "RelativeToolTip": "Portal.Domain\\Entities\\Users\\UserView.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAIwBQAAAA1AAAAAAAAAA==",
+              "Title": "IHardware.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\IHardware.cs",
+              "RelativeDocumentMoniker": "Portal.Application\\Services\\IHardware.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Services\\IHardware.cs",
+              "RelativeToolTip": "Portal.Application\\Services\\IHardware.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T11:48:25.429Z",
+              "WhenOpened": "2025-09-29T11:53:51.286Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Repositories\\UserRepository.cs",
-              "RelativeDocumentMoniker": "Portal.Infrastructure\\Repositories\\UserRepository.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Repositories\\UserRepository.cs",
-              "RelativeToolTip": "Portal.Infrastructure\\Repositories\\UserRepository.cs",
-              "ViewState": "AgIAABQBAAAAAAAAAAAwwDABAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T11:39:43.979Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "IUserDomain.cs",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Interfaces\\IUserDomain.cs",
-              "RelativeDocumentMoniker": "Portal.Domain\\Interfaces\\IUserDomain.cs",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Interfaces\\IUserDomain.cs",
-              "RelativeToolTip": "Portal.Domain\\Interfaces\\IUserDomain.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-20T11:32:17.489Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "ModalDialogAddUser.razor",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\Users\\ModalDialogAddUser.razor",
-              "RelativeDocumentMoniker": "Portal.WEB\\Components\\Pages\\Users\\ModalDialogAddUser.razor",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\Users\\ModalDialogAddUser.razor",
-              "RelativeToolTip": "Portal.WEB\\Components\\Pages\\Users\\ModalDialogAddUser.razor",
+              "DocumentIndex": 9,
+              "Title": "IHardwareServiceWEB.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\IHardwareServiceWEB.cs",
+              "RelativeDocumentMoniker": "Portal.WEB\\Services\\IHardwareServiceWEB.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\IHardwareServiceWEB.cs",
+              "RelativeToolTip": "Portal.WEB\\Services\\IHardwareServiceWEB.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-09-20T11:29:33.421Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T11:42:44.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IHardwareDomain.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Interfaces\\IHardwareDomain.cs",
+              "RelativeDocumentMoniker": "Portal.Domain\\Interfaces\\IHardwareDomain.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Interfaces\\IHardwareDomain.cs",
+              "RelativeToolTip": "Portal.Domain\\Interfaces\\IHardwareDomain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T11:42:36.056Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Index.razor",
-              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\Users\\Index.razor",
-              "RelativeDocumentMoniker": "Portal.WEB\\Components\\Pages\\Users\\Index.razor",
-              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\Users\\Index.razor",
-              "RelativeToolTip": "Portal.WEB\\Components\\Pages\\Users\\Index.razor",
-              "ViewState": "AgIAAL0AAAAAAAAAAAAAAOEAAAAtAAAAAAAAAA==",
+              "Title": "HardwareController.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Controllers\\HardwareController.cs",
+              "RelativeDocumentMoniker": "Portal.API\\Controllers\\HardwareController.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Controllers\\HardwareController.cs",
+              "RelativeToolTip": "Portal.API\\Controllers\\HardwareController.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAcwFAAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T11:42:00.358Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HardwareRepository.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Repositories\\HardwareRepository.cs",
+              "RelativeDocumentMoniker": "Portal.Infrastructure\\Repositories\\HardwareRepository.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Repositories\\HardwareRepository.cs",
+              "RelativeToolTip": "Portal.Infrastructure\\Repositories\\HardwareRepository.cs",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAwwOgAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T11:40:33.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "HardwareServiceWEB.cs",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\HardwareServiceWEB.cs",
+              "RelativeDocumentMoniker": "Portal.WEB\\Services\\HardwareServiceWEB.cs",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Services\\HardwareServiceWEB.cs",
+              "RelativeToolTip": "Portal.WEB\\Services\\HardwareServiceWEB.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAUwDYAAAB4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T11:40:22.114Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MainWarehouseHardware.razor",
+              "DocumentMoniker": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
+              "RelativeDocumentMoniker": "Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
+              "ToolTip": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
+              "RelativeToolTip": "Portal.WEB\\Components\\Pages\\MainWarehouses\\MainWarehouseHardware.razor",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABcAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-09-20T11:29:16.966Z",
+              "WhenOpened": "2025-09-29T11:37:09.387Z",
               "EditorCaption": ""
             }
           ]
