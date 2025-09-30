@@ -5,91 +5,89 @@
 @inject UserDepartmentServiceWEB userDepartment
 @inject NavigationManager navigationManager
 
-<AuthorizeView>
-    <Authorized>
-        <div class="container">
-            @if(MainWarehouses.Count != 0)
-            {
-                <h3>Склады по подразделениям</h3>
-                <div class="card mb-3">
-                    <div class="card-header d-flex flex-row">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+ Добавить</b></button>
-                    </div>
-                    <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-                        <TableView MainWarehouses="MainWarehouses" TableHeader="TableHeaders" />
-                    </div>
-                    <div class="card-footer">
-                    </div>
-                </div>
 
-                <!-- Modal -->
-                <div class="modal fade" id="addMainwarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addMainwarehouseTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addMainwarehouseTitle">Новый склад для подразделения</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="container">
+    <div class="card mt-3 mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm">
+                    <h3 class="m-0">Основные склады отделов</h3>
+                    <p class="m-0">Таблица складов каждого отдела.</p>
+                </div>
+                <div class="col-sm d-flex align-items-center justify-content-end">
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
+                            <div class="row">
+                                <div class="p-0 m-1 col-auto">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+ Добавить</b></button>
+                                </div>
                             </div>
-                            <EditForm Model="mainWarehouseDTO" FormName="AddMainwarehouse" Context="AddMainwarehouse" OnValidSubmit="AddMainwarehouse">
-                                <div class="modal-body">
-                                    <DataAnnotationsValidator />
-
-                                    <!-- Alert -->
-                                    <div class="alert @ClassesAlert" role="alert">
-                                        @ResponseMessage
-                                    </div>
-                                    <!-- End alert -->
-
-                                    <div class="form-group">
-                                        <label for="userdepartment">Подразделение</label>
-                                        <InputSelect id="userdepartment" class="form-control" @bind-Value="mainWarehouseDTO.UserDepartmentId">
-                                            <option value="x">Выберите подразделение пользователя</option>
-                                            @foreach (UserDepartment department in UserDepartments)
-                                            {
-                                                <option value="@department.Id">@department.Title</option>
-                                            }
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => mainWarehouseDTO.UserDepartmentId)" />
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="title">Наименование</label>
-                                        <InputText id="title" class="form-control" @bind-Value="mainWarehouseDTO.Title" />
-                                        <ValidationMessage For="@(() => mainWarehouseDTO.Title)" />
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="shorttitle">Описание</label>
-                                        <InputText id="shorttitle" class="form-control" @bind-Value="mainWarehouseDTO.Description" />
-                                        <ValidationMessage For="@(() => mainWarehouseDTO.Description)" />
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
-                                </div>
-                            </EditForm>
-                        </div>
-                    </div>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
-                <!-- End modal -->
-            }
-            else
-            {
-                <div class="text-center">
-                    <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Загрузка...</span>
-                    </div>
-                </div>
-            }
+            </div>
         </div>
+        <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+            <TableView MainWarehouses="MainWarehouses" TableHeader="TableHeaders" />
+        </div>
+        <div class="card-footer">
 
-    </Authorized>
-    <NotAuthorized>
-        <p>Не авторизован.</p>
-    </NotAuthorized>
-</AuthorizeView>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addMainwarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addMainwarehouseTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMainwarehouseTitle">Новый склад для подразделения</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <EditForm Model="mainWarehouseDTO" FormName="AddMainwarehouse" Context="AddMainwarehouse" OnValidSubmit="AddMainwarehouse">
+                    <div class="modal-body">
+                        <DataAnnotationsValidator />
+
+                        <!-- Alert -->
+                        <div class="alert @ClassesAlert" role="alert">
+                            @ResponseMessage
+                        </div>
+                        <!-- End alert -->
+
+                        <div class="form-group">
+                            <label for="userdepartment">Подразделение</label>
+                            <InputSelect id="userdepartment" class="form-control" @bind-Value="mainWarehouseDTO.UserDepartmentId">
+                                <option value="x">Выберите подразделение пользователя</option>
+                                @foreach (UserDepartment department in UserDepartments)
+                                {
+                                    <option value="@department.Id">@department.Title</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => mainWarehouseDTO.UserDepartmentId)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Наименование</label>
+                            <InputText id="title" class="form-control" @bind-Value="mainWarehouseDTO.Title" />
+                            <ValidationMessage For="@(() => mainWarehouseDTO.Title)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="shorttitle">Описание</label>
+                            <InputText id="shorttitle" class="form-control" @bind-Value="mainWarehouseDTO.Description" />
+                            <ValidationMessage For="@(() => mainWarehouseDTO.Description)" />
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+<!-- End modal -->
 
 @code {
     private MainWarehouseDTO mainWarehouseDTO = new();
@@ -97,7 +95,7 @@
     private List<UserDepartment> UserDepartments = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    private List<string> TableHeaders = ["", "Склад", "Подразделение", "Описание", ""];
+    private List<string> TableHeaders = ["", "Наименование", "Подразделение", "Описание", ""];
 
     protected override async Task OnInitializedAsync()
     {

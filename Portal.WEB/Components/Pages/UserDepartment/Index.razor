@@ -5,59 +5,37 @@
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<AuthorizeView>
-    <Authorized>
-        <div class="container">
-            <div class="row mt-3 mb-3">
-                <div class="col">
+<div class="container">
+    <div class="card mt-3 mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm">
                     <h3 class="m-0">Отделы</h3>
                     <p class="m-0">Таблица отделов предприятия.</p>
                 </div>
-                <div class="col">
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDepartment"><b>+ Добавить</b></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    @if (UserDepartments.Count > 0)
-                    {
-                        <table class="table table-hover text-center">
-                            <thead>
-                                <tr>
-                                    @foreach (var header in TableHeaders)
-                                    {
-                                        <th scope="col">@header</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach (UserDepartment department in UserDepartments)
-                                {
-                                    <tr>
-                                        <td>@department.Title</td>
-                                        <td>@department.ShortTitle</td>
-                                        <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    else
-                    {
-                        <div class="text-center">
-                            <div class="spinner-border text-success" role="status">
-                                <span class="visually-hidden">Загрузка...</span>
+                <div class="col-sm d-flex align-items-center justify-content-end">
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
+                            <div class="row">
+                                <div class="p-0 m-1 col-auto">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDepartment"><b>+ Добавить</b></button>
+                                </div>
                             </div>
-                        </div>
-                    }
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
             </div>
+        </div>
+        <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+            <TableView UserDepartments="UserDepartments" TableHeader="TableHeaders" />
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="addDepartment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addDepartmentTitle" aria-hidden="true">
+<!-- Modal -->
+<div class="modal fade" id="addDepartment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addDepartmentTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -95,14 +73,7 @@
                     </div>
                 </div>
             </div>
-            <!-- End modal -->
-        </div>
-
-    </Authorized>
-    <NotAuthorized>
-        <p>Не авторизован.</p>
-    </NotAuthorized>
-</AuthorizeView>
+<!-- End modal -->
 
 @code {
     private List<UserDepartment> UserDepartments = new();

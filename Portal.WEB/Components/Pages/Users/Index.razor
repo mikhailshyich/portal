@@ -7,17 +7,18 @@
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<AuthorizeView>
-    <Authorized>
-        <div class="container">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-sm">
-                            <h3 class="m-0">Сотрудники</h3>
-                            <p class="m-0">Таблица добавленных сотрудников.</p>
-                        </div>
-                        <div class="col-sm d-flex align-items-center justify-content-end">
+
+<div class="container">
+    <div class="card mt-3 mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm">
+                    <h3 class="m-0">Сотрудники</h3>
+                    <p class="m-0">Таблица добавленных сотрудников.</p>
+                </div>
+                <div class="col-sm d-flex align-items-center justify-content-end">
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
                             <div class="row">
                                 <div class="p-0 m-1 col-auto">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
@@ -26,52 +27,21 @@
                                     <button type="button" class="btn btn-primary" @onclick="SyncUsers"><b>@TitleSyncButton</b></button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-                    @if (UsersList.Count > 0)
-                    {
-                        <table class="table table-hover text-center">
-                            <thead>
-                                <tr>
-                                    @foreach (var header in TableHeaders)
-                                    {
-                                        <th scope="col">@header</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (UserView user in UsersList.OrderBy(u => u.LastName))
-                                {
-                                    <tr>
-                                        <td>@user.LastName</td>
-                                        <td>@user.FirstName</td>
-                                        <td>
-                                            <button class="btn btn-secondary btn-sm mx-1" @onclick="() => ShowUser(user.Id)">Перейти</button>
-                                            <button class="btn btn-primary btn-sm mx-1" @onclick="() => EditUser(user.Id)">Редактировать</button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    else
-                    {
-                        <div class="text-center">
-                            <div class="spinner-border text-success" role="status">
-                                <span class="visually-hidden">Загрузка...</span>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="card-footer">
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
             </div>
+        </div>
+        <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+            <TableView UsersList="UsersList" TableHeader="TableHeaders" />
+        </div>
+        <div class="card-footer">
 
+        </div>
+</div>
 
-            <!-- Modal Add user -->
-            <div class="modal fade" id="addUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserTitle" aria-hidden="true">
+<!-- Modal Add user -->
+<div class="modal fade" id="addUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -163,14 +133,8 @@
                     </div>
                 </div>
             </div>
-            <!-- End modal -->
-        </div>
-        
-    </Authorized>
-    <NotAuthorized>
-        <p>Не авторизован.</p>
-    </NotAuthorized>
-</AuthorizeView>
+<!-- End modal -->
+</div>
 
 @code {
     private List<UserView> UsersList = new();
@@ -227,15 +191,5 @@
             TitleSyncButton = "Sync";
         }
         catch{}
-    }
-
-    private void ShowUser(Guid id)
-    {
-        navigationManager.NavigateTo($"/user/{id}");
-    }
-
-    private void EditUser(Guid id)
-    {
-        
     }
 }

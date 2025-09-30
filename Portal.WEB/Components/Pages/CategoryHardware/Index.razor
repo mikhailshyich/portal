@@ -3,26 +3,37 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject CategoryHardwareServiceWEB CategoryHardwareService
 
-<AuthorizeView>
-    <Authorized>
-        <div class="container">
-            <div class="row mb-2 text-center">
-                <div class="col"><h3>Категории оборудования</h3></div>
-            </div>
-            <div class="row mb-2">
-                <div class="col">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategory">+</button>
+<div class="container">
+    <div class="card mt-3 mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm">
+                    <h3 class="m-0">Категории</h3>
+                    <p class="m-0">Таблица категорий оборудования.</p>
+                </div>
+                <div class="col-sm d-flex align-items-center justify-content-end">
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
+                            <div class="row">
+                                <div class="p-0 m-1 col-auto">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategory"><b>+ Добавить</b></button>
+                                </div>
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
             </div>
-            <div class="row" style="overflow: scroll;">
-                <QuickGrid Items="CategoriesHardware.AsQueryable()">
-                    <PropertyColumn Property="@(p => p.Title)" Title="Полное наименование" Sortable="true" />
-                    <PropertyColumn Property="@(p => p.ShortTitle)" Title="Краткое наименование" Sortable="true" />
-                </QuickGrid>
-            </div>
+        </div>
+        <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+            <TableView CategoriesHardware="CategoriesHardware" TableHeader="TableHeaders" />
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>      
 
-            <!-- Modal -->
-            <div class="modal fade" id="addCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCategoryTitle" aria-hidden="true">
+<!-- Modal -->
+<div class="modal fade" id="addCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCategoryTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -60,20 +71,14 @@
                     </div>
                 </div>
             </div>
-            <!-- End modal -->
-        </div>
-
-    </Authorized>
-    <NotAuthorized>
-        <p>Не авторизован.</p>
-    </NotAuthorized>
-</AuthorizeView>
+<!-- End modal -->
 
 @code {
     private CategoryHardwareDTO categoryHardwareDTO = new();
     private List<CategoryHardware> CategoriesHardware = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
+    private List<string> TableHeaders = ["Полное наименование", "Краткое наименование", ""];
 
     protected override async Task OnInitializedAsync()
     {

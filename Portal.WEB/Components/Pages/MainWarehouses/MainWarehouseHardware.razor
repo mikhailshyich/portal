@@ -11,62 +11,64 @@
 @inject HardwareServiceWEB HardwareService
 @inject NavigationManager navigationManager
 
-<AuthorizeView>
-    <Authorized>
-        <div class="container">
-            @if (MainWarehouse != null)
-            {
-                <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
-                <div class="card mb-3">
-                    <div class="card-header">
+<div class="container">
+    @if (MainWarehouse != null)
+    {
+        <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
+        <div class="card mb-3">
+            <div class="card-header">
+                <AuthorizeView Roles="admin">
+                    <Authorized>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+ Добавить</b></button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware"><b>Переместить</b></button>
                         <button type="button" class="btn btn-secondary"><b>Вернуть</b></button>
                         <button type="button" class="btn btn-danger"><b>Списать</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
-                    </div>
-                    <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-                        <table class="table table-hover text-center">
-                            <thead>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+            <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th><input class="form-check-input" type="checkbox" @oninput="e => { ChangeAll(e.Value); }" /></th>
+                            @foreach (var header in TableHeaders)
+                            {
+                                <th scope="col">@header</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (MainWarehouse.Hardwares.Count > 0)
+                        {
+                            @foreach (Hardware hardware in MainWarehouse.Hardwares)
+                            {
                                 <tr>
-                                    <th><input class="form-check-input" type="checkbox" @oninput="e => { ChangeAll(e.Value); }" /></th>
-                                    @foreach (var header in TableHeaders)
-                                    {
-                                        <th scope="col">@header</th>
-                                    }
+                                    <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
+                                    <td>@hardware.Title</td>
+                                    <td>@hardware.CategoryHardware.Title</td>
+                                    <td>@hardware.CombinedInvNumber</td>
+                                    <td>@hardware.InventoryNumberExternalSystem</td>
+                                    <td>@hardware.DocumentExternalSystem.ShortTitle</td>
+                                    <td>@hardware.DateTimeAdd</td>
+                                    <td><a href="/user/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
+                                    <td><button class="btn btn-secondary btn-sm mx-1">Подробнее</button></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @if (MainWarehouse.Hardwares.Count > 0)
-                                {
-                                    @foreach (Hardware hardware in MainWarehouse.Hardwares)
-                                    {
-                                        <tr>
-                                            <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
-                                            <td>@hardware.Title</td>
-                                            <td>@hardware.CategoryHardware.Title</td>
-                                            <td>@hardware.CombinedInvNumber</td>
-                                            <td>@hardware.InventoryNumberExternalSystem</td>
-                                            <td>@hardware.DocumentExternalSystem.ShortTitle</td>
-                                            <td>@hardware.DateTimeAdd</td>
-                                            <td><a href="/user/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
-                                            <td><button class="btn btn-secondary btn-sm mx-1">Подробнее</button></td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                        
-                    </div>
-                    <div class="card-footer">
+                            }
+                        }
+                    </tbody>
+                </table>
+                
+            </div>
+            <div class="card-footer">
 
-                    </div>
-                </div>
+            </div>
+        </div>
 
 
-                <!-- Modal ADD HARDWARE-->
-                <div class="modal fade" id="addHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addHardwareTitle" aria-hidden="true">
+        <!-- Modal ADD HARDWARE-->
+        <div class="modal fade" id="addHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addHardwareTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -146,10 +148,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- End modal -->
+        <!-- End modal -->
 
-                <!-- Modal MOVE HARDWARE -->
-                <div class="modal fade" id="moveHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="moveHardwareTitle" aria-hidden="true">
+        <!-- Modal MOVE HARDWARE -->
+        <div class="modal fade" id="moveHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="moveHardwareTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -199,23 +201,17 @@
                         </div>
                     </div>
                 </div>
-                <!--End modal -->
-            }
-            else
-            {
-                <div class="text-center">
-                    <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Загрузка...</span>
-                    </div>
-                </div>
-            }
+        <!--End modal -->
+    }
+    else
+    {
+        <div class="text-center">
+            <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Загрузка...</span>
+            </div>
         </div>
-
-    </Authorized>
-    <NotAuthorized>
-        <p>Не авторизован.</p>
-    </NotAuthorized>
-</AuthorizeView>
+    }
+</div>
 
 
 @code {

@@ -16,7 +16,7 @@
             @foreach (MainWarehouse warehouse in MainWarehouses)
             {
                 <tr>
-                    <td><input class="form-check-input" type="checkbox" /></td>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@warehouse.Id" /></td>
                     <td>@warehouse.Title</td>
                     <td>@warehouse.UserDepartment?.Title</td>
                     <td>@warehouse.Description</td>
@@ -29,7 +29,7 @@
             @foreach (Hardware hardware in Hardwares)
             {
                 <tr>
-                    <td><input class="form-check-input" type="checkbox" @bind-value="@hardware.Id" @oninput="CheckboxChanged" /></td>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@hardware.Id" /></td>
                     <td>@hardware.Title</td>
                     <td>@hardware.Description</td>
                     <td>@hardware.CombinedInvNumber</td>
@@ -44,12 +44,67 @@
             @foreach (UserWarehouse warehouse in UserWarehouses)
             {
                 <tr>
-                    <td><input class="form-check-input" type="checkbox" @bind-value="@warehouse.Id" @oninput="CheckboxChanged" /></td>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@warehouse.Id" /></td>
                     <td>@warehouse.User?.LastName @warehouse.User?.FirstName</td>
                     <td>@warehouse.Title</td>
                     <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToUserWarehouse(warehouse.Id)">Перейти</button></td>
                 </tr>
             }
+        }
+        else if (CategoriesHardware?.Count > 0)
+        {
+            @foreach (CategoryHardware category in CategoriesHardware)
+            {
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@category.Id" /></td>
+                    <td>@category.Title</td>
+                    <td>@category.ShortTitle</td>
+                    <td><button class="btn btn-secondary btn-sm mx-1">Редактировать</button></td>
+                </tr>
+            }
+        }
+        else if (UserDepartments?.Count > 0)
+        {
+            @foreach (UserDepartment department in UserDepartments)
+            {
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@department.Id" /></td>
+                    <td>@department.Title</td>
+                    <td>@department.ShortTitle</td>
+                    <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
+                </tr>
+            }
+        }
+        else if (UsersList?.Count > 0)
+        {
+            @foreach (UserView user in UsersList.OrderBy(u => u.LastName))
+            {
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@user.Id" /></td>
+                    <td>@user.LastName</td>
+                    <td>@user.FirstName</td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm mx-1" @onclick="() => ShowUser(user.Id)">Перейти</button>
+                        <AuthorizeView Roles="admin">
+                            <Authorized>
+                                <button class="btn btn-primary btn-sm mx-1" @onclick="() => EditUser(user.Id)">Редактировать</button>
+                            </Authorized>
+                        </AuthorizeView>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="10">
+                    <div class="text-center">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -63,6 +118,12 @@
     public List<Hardware>? Hardwares { get; set; } = new();
     [Parameter]
     public List<UserWarehouse>? UserWarehouses { get; set; } = new();
+    [Parameter]
+    public List<CategoryHardware>? CategoriesHardware { get; set; } = new();
+    [Parameter]
+    public List<UserDepartment>? UserDepartments { get; set; } = new();
+    [Parameter]
+    public List<UserView>? UsersList { get; set; } = new();
 
     private void GoToMainWarehouse(Guid id)
     {
@@ -77,5 +138,15 @@
     private void CheckboxChanged(ChangeEventArgs args)
     {
         throw new NotImplementedException();
+    }
+
+    private void ShowUser(Guid id)
+    {
+        navigationManager.NavigateTo($"/user/{id}");
+    }
+
+    private void EditUser(Guid id)
+    {
+
     }
 }
