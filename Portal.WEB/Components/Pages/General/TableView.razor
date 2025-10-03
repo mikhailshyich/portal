@@ -45,7 +45,7 @@
             {
                 <tr>
                     <td><input class="form-check-input" type="checkbox" @bind-value="@warehouse.Id" /></td>
-                    <td>@warehouse.User?.LastName @warehouse.User?.FirstName</td>
+                    <td><a href="/user/@warehouse.User?.Id">@warehouse.User?.LastName @warehouse.User?.FirstName</a></td>
                     <td>@warehouse.Title</td>
                     <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToUserWarehouse(warehouse.Id)">Перейти</button></td>
                 </tr>
@@ -94,6 +94,24 @@
                 </tr>
             }
         }
+        else if (DocumentExternalSystemList?.Count > 0)
+        {
+            @foreach (DocumentExternalSystem document in DocumentExternalSystemList)
+            {
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" @bind-value="@document.Id" /></td>
+                    <td>@document.Title</td>
+                    <td>@document.ShortTitle</td>
+                    <td>
+                        <AuthorizeView Roles="admin">
+                            <Authorized>
+                                <button class="btn btn-primary btn-sm mx-1" @onclick="() => EditDocument(document.Id)">Редактировать</button>
+                            </Authorized>
+                        </AuthorizeView>
+                    </td>
+                </tr>
+            }
+        }
         else
         {
             <tr>
@@ -124,6 +142,8 @@
     public List<UserDepartment>? UserDepartments { get; set; } = new();
     [Parameter]
     public List<UserView>? UsersList { get; set; } = new();
+    [Parameter]
+    public List<DocumentExternalSystem>? DocumentExternalSystemList { get; set; } = new();
 
     private void GoToMainWarehouse(Guid id)
     {
@@ -146,6 +166,12 @@
     }
 
     private void EditUser(Guid id)
+    {
+        navigationManager.NavigateTo($"/user/edit/{id}");
+        
+    }
+
+    private void EditDocument(Guid id)
     {
 
     }

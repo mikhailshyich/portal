@@ -68,5 +68,12 @@ namespace Portal.WEB.Services
             var response = await user.Content.ReadFromJsonAsync<UserView>();
             return response!;
         }
+
+        public async Task<CustomGeneralResponses> EditUserAsync(UserView request)
+        {
+            var user = await httpClient.PutAsJsonAsync($"{BaseURI}/edit", request);
+            var response = await user.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
+        }
     }
 }

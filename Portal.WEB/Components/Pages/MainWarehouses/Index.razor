@@ -5,6 +5,7 @@
 @inject UserDepartmentServiceWEB userDepartment
 @inject NavigationManager navigationManager
 
+<title>Основные склады</title>
 
 <div class="container">
     <div class="card mt-3 mb-3">
@@ -95,7 +96,7 @@
     private List<UserDepartment> UserDepartments = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    private List<string> TableHeaders = ["", "Наименование", "Подразделение", "Описание", ""];
+    private List<string> TableHeaders = ["Наименование", "Подразделение", "Описание", ""];
 
     protected override async Task OnInitializedAsync()
     {

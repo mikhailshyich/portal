@@ -3,26 +3,39 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject DocumentExternalSystemServiceWEB DocumentExternalSystem
 
-<AuthorizeView>
-    <Authorized>
-        <div class="container">
-            <div class="row mb-2 text-center">
-                <div class="col"><h3>Документы внешних учётных систем</h3></div>
-            </div>
-            <div class="row mb-2">
-                <div class="col">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDocument">+</button>
+<title>Документы</title>
+
+<div class="container">
+    <div class="card mt-3 mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm">
+                    <h3 class="m-0">Документы</h3>
+                    <p class="m-0">Документы внешних учётных систем.</p>
+                </div>
+                <div class="col-sm d-flex align-items-center justify-content-end">
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
+                            <div class="row">
+                                <div class="p-0 m-1 col-auto">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDocument"><b>+ Добавить</b></button>
+                                </div>
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
             </div>
-            <div class="row" style="overflow: scroll;">
-                <QuickGrid Items="DocumentsExternal.AsQueryable()">
-                    <PropertyColumn Property="@(p => p.Title)" Title="Полное наименование" Sortable="true" />
-                    <PropertyColumn Property="@(p => p.ShortTitle)" Title="Краткое наименование" Sortable="true" />
-                </QuickGrid>
-            </div>
+        </div>
+        <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+            <TableView DocumentExternalSystemList="DocumentsExternal" TableHeader="TableHeaders" />
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="addDocument" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addDocumentTitle" aria-hidden="true">
+<!-- Modal -->
+<div class="modal fade" id="addDocument" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addDocumentTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -60,18 +73,12 @@
                     </div>
                 </div>
             </div>
-            <!-- End modal -->
-        </div>
-
-    </Authorized>
-    <NotAuthorized>
-        <p>Не авторизован.</p>
-    </NotAuthorized>
-</AuthorizeView>
+<!-- End modal -->
 
 @code {
     private DocumentExternalSystemDTO documentExternalDTO = new();
     private List<DocumentExternalSystem> DocumentsExternal = new();
+    private List<string> TableHeaders = ["", "Полное наименование", "Краткое наименование", ""];
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
 

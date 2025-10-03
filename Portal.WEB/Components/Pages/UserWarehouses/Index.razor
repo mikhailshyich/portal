@@ -4,35 +4,38 @@
 @inject NavigationManager navigationManager
 @inject UserWarehouseServiceWEB userWarehouseService
 
-<AuthorizeView>
-    <Authorized>
-        <div class="container">
-            @if (UserWarehouses.Count != 0)
-            {
-                <div class="card mt-3 mb-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-sm">
-                                <h3 class="m-0">Склады сотрудников</h3>
-                                <p class="m-0">Таблица личных складов сотрудников.</p>
-                            </div>
-                            <div class="col-sm d-flex align-items-center justify-content-end">
-                                <div class="row">
-                                    <div class="p-0 m-1 col-auto">
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
-                                    </div>
+<title>Склады сотрудников</title>
+
+<div class="container">
+    <div class="card mt-3 mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm">
+                    <h3 class="m-0">Склады сотрудников</h3>
+                    <p class="m-0">Таблица личных складов сотрудников.</p>
+                </div>
+                <div class="col-sm d-flex align-items-center justify-content-end">
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
+                            <div class="row">
+                                <div class="p-0 m-1 col-auto">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-                        <TableView UserWarehouses="UserWarehouses" TableHeader="TableHeaders" />
-                    </div>
-                    <div class="card-footer">
-                    </div>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
+            </div>
+        </div>
+        <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
+            <TableView UserWarehouses="UserWarehouses" TableHeader="TableHeaders" />
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>
 
-                @* <!-- Modal -->
+@* <!-- Modal -->
                 <div class="modal fade" id="addMainwarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addMainwarehouseTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -84,22 +87,6 @@
                     </div>
                 </div>
                 <!-- End modal --> *@
-            }
-            else
-            {
-                <div class="text-center">
-                    <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Загрузка...</span>
-                    </div>
-                </div>
-            }
-        </div>
-
-    </Authorized>
-    <NotAuthorized>
-        <p>Не авторизован.</p>
-    </NotAuthorized>
-</AuthorizeView>
 
 @code{
     private UserWarehouseDTO userWarehouseDTO = new();

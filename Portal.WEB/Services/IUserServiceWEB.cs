@@ -15,6 +15,7 @@ namespace Portal.WEB.Services
         Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request);
         Task<List<UserRole>> GetAllUserRolesAsync();
         Task<CustomGeneralResponses> SyncUsersAsync();
+        Task<CustomGeneralResponses> EditUserAsync(UserView request);
         //Task CheckTokens(LoginDTO request);
     }
 }
