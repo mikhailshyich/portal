@@ -11,5 +11,6 @@ namespace Portal.Domain.Interfaces
         Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<UserDepartment>> GetAllAsync();
         Task<UserDepartment> GetByIdAsync(Guid id);
+
     }
 }

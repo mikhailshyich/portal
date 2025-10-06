@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @inject UserWarehouseServiceWEB userWarehouseService
 @inject UserServiceWEB userService
+@inject UserDepartmentServiceWEB userDepartmentService
 
 <title>Склады сотрудников</title>
 
@@ -56,7 +57,7 @@
 
                     <div class="form-group">
                         <label for="userdepartment">Сотрудник</label>
-                        <InputSelect id="userdepartment" class="form-control" @bind-Value="userWarehouseDTO.UserId">
+                        <InputSelect id="userdepartment" class="form-control" @oninput="SelectedUser" @bind-Value="userWarehouseDTO.UserId">
                             <option value="x">Выберите сотрудника</option>
                             @foreach (UserView user in UsersList)
                             {
@@ -64,6 +65,11 @@
                             }
                         </InputSelect>
                         <ValidationMessage For="@(() => userWarehouseDTO.UserId)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">Отдел сотрудника</label>
+                        <InputText id="title" class="form-control" @bind-Value="userDepartment.Title" disabled readonly />
                     </div>
 
                     <div class="form-group">
@@ -85,6 +91,8 @@
 
 @code{
     private UserWarehouseDTO userWarehouseDTO = new();
+    private UserDepartment userDepartment = new();
+    private UserView user = new();
     private List<UserWarehouse> UserWarehouses = new();
     private List<UserView> UsersList = new();
     private string ResponseMessage = string.Empty;
@@ -106,8 +114,27 @@
         try
         {
             var response = await userWarehouseService.AddAsync(userWarehouseDTO);
-            UserWarehouses = await userWarehouseService.GetAllAsync();
+            if (!response.Flag)
+            {
+                ResponseMessage = response.Message;
+                ClassesAlert = "alert-warning";
+            }
+            else
+            {
+                ResponseMessage = response.Message;
+                ClassesAlert = "alert-success";
+                userWarehouseDTO = new();
+                userDepartment = new();
+                UserWarehouses = await userWarehouseService.GetAllAsync();
+            }
         }
         catch (Exception ex) { }
+    }
+    private async Task SelectedUser(ChangeEventArgs args)
+    {
+        var userId = args.Value.ToString();
+        Guid.TryParse(userId, out Guid id);
+        user = await userService.GetByIdAsync(id);
+        userDepartment = await userDepartmentService.GetByIdAsync(user.UserDepartmentId);
     }
 }

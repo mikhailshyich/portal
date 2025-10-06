@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.Domain.Entities;
 using Portal.Domain.Entities.Hardwares;
+using Portal.Domain.Entities.History;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Entities.Warehouses;
 
@@ -22,6 +23,7 @@ namespace Portal.Infrastructure.Data
         public DbSet<DocumentExternalSystem> DocumentsExternalSystem { get; set; }
         public DbSet<UserHardware> UsersHardware { get; set; }
         public DbSet<UserWarehouse> UserWarehouses { get; set; }
+        public DbSet<History> HistoryEntries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
