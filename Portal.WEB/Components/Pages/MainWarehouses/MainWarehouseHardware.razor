@@ -174,7 +174,7 @@
                                         <label for="user">Сотрудник</label>
                                         <InputSelect id="user" class="form-control" @oninput="SelectedUser" @bind-Value="hardwareMoveDTO.UserId">
                                             <option value="">Выберите нужного сотрудника</option>
-                                            @foreach (UserView user in UsersList)
+                                            @foreach (UserView user in UsersList.OrderBy(u=>u.LastName))
                                             {
                                                 <option value="@user.Id">@user.LastName @user.FirstName</option>
                                             }
@@ -185,7 +185,7 @@
                                     <div class="form-group">
                                         <label for="user">Склад сотрудника</label>
                                         <InputSelect id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
-                                            <option value="">Выберите нужный склад</option>
+                                            <option selected value="">Выберите нужный склад</option>
                                             @foreach (UserWarehouse warehouse in UserWarehousesList)
                                             {
                                                 <option value="@warehouse.Id">@warehouse.Title</option>

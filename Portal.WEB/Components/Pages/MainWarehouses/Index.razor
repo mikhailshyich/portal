@@ -42,7 +42,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addMainwarehouseTitle">Новый склад для подразделения</h5>
+                    <h5 class="modal-title" id="addMainwarehouseTitle">Новый склад для отдела</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <EditForm Model="mainWarehouseDTO" FormName="AddMainwarehouse" Context="AddMainwarehouse" OnValidSubmit="AddMainwarehouse">
@@ -56,9 +56,9 @@
                         <!-- End alert -->
 
                         <div class="form-group">
-                            <label for="userdepartment">Подразделение</label>
+                            <label for="userdepartment">Отдел</label>
                             <InputSelect id="userdepartment" class="form-control" @bind-Value="mainWarehouseDTO.UserDepartmentId">
-                                <option value="x">Выберите подразделение пользователя</option>
+                                <option value="x">Выберите нужный отдел</option>
                                 @foreach (UserDepartment department in UserDepartments)
                                 {
                                     <option value="@department.Id">@department.Title</option>

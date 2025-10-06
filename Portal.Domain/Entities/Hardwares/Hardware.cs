@@ -28,6 +28,7 @@ namespace Portal.Domain.Entities.Hardwares
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InventoryNumber { get; set; }
         public string CombinedInvNumber { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
 
         public MainWarehouse? MainWarehouse { get; set; }
         public CategoryHardware? CategoryHardware { get; set; }

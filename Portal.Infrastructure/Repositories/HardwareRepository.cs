@@ -41,7 +41,8 @@ namespace Portal.Infrastructure.Repositories
                         InventoryNumberExternalSystem = request.InventoryNumberExternalSystem,
                         TTN = request.TTN,
                         DateTimeAdd = DateTime.Now,
-                        FileNameImage = request.FileNameImage
+                        FileNameImage = request.FileNameImage,
+                        IsActive = true
                     };
                     context.Hardwares.Add(hardware);
                     await context.SaveChangesAsync();
