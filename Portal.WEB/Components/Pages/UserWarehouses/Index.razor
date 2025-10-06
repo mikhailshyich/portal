@@ -3,6 +3,7 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager navigationManager
 @inject UserWarehouseServiceWEB userWarehouseService
+@inject UserServiceWEB userService
 
 <title>Склады сотрудников</title>
 
@@ -19,7 +20,7 @@
                         <Authorized>
                             <div class="row">
                                 <div class="p-0 m-1 col-auto">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserWarehouse"><b>+ Добавить</b></button>
                                 </div>
                             </div>
                         </Authorized>
@@ -35,62 +36,57 @@
     </div>
 </div>
 
-@* <!-- Modal -->
-                <div class="modal fade" id="addMainwarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addMainwarehouseTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addMainwarehouseTitle">Новый склад для подразделения</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <EditForm Model="mainWarehouseDTO" FormName="AddMainwarehouse" Context="AddMainwarehouse" OnValidSubmit="AddMainwarehouse">
-                                <div class="modal-body">
-                                    <DataAnnotationsValidator />
+<!-- Modal -->
+<div class="modal fade" id="addUserWarehouse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserWarehouse" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserWarehouseTitle">Новый склад для подразделения</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <EditForm Model="userWarehouseDTO" FormName="AddUserWarehouse" Context="AddUserWarehouse" OnValidSubmit="AddUserWarehouse">
+                <div class="modal-body">
+                    <DataAnnotationsValidator />
 
-                                    <!-- Alert -->
-                                    <div class="alert @ClassesAlert" role="alert">
-                                        @ResponseMessage
-                                    </div>
-                                    <!-- End alert -->
-
-                                    <div class="form-group">
-                                        <label for="userdepartment">Подразделение</label>
-                                        <InputSelect id="userdepartment" class="form-control" @bind-Value="mainWarehouseDTO.UserDepartmentId">
-                                            <option value="x">Выберите подразделение пользователя</option>
-                                            @foreach (UserDepartment department in UserDepartments)
-                                            {
-                                                <option value="@department.Id">@department.Title</option>
-                                            }
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => mainWarehouseDTO.UserDepartmentId)" />
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="title">Наименование</label>
-                                        <InputText id="title" class="form-control" @bind-Value="mainWarehouseDTO.Title" />
-                                        <ValidationMessage For="@(() => mainWarehouseDTO.Title)" />
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="shorttitle">Описание</label>
-                                        <InputText id="shorttitle" class="form-control" @bind-Value="mainWarehouseDTO.Description" />
-                                        <ValidationMessage For="@(() => mainWarehouseDTO.Description)" />
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
-                                </div>
-                            </EditForm>
-                        </div>
+                    <!-- Alert -->
+                    <div class="alert @ClassesAlert" role="alert">
+                        @ResponseMessage
                     </div>
+                    <!-- End alert -->
+
+                    <div class="form-group">
+                        <label for="userdepartment">Сотрудник</label>
+                        <InputSelect id="userdepartment" class="form-control" @bind-Value="userWarehouseDTO.UserId">
+                            <option value="x">Выберите сотрудника</option>
+                            @foreach (UserView user in UsersList)
+                            {
+                                <option value="@user.Id">@user.LastName @user.FirstName</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => userWarehouseDTO.UserId)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">Наименование</label>
+                        <InputText id="title" class="form-control" @bind-Value="userWarehouseDTO.Title" />
+                        <ValidationMessage For="@(() => userWarehouseDTO.Title)" />
+                    </div>
+
                 </div>
-                <!-- End modal --> *@
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+<!-- End modal -->
 
 @code{
     private UserWarehouseDTO userWarehouseDTO = new();
     private List<UserWarehouse> UserWarehouses = new();
+    private List<UserView> UsersList = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
     private List<string> TableHeaders = ["Сотрудник", "Наименование", ""];
@@ -100,6 +96,16 @@
         try
         {
             await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            UserWarehouses = await userWarehouseService.GetAllAsync();
+            UsersList = await userService.GetAllAsync();
+        }
+        catch (Exception ex) { }
+    }
+    private async Task AddUserWarehouse()
+    {
+        try
+        {
+            var response = await userWarehouseService.AddAsync(userWarehouseDTO);
             UserWarehouses = await userWarehouseService.GetAllAsync();
         }
         catch (Exception ex) { }

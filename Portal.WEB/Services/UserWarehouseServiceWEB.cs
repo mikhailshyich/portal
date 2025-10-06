@@ -16,9 +16,11 @@ namespace Portal.WEB.Services
 
         private readonly string BaseURI = "api/UserWarehouse";
 
-        public Task<CustomGeneralResponses> AddAsync(UserWarehouseDTO request)
+        public async Task<CustomGeneralResponses> AddAsync(UserWarehouseDTO request)
         {
-            throw new NotImplementedException();
+            var warehouse = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
+            var response = await warehouse.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
         }
 
         public Task<CustomGeneralResponses> UpdateAsync(UserWarehouse request)

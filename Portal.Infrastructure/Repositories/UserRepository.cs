@@ -197,7 +197,7 @@ namespace Portal.Infrastructure.Repositories
         /// <returns></returns>
         public async Task<List<UserView>> GetAllAsync()
         {
-            var users = await context.Users.Where(u => u.IsActive == true).ToListAsync();
+            var users = await context.Users.Where(u => u.IsActive == true).OrderBy(u => u.LastName).ToListAsync();
             var userslist = new List<UserView>();
             if(users.Count > 0)
             {

@@ -77,7 +77,7 @@
         }
         else if (UsersList?.Count > 0)
         {
-            @foreach (UserView user in UsersList.OrderBy(u => u.LastName))
+            @foreach (UserView user in UsersList)
             {
                 <tr>
                     <td><input class="form-check-input" type="checkbox" @bind-value="@user.Id" /></td>
