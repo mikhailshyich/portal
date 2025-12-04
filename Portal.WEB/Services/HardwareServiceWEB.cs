@@ -50,6 +50,13 @@ namespace Portal.WEB.Services
             return response!;
         }
 
+        public async Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport)
+        {
+            var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/import", hardwareImport);
+            var response = await hardware.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
+        }
+
         public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid? userID, Guid? userWarehouseID)
         {
             var hardwares = await httpClient.PostAsJsonAsync($"{BaseURI}/move/{userID}/{userWarehouseID}", hardwaresID);

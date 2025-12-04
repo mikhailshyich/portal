@@ -16,6 +16,9 @@ builder.Services.AddDbContext<PortalDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ??
         throw new InvalidOperationException("Строка подключения к БД не найдена"));
+    //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString) ??
+    //    throw new InvalidOperationException("Строка подключения к БД не найдена"));
 });
 builder.Services.AddControllersWithViews()
                 .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);

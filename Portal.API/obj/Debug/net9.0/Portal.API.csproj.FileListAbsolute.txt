@@ -9,6 +9,11 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Portal.API.pdb
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Azure.Core.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Azure.Identity.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\ClosedXML.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\ClosedXML.Parser.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\DocumentFormat.OpenXml.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\DocumentFormat.OpenXml.Framework.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\ExcelNumberFormat.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Humanizer.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\itextsharp.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
@@ -52,7 +57,9 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Mono.TextTemplating.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\RBush.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\Scalar.AspNetCore.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\SixLabors.Fonts.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.ClientModel.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.CodeDom.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Composition.AttributedModel.dll
@@ -68,6 +75,7 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.DirectoryServi
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Drawing.Common.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.IO.Packaging.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Memory.Data.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Runtime.Caching.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.API\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
@@ -173,6 +181,7 @@ D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.development.json
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\swae.build.ex.cache
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.csproj.Up2Date
 D:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.dll

@@ -23,6 +23,7 @@
                     <Authorized>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+ Добавить</b></button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware"><b>Переместить</b></button>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
                         <button type="button" class="btn btn-secondary"><b>Вернуть</b></button>
                         <button type="button" class="btn btn-danger"><b>Списать</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
@@ -204,6 +205,36 @@
                     </div>
                 </div>
         <!--End modal -->
+
+        <!-- Modal IMPORT HARDWARE -->
+        <div class="modal fade" id="importHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importHardwareTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importHardwareTitle">Импорт оборудования из файла Excel</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <!-- Alert -->
+                        <div class="alert @ClassesAlert" role="alert">
+                            @ResponseMessage
+                        </div>
+                        <!-- End alert -->
+
+                        <div class="form-group">
+                            <label>Файл Excel</label>
+                            <InputFile class="form-control" id="file" OnChange="UploadFile" accept=".xls,.xlsx" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Строк импортировано: @StringCount</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End modal -->
     }
     else
     {
@@ -235,6 +266,7 @@
     private List<string> TableHeaders = ["Наименование", "Категория", "Инвентарный", "Номер у/с", "Документ у/с", "Дата добавления", "МОЛ", ""];
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
+    private int StringCount;
 
     protected override async Task OnInitializedAsync()
     {
@@ -308,7 +340,7 @@
         }
         catch(Exception ex)
         {
-            
+
         }
     }
 
@@ -345,6 +377,7 @@
             HardwaresId.Remove(id);
         }
     }
+
     private void ChangeAll(object checkedValue)
     {
         if ((bool)checkedValue)
@@ -362,5 +395,46 @@
         Guid.TryParse(userId, out Guid id);
         UserWarehousesList.Clear();
         UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(id);
+    }
+    private async Task UploadFile(InputFileChangeEventArgs e)
+    {
+        if (e.File is null) return;
+        try
+        {
+            using var stream = new MemoryStream();
+            await e.File.OpenReadStream().CopyToAsync(stream);
+            stream.Position = 0;
+            using var workbook = new XLWorkbook(stream);
+            var worksheet = workbook.Worksheets.First();
+            var rows = worksheet.RowsUsed().Skip(1);
+            List<HardwareImportDTO> hardwares = new List<HardwareImportDTO>();
+            foreach(var row in rows)
+            {
+                HardwareImportDTO hardwareImport = new HardwareImportDTO
+                {
+                    MainWarehouseId = Guid.Parse(row.Cell(1).Value.ToString()),
+                    CategoryHardwareId = Guid.Parse(row.Cell(2).Value.ToString()),
+                    DocumentExternalSystemId = Guid.Parse(row.Cell(3).Value.ToString()),
+                    Title = row.Cell(4).Value.ToString(),
+                    Count = int.Parse(row.Cell(5).Value.ToString()),
+                    InventoryNumberExternalSystem = row.Cell(6).Value.ToString(),
+                    TTN = row.Cell(7).Value.ToString()
+                };
+                StringCount += 1;
+                hardwares.Add(hardwareImport);
+            }
+            var result = await HardwareService.Import(hardwares);
+            if (!result.Flag)
+            {
+                ResponseMessage = result.Message;
+                ClassesAlert = "alert-warning";
+            }
+            else
+            {
+                ResponseMessage = result.Message;
+                ClassesAlert = "alert-success";
+            }
+        }
+        catch(Exception ex){}
     }
 }

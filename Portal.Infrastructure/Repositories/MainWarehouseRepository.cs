@@ -66,7 +66,7 @@ namespace Portal.Infrastructure.Repositories
                 mainWarehouse.Hardwares = hardwares;
             }
 
-            foreach(var hardware in mainWarehouse.Hardwares)
+            foreach (var hardware in mainWarehouse.Hardwares)
             {
                 var category = await context.CategoriesHardware.FindAsync(hardware.CategoryHardwareId);
                 var document = await context.DocumentsExternalSystem.FindAsync(hardware.DocumentExternalSystemId);

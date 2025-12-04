@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Portal.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class asdiasid : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,7 +117,8 @@ namespace Portal.Infrastructure.Migrations
                     FileNameImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InventoryNumber = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CombinedInvNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CombinedInvNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,6 +144,21 @@ namespace Portal.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HistoryEntries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OperationType = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DateTimeChanges = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoryEntries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -154,9 +170,9 @@ namespace Portal.Infrastructure.Migrations
                     Patronymic = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Specialization = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Specialization = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     UserTokenId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -278,6 +294,11 @@ namespace Portal.Infrastructure.Migrations
                 column: "UserWarehouseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HistoryEntries_UserId",
+                table: "HistoryEntries",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MainWarehouses_UserDepartmentId",
                 table: "MainWarehouses",
                 column: "UserDepartmentId");
@@ -322,6 +343,14 @@ namespace Portal.Infrastructure.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_HistoryEntries_Users_UserId",
+                table: "HistoryEntries",
+                column: "UserId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Users_UserTokens_UserTokenId",
                 table: "Users",
                 column: "UserTokenId",
@@ -338,6 +367,9 @@ namespace Portal.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Hardwares");
+
+            migrationBuilder.DropTable(
+                name: "HistoryEntries");
 
             migrationBuilder.DropTable(
                 name: "UsersHardware");

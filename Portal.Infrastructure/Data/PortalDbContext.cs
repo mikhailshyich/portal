@@ -9,7 +9,7 @@ namespace Portal.Infrastructure.Data
 {
     public class PortalDbContext : DbContext
     {
-        public PortalDbContext(DbContextOptions<PortalDbContext> options) : base(options) { 
+        public PortalDbContext(DbContextOptions<PortalDbContext> options) : base(options) {
             //Database.EnsureCreated();
             }
 

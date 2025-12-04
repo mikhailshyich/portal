@@ -39,6 +39,11 @@ namespace Portal.Application.Services
             return await hardwareDomain.GetByUserIdAsync(userId);
         }
 
+        public async Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport)
+        {
+            return await hardwareDomain.Import(hardwareImport);
+        }
+
         public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid>? hardwaresID, Guid? userID, Guid? userWarehouseID)
         {
             return await hardwareDomain.MoveToUserAsync(hardwaresID, userID, userWarehouseID);

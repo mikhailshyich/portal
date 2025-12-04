@@ -16,6 +16,13 @@ namespace Portal.Domain.Entities.History
 
         public User? User { get; set; }
 
+        /// <summary>
+        /// Добавить запись в таблицу
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <param name="operationType">Тип операции</param>
+        /// <param name="description">Описание</param>
+        /// <param name="dateTimeChanges">Дата и время изменений</param>
         public History(Guid userId, string operationType, string? description, DateTime dateTimeChanges)
         {
             this.UserId = userId;

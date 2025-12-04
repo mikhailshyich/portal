@@ -163,6 +163,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwareController",
+    "Method": "Import",
+    "RelativePath": "api/Hardware/import",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "hardwares",
+        "Type": "System.Collections.Generic.List\u00601[[Portal.Domain.DTOs.HardwareImportDTO, Portal.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwareController",
     "Method": "Move",
     "RelativePath": "api/Hardware/move/{userId}/{userWarehouseId}",
     "HttpMethod": "POST",

@@ -46,18 +46,16 @@ namespace Portal.Infrastructure.Repositories
                     };
                     context.Hardwares.Add(hardware);
                     await context.SaveChangesAsync();
-                    hardware.CombinedInvNumber = $"{category?.ShortTitle}-{hardware.InventoryNumber}";
+                    hardware.CombinedInvNumber = $"TMK-{hardware.InventoryNumber}";
                 }
 
                 await context.SaveChangesAsync();
                 return new CustomGeneralResponses(true, "Оборудование успешно добавлено.", hardwareList);
             }
-            catch(Exception ex)
+            catch
             {
                 return new CustomGeneralResponses(false, "Ошибка при добавлении оборудования.\nПроверьте заполнение обязательных полей.");
             }
-
-            
         }
 
         public async Task<string> GenerateQR(List<Guid>? idList)
@@ -257,6 +255,43 @@ namespace Portal.Infrastructure.Repositories
             await context.SaveChangesAsync();
 
             return new CustomGeneralResponses(true, $"Оборудование в количестве {hardwaresID.Count} возвращено на склад!");
+        }
+
+        public async Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport)
+        {
+            if (hardwareImport.Count == 0) return new CustomGeneralResponses(false, "Список с оборудованием для импорта пустой.");
+
+            //var hardwareList = new List<Hardware>();
+            try
+            {
+                foreach (var hardware in hardwareImport)
+                {
+                    for (var i = 0; i < hardware.Count; i++)
+                    {
+                        var newHardware = new Hardware()
+                        {
+                            MainWarehouseId = hardware.MainWarehouseId,
+                            CategoryHardwareId = hardware.CategoryHardwareId,
+                            DocumentExternalSystemId = hardware.DocumentExternalSystemId,
+                            Title = hardware.Title,
+                            Count = 1,
+                            InventoryNumberExternalSystem = hardware.InventoryNumberExternalSystem,
+                            TTN = hardware.TTN,
+                            DateTimeAdd = DateTime.Now,
+                            IsActive = true
+                        };
+                        context.Hardwares.Add(newHardware);
+                        await context.SaveChangesAsync();
+                        newHardware.CombinedInvNumber = $"TMK-{newHardware.InventoryNumber}";
+                    }
+                }
+                await context.SaveChangesAsync();
+            }
+            catch
+            {
+                return new CustomGeneralResponses(false, "Ошибка при добавлении оборудования.\nПроверьте заполнение обязательных полей.");
+            }
+            return new CustomGeneralResponses(true, "Оборудование успешно импортировано!");
         }
     }
 }
