@@ -18,11 +18,6 @@ namespace Portal.Application.Services
             return await mainWarehouseDomainInterface.AddAsync(request);
         }
 
-        public Task<MainWarehouse> EditGameAsync(MainWarehouse request)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<MainWarehouse>> GetAllAsync()
         {
             return await mainWarehouseDomainInterface.GetAllAsync();

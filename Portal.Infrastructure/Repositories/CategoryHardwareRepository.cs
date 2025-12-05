@@ -21,8 +21,11 @@ namespace Portal.Infrastructure.Repositories
         {
             if (request is null) return new CustomGeneralResponses(false, "Передаваемый объект равен null.");
 
-            var result = await context.CategoriesHardware.AnyAsync(r => r.Title == request.Title);
-            if (result) return new CustomGeneralResponses(false, "Такая категория уже существует.");
+            var categoryTitle = await context.CategoriesHardware.AnyAsync(r => r.Title == request.Title);
+            if (categoryTitle) return new CustomGeneralResponses(false, $"Категория [{request.Title}] уже существует.");
+
+            var categoryShortTitle = await context.CategoriesHardware.AnyAsync(c=> c.ShortTitle == request.ShortTitle);
+            if (categoryShortTitle) return new CustomGeneralResponses(false, $"Выберите другое сокращение. [{request.ShortTitle}] уже используется.");
 
             var category = new CategoryHardware()
             {

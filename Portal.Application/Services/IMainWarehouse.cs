@@ -9,6 +9,5 @@ namespace Portal.Application.Services
         Task<List<MainWarehouse>> GetAllAsync();
         Task<CustomGeneralResponses> AddAsync(MainWarehouseDTO request);
         Task<MainWarehouse> GetByIdAsync(Guid id);
-        Task<MainWarehouse> EditGameAsync(MainWarehouse request);
     }
 }

@@ -12,8 +12,8 @@ using Portal.Infrastructure.Data;
 namespace Portal.Infrastructure.Migrations
 {
     [DbContext(typeof(PortalDbContext))]
-    [Migration("20251204082341_First")]
-    partial class First
+    [Migration("20251204140926_second")]
+    partial class second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,12 +98,6 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InventoryNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryNumber"));
-
                     b.Property<string>("InventoryNumberExternalSystem")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -113,6 +107,9 @@ namespace Portal.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid>("MainWarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MarkCode")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TTN")
@@ -144,6 +141,31 @@ namespace Portal.Infrastructure.Migrations
                     b.HasIndex("UserWarehouseId");
 
                     b.ToTable("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Hardwares.MarkCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("HardwareId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("MarkCodeNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MarkCodeNumber"));
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HardwareId");
+
+                    b.ToTable("MarkCodes");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.UserHardware", b =>
@@ -478,6 +500,15 @@ namespace Portal.Infrastructure.Migrations
                     b.Navigation("User");
 
                     b.Navigation("UserWarehouse");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Hardwares.MarkCode", b =>
+                {
+                    b.HasOne("Portal.Domain.Entities.Hardwares.Hardware", "Hardware")
+                        .WithMany()
+                        .HasForeignKey("HardwareId");
+
+                    b.Navigation("Hardware");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.History.History", b =>

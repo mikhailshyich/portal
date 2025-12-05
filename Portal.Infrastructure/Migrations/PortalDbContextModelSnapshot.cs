@@ -85,8 +85,8 @@ namespace Portal.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<Guid>("DocumentExternalSystemId")
                         .HasColumnType("uniqueidentifier");
@@ -94,12 +94,6 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<string>("FileNameImage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("InventoryNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryNumber"));
 
                     b.Property<string>("InventoryNumberExternalSystem")
                         .IsRequired()
@@ -112,6 +106,14 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<Guid>("MainWarehouseId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("MarkCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NameForLabel")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<string>("TTN")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -119,8 +121,8 @@ namespace Portal.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -141,6 +143,31 @@ namespace Portal.Infrastructure.Migrations
                     b.HasIndex("UserWarehouseId");
 
                     b.ToTable("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Hardwares.MarkCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("HardwareId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("MarkCodeNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MarkCodeNumber"));
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HardwareId");
+
+                    b.ToTable("MarkCodes");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.UserHardware", b =>
@@ -475,6 +502,15 @@ namespace Portal.Infrastructure.Migrations
                     b.Navigation("User");
 
                     b.Navigation("UserWarehouse");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.Hardwares.MarkCode", b =>
+                {
+                    b.HasOne("Portal.Domain.Entities.Hardwares.Hardware", "Hardware")
+                        .WithMany()
+                        .HasForeignKey("HardwareId");
+
+                    b.Navigation("Hardware");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.History.History", b =>

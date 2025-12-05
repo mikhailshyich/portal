@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
+using Portal.Application.Services;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Interfaces;
@@ -12,6 +13,7 @@ namespace Portal.Infrastructure.Repositories
     public class HardwareRepository : IHardwareDomain
     {
         private readonly PortalDbContext context;
+        private readonly string prefixMarkCode = "markCode_";
 
         public HardwareRepository(PortalDbContext context)
         {
@@ -44,11 +46,12 @@ namespace Portal.Infrastructure.Repositories
                         FileNameImage = request.FileNameImage,
                         IsActive = true
                     };
-                    context.Hardwares.Add(hardware);
-                    await context.SaveChangesAsync();
-                    hardware.CombinedInvNumber = $"TMK-{hardware.InventoryNumber}";
+                    //context.Hardwares.Add(hardware);
+                    //await context.SaveChangesAsync();
+                    //hardware.CombinedInvNumber = $"TMK-";
+                    hardwareList.Add(hardware);
                 }
-
+                context.Hardwares.AddRange(hardwareList);
                 await context.SaveChangesAsync();
                 return new CustomGeneralResponses(true, "Оборудование успешно добавлено.", hardwareList);
             }
@@ -62,7 +65,7 @@ namespace Portal.Infrastructure.Repositories
         {
             try
             {
-                iTextSharp.text.Rectangle qrSize = new(30, 30); //49,4x31,7mm 111, 84
+                iTextSharp.text.Rectangle qrSize = new(37, 37);
                 Document document = new Document(qrSize, 0, 0, 0, 0);
                 //var randomNumber = new byte[10];
                 //using var rng = RandomNumberGenerator.Create();
@@ -86,7 +89,7 @@ namespace Portal.Infrastructure.Repositories
                             var hardware = context.Hardwares.Find(hardawreId);
 
                             // URL or text to be encoded in the QR code
-                            string text = hardware?.CombinedInvNumber;
+                            string text = $"{prefixMarkCode}{hardware?.MarkCode.ToString()}";
                             // Create the QR code
                             BarcodeQRCode qrcode = new BarcodeQRCode(text, 25, 25, null);
                             // Convert the QR code to an image
@@ -120,8 +123,8 @@ namespace Portal.Infrastructure.Repositories
                 var fontTmk = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);    //
                 var fontBold = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.BOLD);
                 fontTmk.Size = 6;
-                font.Size = 8;
-                fontBold.Size = 10;
+                font.Size = 7;
+                fontBold.Size = 7;
 
                 Document document = new Document(labelSize, 0, 0, 0, 0);
                 //var randomNumber = new byte[10];
@@ -145,36 +148,39 @@ namespace Portal.Infrastructure.Repositories
                         {
                             var hardware = context.Hardwares.Find(hardwareId);
 
-                            Paragraph tmk = new("ОАО Туровский молочный комбинат", fontTmk);
-                            tmk.Alignment = Element.ALIGN_CENTER;
-                            tmk.SpacingAfter = 0;
-
-                            string invExt = "";
-                            if (hardware.InventoryNumberExternalSystem != "")
+                            if(hardware.MarkCode != null & hardware.NameForLabel != string.Empty)
                             {
-                                invExt = $" ({hardware.InventoryNumberExternalSystem})";
-                            }
-                            Paragraph title = new($"{hardware.Title}{invExt}", font);
-                            title.Alignment = Element.ALIGN_CENTER;
-                            title.SpacingAfter = 0;
-                            Paragraph inventoryNumber = new($"Инв. {hardware.CombinedInvNumber}", fontBold);
-                            inventoryNumber.Alignment = Element.ALIGN_CENTER;
-                            title.SpacingAfter = 0;
+                                Paragraph tmk = new("ОАО Туровский молочный комбинат", fontTmk);
+                                tmk.Alignment = Element.ALIGN_CENTER;
+                                tmk.SpacingAfter = 0;
 
-                            // URL or text to be encoded in the QR code
-                            string qrText = hardware?.CombinedInvNumber;
-                            // Create the QR code
-                            BarcodeQRCode qrcode = new BarcodeQRCode(qrText, 25, 25, null);
-                            // Convert the QR code to an image
-                            iTextSharp.text.Image img = qrcode.GetImage();
-                            img.Alignment = Element.ALIGN_CENTER;
-                            // Create a PdfWriter instance
-                            //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
-                            document.Add(tmk);
-                            document.Add(img);
-                            document.Add(title);
-                            document.Add(inventoryNumber);
-                            document.NewPage();
+                                string invExt = "";
+                                if (hardware.InventoryNumberExternalSystem != "")
+                                {
+                                    invExt = $" ({hardware.InventoryNumberExternalSystem})";
+                                }
+                                Paragraph title = new($"{hardware.NameForLabel}", font);
+                                title.Alignment = Element.ALIGN_CENTER;
+                                title.SpacingAfter = 0;
+                                Paragraph inventoryNumber = new($"Инв. {hardware.CombinedInvNumber}{invExt}", fontBold);
+                                inventoryNumber.Alignment = Element.ALIGN_CENTER;
+                                title.SpacingAfter = 0;
+
+                                // URL or text to be encoded in the QR code
+                                string qrText = $"{prefixMarkCode}{hardware?.MarkCode.ToString()}";
+                                // Create the QR code
+                                BarcodeQRCode qrcode = new BarcodeQRCode(qrText, 10, 10, null);
+                                // Convert the QR code to an image
+                                iTextSharp.text.Image img = qrcode.GetImage();
+                                img.Alignment = Element.ALIGN_CENTER;
+                                // Create a PdfWriter instance
+                                //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
+                                document.Add(tmk);
+                                document.Add(img);
+                                document.Add(title);
+                                document.Add(inventoryNumber);
+                                document.NewPage();
+                            }
                         }
                     }
                     document.Close();
@@ -261,7 +267,7 @@ namespace Portal.Infrastructure.Repositories
         {
             if (hardwareImport.Count == 0) return new CustomGeneralResponses(false, "Список с оборудованием для импорта пустой.");
 
-            //var hardwareList = new List<Hardware>();
+            var hardwareList = new List<Hardware>();
             try
             {
                 foreach (var hardware in hardwareImport)
@@ -280,11 +286,10 @@ namespace Portal.Infrastructure.Repositories
                             DateTimeAdd = DateTime.Now,
                             IsActive = true
                         };
-                        context.Hardwares.Add(newHardware);
-                        await context.SaveChangesAsync();
-                        newHardware.CombinedInvNumber = $"TMK-{newHardware.InventoryNumber}";
+                        hardwareList.Add(newHardware);
                     }
                 }
+                context.AddRange(hardwareList);
                 await context.SaveChangesAsync();
             }
             catch
@@ -292,6 +297,33 @@ namespace Portal.Infrastructure.Repositories
                 return new CustomGeneralResponses(false, "Ошибка при добавлении оборудования.\nПроверьте заполнение обязательных полей.");
             }
             return new CustomGeneralResponses(true, "Оборудование успешно импортировано!");
+        }
+
+        public async Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO)
+        {
+            if (markHardwareDTO is null) return new CustomGeneralResponses(false, "Проверьте введённые данные.");
+            if (markHardwareDTO.HardwareId == Guid.Empty) return new CustomGeneralResponses(false, "ID оборудования пустой.");
+            if (markHardwareDTO.MarkCode == Guid.Empty) return new CustomGeneralResponses(false, "ID кода маркировки пустой.");
+
+            var hardware = await context.Hardwares.FirstOrDefaultAsync(h => h.Id ==  markHardwareDTO.HardwareId);
+            if(hardware is null) return new CustomGeneralResponses(false, $"Оборудование с ID {markHardwareDTO.HardwareId} не найдено.");
+            if(hardware.MarkCode != null) return new CustomGeneralResponses(false, $"Оборудование уже промаркировано.");
+
+            var markCode = await context.MarkCodes.FirstOrDefaultAsync(m => m.Id == markHardwareDTO.MarkCode);
+            if (markCode is null) return new CustomGeneralResponses(false, $"Код маркировки с ID {markHardwareDTO.MarkCode} не найден.");
+            if (markCode.Used == true) return new CustomGeneralResponses(false, $"Код маркировки с ID {markHardwareDTO.MarkCode} уже используется.");
+
+            var categoryHrdw = await context.CategoriesHardware.FirstOrDefaultAsync(c => c.Id == hardware.CategoryHardwareId);
+            if (categoryHrdw is null) return new CustomGeneralResponses(false, $"Оборудование не привязано к категории.");
+
+            hardware.MarkCode = markCode.Id;
+            hardware.CombinedInvNumber = $"{categoryHrdw.ShortTitle}-{markCode.MarkCodeNumber}";
+
+            markCode.HardwareId = hardware.Id;
+            markCode.Used = true;
+
+            await context.SaveChangesAsync();
+            return new CustomGeneralResponses(true, $"Оборудование успешно промаркировано!", hardware);
         }
     }
 }

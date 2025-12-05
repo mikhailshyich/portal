@@ -179,6 +179,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwareController",
+    "Method": "MarkHardware",
+    "RelativePath": "api/Hardware/mark",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "markHardwareDTO",
+        "Type": "Portal.Domain.DTOs.MarkHardwareDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwareController",
     "Method": "Move",
     "RelativePath": "api/Hardware/move/{userId}/{userWarehouseId}",
     "HttpMethod": "POST",
@@ -259,6 +275,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.MarkCodeController",
+    "Method": "Add",
+    "RelativePath": "api/MarkCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Portal.Domain.DTOs.MarkCodeDTO",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

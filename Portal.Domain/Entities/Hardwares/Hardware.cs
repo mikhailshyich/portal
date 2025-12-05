@@ -14,9 +14,12 @@ namespace Portal.Domain.Entities.Hardwares
         public Guid DocumentExternalSystemId { get; set; }
         public Guid? UserId { get; set; }
         public Guid? UserWarehouseId {  get; set; }
-        [MaxLength(45)]
+        public Guid? MarkCode { get; set; }
+        [MaxLength(150)]
         public string Title { get; set; } = string.Empty;
-        [MaxLength(100)]
+        [MaxLength(150)]
+        public string NameForLabel { get; set; } = string.Empty;
+        [MaxLength(150)]
         public string Description { get; set; } = string.Empty;
         public int Count { get; set; }
         [MaxLength(20)]
@@ -25,8 +28,6 @@ namespace Portal.Domain.Entities.Hardwares
         public string TTN { get; set; } = string.Empty;
         public DateTime DateTimeAdd { get; set; }
         public string FileNameImage { get; set; } = string.Empty;
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int InventoryNumber { get; set; }
         public string CombinedInvNumber { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 

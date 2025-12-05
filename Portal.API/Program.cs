@@ -44,6 +44,9 @@ builder.Services.AddScoped<ICategoryHardwareDomain, CategoryHardwareRepository>(
 builder.Services.AddScoped<IUserWarehouse, UserWarehouseService>();
 builder.Services.AddScoped<IUserWarehouseDomain, UserWarehouseRepositiry>();
 
+builder.Services.AddScoped<IMarkCode, MarkCodeService>();
+builder.Services.AddScoped<IMarkCodeDomain, MarkCodeRepository>();
+
 
 
 builder.Services.AddAuthentication(x =>

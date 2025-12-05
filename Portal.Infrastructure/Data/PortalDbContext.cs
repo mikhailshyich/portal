@@ -24,6 +24,7 @@ namespace Portal.Infrastructure.Data
         public DbSet<UserHardware> UsersHardware { get; set; }
         public DbSet<UserWarehouse> UserWarehouses { get; set; }
         public DbSet<History> HistoryEntries { get; set; }
+        public DbSet<MarkCode> MarkCodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

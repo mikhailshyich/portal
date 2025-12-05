@@ -27,7 +27,5 @@ namespace Portal.Domain.DTOs
         public string TTN { get; set; } = string.Empty;
         public DateTime DateTimeAdd { get; set; }
         public string FileNameImage { get; set; } = string.Empty;
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int InventoryNumber { get; set; }
     }
 }

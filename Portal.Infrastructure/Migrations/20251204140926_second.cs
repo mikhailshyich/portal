@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Portal.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class second : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -108,6 +108,7 @@ namespace Portal.Infrastructure.Migrations
                     DocumentExternalSystemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserWarehouseId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MarkCode = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
@@ -115,8 +116,6 @@ namespace Portal.Infrastructure.Migrations
                     TTN = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     DateTimeAdd = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FileNameImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InventoryNumber = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     CombinedInvNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -141,6 +140,26 @@ namespace Portal.Infrastructure.Migrations
                         principalTable: "MainWarehouses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MarkCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HardwareId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MarkCodeNumber = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Used = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MarkCodes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MarkCodes_Hardwares_HardwareId",
+                        column: x => x.HardwareId,
+                        principalTable: "Hardwares",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -304,6 +323,11 @@ namespace Portal.Infrastructure.Migrations
                 column: "UserDepartmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MarkCodes_HardwareId",
+                table: "MarkCodes",
+                column: "HardwareId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_UserDepartmentId",
                 table: "Users",
                 column: "UserDepartmentId");
@@ -366,13 +390,16 @@ namespace Portal.Infrastructure.Migrations
                 table: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Hardwares");
-
-            migrationBuilder.DropTable(
                 name: "HistoryEntries");
 
             migrationBuilder.DropTable(
+                name: "MarkCodes");
+
+            migrationBuilder.DropTable(
                 name: "UsersHardware");
+
+            migrationBuilder.DropTable(
+                name: "Hardwares");
 
             migrationBuilder.DropTable(
                 name: "CategoriesHardware");
