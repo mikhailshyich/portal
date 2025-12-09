@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.Users;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
@@ -52,14 +51,14 @@ namespace Portal.Infrastructure.Repositories
             return await context.DocumentsExternalSystem.ToListAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<DocumentExternalSystem> GetByIdAsync(Guid id)
         {
-            if (id == Guid.Empty) return new CustomGeneralResponses(false, "Guid не может быть пустым.");
+            if (id == Guid.Empty) return null!;
 
             var document = await context.DocumentsExternalSystem.FindAsync(id);
-            if (document is null) return new CustomGeneralResponses(false, "Документ не найден.");
+            if (document is null) return null!;
 
-            return new CustomGeneralResponses(true, "Документ успешно найден.", document);
+            return document;
         }
 
         public async Task<CustomGeneralResponses> UpdateAsync(DocumentExternalSystem request)

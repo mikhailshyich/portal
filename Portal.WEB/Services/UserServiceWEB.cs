@@ -1,5 +1,5 @@
-﻿using Portal.Domain.DTOs;
-using Portal.Domain.Entities;
+﻿using DocumentFormat.OpenXml.Office2016.Excel;
+using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Responses;
 
@@ -73,6 +73,13 @@ namespace Portal.WEB.Services
         {
             var user = await httpClient.PutAsJsonAsync($"{BaseURI}/edit", request);
             var response = await user.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
+        }
+
+        public async Task<UserEdit> GetByIdEditAsync(Guid id)
+        {
+            var user = await httpClient.GetAsync($"{BaseURI}/{id}");
+            var response = await user.Content.ReadFromJsonAsync<UserEdit>();
             return response!;
         }
     }

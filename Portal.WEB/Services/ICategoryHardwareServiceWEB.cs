@@ -10,6 +10,6 @@ namespace Portal.WEB.Services
         Task<CustomGeneralResponses> UpdateAsync(CategoryHardware request);
         Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<CategoryHardware>> GetAllAsync();
-        Task<CustomGeneralResponses> GetByIdAsync(Guid id);
+        Task<CategoryHardware> GetByIdAsync(Guid id);
     }
 }

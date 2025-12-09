@@ -2,6 +2,7 @@
 {
     public class HardwareImportDTO
     {
+        public Guid ResponsibleId { get; set; }
         public Guid MainWarehouseId { get; set; }
         public Guid CategoryHardwareId { get; set; }
         public Guid DocumentExternalSystemId { get; set; }

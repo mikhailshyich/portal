@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject UserServiceWEB userService
 @inherits LayoutComponentBase
+@inject ILocalStorageService localStorage
 
 <AuthorizeView>
     <Authorized>
@@ -43,19 +44,22 @@
 
     private ClaimsPrincipal user = new();
     public UserView userView = new();
+    public string username = string.Empty;
 
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (firstRender)
-    //     {
-    //         user = (await AuthStat).User;
-    //         await SetUser(user.Identity.Name);
-    //         if (user.Identity is null || !user.Identity.IsAuthenticated)
-    //         {
-    //             NavigationManager.NavigateTo("/login");
-    //         }
-    //     }
-    // }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            user = (await AuthStat).User;
+            if (user.Identity != null)
+            {
+                username = user.Identity.Name;
+                userView = await userService.GetByUsernameAsync(username);
+                if (userView != null)
+                    await localStorage.SetItemAsync("userId", userView.Id);
+            }
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,7 +77,9 @@
     private async Task SetUser(string username)
     {
         if(username != string.Empty)
+        {
             userView = await userService.GetByUsernameAsync(username);
+        }
     }
 }
 

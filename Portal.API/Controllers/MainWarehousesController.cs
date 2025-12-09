@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
 
@@ -7,16 +6,16 @@ namespace Portal.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MainWarehouseController : ControllerBase
+    public class MainWarehousesController : ControllerBase
     {
         private readonly IMainWarehouse mainWarehouseService;
 
-        public MainWarehouseController(IMainWarehouse mainWarehouseService)
+        public MainWarehousesController(IMainWarehouse mainWarehouseService)
         {
             this.mainWarehouseService = mainWarehouseService;
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add(MainWarehouseDTO request)
         {
             if (request is null)
@@ -25,7 +24,7 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await mainWarehouseService.GetAllAsync();

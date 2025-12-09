@@ -1,6 +1,5 @@
 ﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.Users;
 using Portal.Domain.Responses;
 
 namespace Portal.Domain.Interfaces
@@ -11,6 +10,6 @@ namespace Portal.Domain.Interfaces
         Task<CustomGeneralResponses> UpdateAsync(DocumentExternalSystem request);
         Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<DocumentExternalSystem>> GetAllAsync();
-        Task<CustomGeneralResponses> GetByIdAsync(Guid id);
+        Task<DocumentExternalSystem> GetByIdAsync(Guid id);
     }
 }

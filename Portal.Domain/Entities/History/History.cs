@@ -7,11 +7,12 @@ namespace Portal.Domain.Entities.History
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
-        [MaxLength(40)]
-        public string OperationType { get; set; } = string.Empty;
-        [MaxLength(100)]
-        public string? Description { get; set; } = string.Empty;
+        public Guid? ResponsibleId { get; set; }
+        public Guid? HardwareId { get; set; }
+        public Guid? SenderId { get; set; }
+        public Guid? RecipientId { get; set; }
+        public Guid? WarehouseId { get; set; }
+        public string OperationType { get; set; }
         public DateTime DateTimeChanges { get; set; }
 
         public User? User { get; set; }
@@ -19,15 +20,38 @@ namespace Portal.Domain.Entities.History
         /// <summary>
         /// Добавить запись в таблицу
         /// </summary>
-        /// <param name="userId">ID пользователя</param>
-        /// <param name="operationType">Тип операции</param>
-        /// <param name="description">Описание</param>
+        /// <param name="responsibleId">ID ответственного пользователя</param>
+        /// <param name="hardwareId">ID оборудования</param>
+        /// <param name="senderId">ID отправителя</param>
+        /// <param name="recipientId">ID получателя</param>
+        /// <param name="warehouseId">ID склада</param>
+        /// <param name="operationType">Вид операции</param>
         /// <param name="dateTimeChanges">Дата и время изменений</param>
-        public History(Guid userId, string operationType, string? description, DateTime dateTimeChanges)
+        public History(Guid? responsibleId, Guid? hardwareId, Guid? senderId, Guid? warehouseId, string operationType, Guid? recipientId, DateTime dateTimeChanges)
         {
-            this.UserId = userId;
+            this.ResponsibleId = responsibleId;
+            this.HardwareId = hardwareId;
+            this.SenderId = senderId;
+            this.WarehouseId = warehouseId;
             this.OperationType = operationType;
-            this.Description = description;
+            this.RecipientId = recipientId;
+            this.DateTimeChanges = dateTimeChanges;
+        }
+
+        /// <summary>
+        /// Добавление оборудования на склад
+        /// </summary>
+        /// <param name="responsibleId">ID ответственного пользователя</param>
+        /// <param name="hardwareId">ID оборудования</param>
+        /// <param name="warehouseId">ID склада</param>
+        /// <param name="operationType">Вид операции</param>
+        /// <param name="dateTimeChanges">Дата и время изменений</param>
+        public History(Guid? responsibleId, Guid hardwareId, Guid warehouseId, string operationType, DateTime dateTimeChanges)
+        {
+            this.ResponsibleId = responsibleId;
+            this.HardwareId = hardwareId;
+            this.WarehouseId = warehouseId;
+            this.OperationType = operationType;
             this.DateTimeChanges = dateTimeChanges;
         }
     }

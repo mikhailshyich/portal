@@ -94,5 +94,12 @@ namespace Portal.API.Controllers
             var result = await hardwareInterface.MarkHardware(markHardwareDTO);
             return Ok(result);
         }
+
+        [HttpPatch("marking")]
+        public async Task<IActionResult> MarkHardware([FromBody]List<Guid> hardwareId)
+        {
+            var result = await hardwareInterface.MarkAllHardware(hardwareId);
+            return Ok(result);
+        }
     }
 }

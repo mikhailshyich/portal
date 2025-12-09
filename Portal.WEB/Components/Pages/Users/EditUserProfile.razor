@@ -100,6 +100,7 @@
     [Parameter]
     public Guid Id { get; set; }
 
+    // private UserEdit UserEdit = new();
     private UserView User = new();
     private List<UserRole> UserRoles = new();
     private List<UserDepartment> UserDepartments = new();
@@ -109,6 +110,7 @@
         try
         {
             User = await userService.GetByIdAsync(Id);
+            // User = await userService.GetByIdEditAsync(Id);
             UserRoles = await userService.GetAllUserRolesAsync();
             UserDepartments = await userDepartment.GetAllAsync();
         }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
-using Portal.Domain.Entities;
 using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
@@ -38,10 +37,10 @@ namespace Portal.Infrastructure.Repositories
         public async Task<List<MainWarehouse>> GetAllAsync()
         {
             var mainWarehouses = await context.MainWarehouses.ToListAsync();
-            foreach(var mainWarehouse in mainWarehouses)
+            foreach (var mainWarehouse in mainWarehouses)
             {
                 var userDepartment = await context.UserDepartments.FindAsync(mainWarehouse.UserDepartmentId);
-                if(userDepartment != null)
+                if (userDepartment != null)
                     mainWarehouse.UserDepartment = userDepartment;
             }
             return mainWarehouses;
@@ -63,21 +62,20 @@ namespace Portal.Infrastructure.Repositories
             var hardwares = context.Hardwares.Where(m => m.MainWarehouseId == mainWarehouse.Id & m.IsActive == true).ToList();
             if (hardwares != null)
             {
-                mainWarehouse.Hardwares = hardwares;
-            }
-
-            foreach (var hardware in mainWarehouse.Hardwares)
-            {
-                var category = await context.CategoriesHardware.FindAsync(hardware.CategoryHardwareId);
-                var document = await context.DocumentsExternalSystem.FindAsync(hardware.DocumentExternalSystemId);
-                if (hardware.UserId != null)
+                foreach (var hardware in hardwares)
                 {
-                    var user = await context.Users.FindAsync(hardware.UserId);
-                    hardware.User = user;
+                    //var category = await context.CategoriesHardware.FindAsync(hardware.CategoryHardwareId);
+                    //var document = await context.DocumentsExternalSystem.FindAsync(hardware.DocumentExternalSystemId);
+                    if (hardware.UserId != null)
+                    {
+                        var user = await context.Users.FindAsync(hardware.UserId);
+                        hardware.User = user;
+                    }
+                    //hardware.CategoryHardware = category;
+                    //hardware.DocumentExternalSystem = document;
                 }
-                hardware.CategoryHardware = category;
-                hardware.DocumentExternalSystem = document;
             }
+            mainWarehouse.Hardwares = hardwares!;
 
             return mainWarehouse;
         }

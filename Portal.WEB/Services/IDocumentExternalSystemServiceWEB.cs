@@ -10,6 +10,6 @@ namespace Portal.WEB.Services
         Task<CustomGeneralResponses> UpdateAsync(DocumentExternalSystem request);
         Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<DocumentExternalSystem>> GetAllAsync();
-        Task<CustomGeneralResponses> GetByIdAsync(Guid id);
+        Task<DocumentExternalSystem> GetByIdAsync(Guid id);
     }
 }

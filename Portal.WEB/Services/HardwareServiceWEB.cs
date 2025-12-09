@@ -1,6 +1,6 @@
 ﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.Users;
+using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Responses;
 
 namespace Portal.WEB.Services
@@ -55,6 +55,18 @@ namespace Portal.WEB.Services
             var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/import", hardwareImport);
             var response = await hardware.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
+        }
+
+        public async Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId)
+        {
+            var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/marking", hardwareId);
+            var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
+        }
+
+        public Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid? userID, Guid? userWarehouseID)

@@ -45,7 +45,7 @@ namespace Portal.Infrastructure.Repositories
             foreach (var w in warehouses)
             {
                 var user = await context.Users.FindAsync(w.UserId);
-                if(user != null)
+                if (user != null)
                     w.User = user;
             }
             return warehouses;

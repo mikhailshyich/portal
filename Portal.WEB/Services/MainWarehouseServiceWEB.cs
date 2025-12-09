@@ -7,7 +7,7 @@ namespace Portal.WEB.Services
     public class MainWarehouseServiceWEB : IMainWarehouseServiceWEB
     {
         private readonly HttpClient httpClient;
-        private readonly string BaseURI = "/api/MainWarehouse";
+        private readonly string BaseURI = "/api/MainWarehouses";
         public MainWarehouseServiceWEB(HttpClient httpClient)
         {
             this.httpClient = httpClient;
@@ -15,7 +15,7 @@ namespace Portal.WEB.Services
 
         public async Task<CustomGeneralResponses> AddAsync(MainWarehouseDTO request)
         {
-            var mainWarehouse = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
+            var mainWarehouse = await httpClient.PostAsJsonAsync($"{BaseURI}", request);
             var response = await mainWarehouse.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }
@@ -27,7 +27,7 @@ namespace Portal.WEB.Services
 
         public async Task<List<MainWarehouse>> GetAllAsync()
         {
-            var mainWarehouse = await httpClient.GetAsync($"{BaseURI}/all");
+            var mainWarehouse = await httpClient.GetAsync($"{BaseURI}");
             var response = await mainWarehouse.Content.ReadFromJsonAsync<List<MainWarehouse>>();
             return response!;
         }

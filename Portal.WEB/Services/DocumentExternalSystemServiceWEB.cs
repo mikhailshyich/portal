@@ -7,7 +7,7 @@ namespace Portal.WEB.Services
     public class DocumentExternalSystemServiceWEB : IDocumentExternalSystemServiceWEB
     {
         private readonly HttpClient httpClient;
-        private readonly string BaseURI = "/api/DocumentExternalSystem";
+        private readonly string BaseURI = "/api/Documents";
         public DocumentExternalSystemServiceWEB(HttpClient httpClient)
         {
             this.httpClient = httpClient;
@@ -15,7 +15,7 @@ namespace Portal.WEB.Services
 
         public async Task<CustomGeneralResponses> AddAsync(DocumentExternalSystemDTO request)
         {
-            var document = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
+            var document = await httpClient.PostAsJsonAsync($"{BaseURI}", request);
             var response = await document.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }
@@ -28,14 +28,16 @@ namespace Portal.WEB.Services
         public async Task<List<DocumentExternalSystem>> GetAllAsync()
         {
 
-            var document = await httpClient.GetAsync($"{BaseURI}/all");
-            var response = await document.Content.ReadFromJsonAsync<List<DocumentExternalSystem>>();
+            var documents = await httpClient.GetAsync($"{BaseURI}");
+            var response = await documents.Content.ReadFromJsonAsync<List<DocumentExternalSystem>>();
             return response!;
         }
 
-        public Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<DocumentExternalSystem> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var document = await httpClient.GetAsync($"{BaseURI}/{id}");
+            var response = await document.Content.ReadFromJsonAsync<DocumentExternalSystem>();
+            return response!;
         }
 
         public Task<CustomGeneralResponses> UpdateAsync(DocumentExternalSystem request)

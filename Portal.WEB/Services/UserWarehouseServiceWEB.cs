@@ -1,5 +1,4 @@
 ﻿using Portal.Domain.DTOs;
-using Portal.Domain.Entities.Users;
 using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Responses;
 

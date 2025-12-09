@@ -1,5 +1,4 @@
-﻿using Portal.Domain.Entities.Users;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Portal.Domain.Entities.Hardwares
 {

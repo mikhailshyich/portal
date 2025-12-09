@@ -1,7 +1,6 @@
 ﻿using Portal.Domain.Entities.Users;
 using Portal.Domain.Entities.Warehouses;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Portal.Domain.Entities.Hardwares
 {
@@ -13,7 +12,7 @@ namespace Portal.Domain.Entities.Hardwares
         public Guid CategoryHardwareId { get; set; }
         public Guid DocumentExternalSystemId { get; set; }
         public Guid? UserId { get; set; }
-        public Guid? UserWarehouseId {  get; set; }
+        public Guid? UserWarehouseId { get; set; }
         public Guid? MarkCode { get; set; }
         [MaxLength(150)]
         public string Title { get; set; } = string.Empty;

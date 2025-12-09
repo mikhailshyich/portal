@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -32,7 +33,7 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddScoped(sp => 
+builder.Services.AddScoped(sp =>
 {
     //return new HttpClient { BaseAddress = new Uri("http://192.168.1.47:81") };
     return new HttpClient { BaseAddress = new Uri("https://localhost:7266") };
@@ -47,6 +48,8 @@ builder.Services.AddScoped<DocumentExternalSystemServiceWEB>();
 builder.Services.AddScoped<MainWarehouseServiceWEB>();
 builder.Services.AddScoped<HardwareServiceWEB>();
 builder.Services.AddScoped<UserWarehouseServiceWEB>();
+
+builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();
 

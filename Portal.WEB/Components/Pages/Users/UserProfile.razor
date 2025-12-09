@@ -45,6 +45,7 @@
                             <th>№ вн. систем</th>
                             <th>Инв. №</th>
                             <th>ТТН</th>
+                            <th>Склад</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
@@ -66,6 +67,7 @@
                                 <td>@userHardware.InventoryNumberExternalSystem</td>
                                 <td>@userHardware.CombinedInvNumber</td>
                                 <td>@userHardware.TTN</td>
+                                <td>@userHardware.UserWarehouse?.Title</td>
                                 <td>
                                     <a class="btn btn-primary btn-sm mb-1" id="qrcode" title="Печать QR-кода" asp-controller="Employee" asp-action="PrintQr" asp-route-id="@userHardware.Id" onclick="setTimeout(window.open('/files/qrcode.pdf'),1000)"><img src="~/img/qr.png"></a>
                                     <a class="btn btn-primary btn-sm mb-1" title="Переместить на другого сотрудника" asp-controller="Hardware" asp-action="Move" asp-route-id="@userHardware.Id"><img src="~/img/employee.png"></a>

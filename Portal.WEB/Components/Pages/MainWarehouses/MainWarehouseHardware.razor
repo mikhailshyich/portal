@@ -10,6 +10,7 @@
 @inject UserWarehouseServiceWEB UserWarehouseService
 @inject HardwareServiceWEB HardwareService
 @inject NavigationManager navigationManager
+@inject ILocalStorageService localStorage
 
 <title>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</title>
 
@@ -21,8 +22,8 @@
             <div class="card-header">
                 <AuthorizeView Roles="admin">
                     <Authorized>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware"><b>+ Добавить</b></button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware"><b>Переместить</b></button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onclick="AddHardwareEvent"><b>+ Добавить</b></button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Переместить</b></button>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
                         <button type="button" class="btn btn-secondary"><b>Вернуть</b></button>
                         <button type="button" class="btn btn-danger"><b>Списать</b></button>
@@ -35,7 +36,7 @@
                 <table class="table table-hover text-center">
                     <thead>
                         <tr>
-                            <th><input class="form-check-input" type="checkbox" @oninput="e => { ChangeAll(e.Value); }" /></th>
+                            <th><input class="form-check-input" type="checkbox" @bind-value="IsChecked"  /></th>
                             @foreach (var header in TableHeaders)
                             {
                                 <th scope="col">@header</th>
@@ -50,10 +51,8 @@
                                 <tr>
                                     <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
                                     <td>@hardware.Title</td>
-                                    <td>@hardware.CategoryHardware.Title</td>
                                     <td>@hardware.CombinedInvNumber</td>
                                     <td>@hardware.InventoryNumberExternalSystem</td>
-                                    <td>@hardware.DocumentExternalSystem.ShortTitle</td>
                                     <td>@hardware.DateTimeAdd</td>
                                     <td><a href="/user/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
                                     <td><button class="btn btn-secondary btn-sm mx-1">Подробнее</button></td>
@@ -173,7 +172,7 @@
 
                                     <div class="form-group">
                                         <label for="user">Сотрудник</label>
-                                        <InputSelect id="user" class="form-control" @oninput="SelectedUser" @bind-Value="hardwareMoveDTO.UserId">
+                                        <InputSelect id="user" class="form-control" @oninput="SelectedUserEvent" @bind-Value="hardwareMoveDTO.UserId">
                                             <option value="">Выберите нужного сотрудника</option>
                                             @foreach (UserView user in UsersList.OrderBy(u=>u.LastName))
                                             {
@@ -263,27 +262,33 @@
     private string ClassesAlert = string.Empty;
     //private readonly string host = "http://hardware-vm:81";
     private readonly string host = "https://localhost:7266";
-    private List<string> TableHeaders = ["Наименование", "Категория", "Инвентарный", "Номер у/с", "Документ у/с", "Дата добавления", "МОЛ", ""];
+    private List<string> TableHeaders = ["Наименование", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ", ""];
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
     private int StringCount;
+
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            //await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+            await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
             var response = await MainWarehouseService.GetByIdAsync(Id);
             if (response != null)
             {
+                // foreach (var hardware in response.Hardwares)
+                // {
+                //    var category = await CategoryHardwareService.GetByIdAsync(hardware.CategoryHardwareId);
+                //    var document = await DocumentExternalSystem.GetByIdAsync(hardware.DocumentExternalSystemId);
+                //    hardware.CategoryHardware = category;
+                //    hardware.DocumentExternalSystem = document;
+                // }
                 MainWarehouse = response;
-                Categories = await CategoryHardwareService.GetAllAsync();
-                Documents = await DocumentExternalSystem.GetAllAsync();
-                UsersList = await UserService.GetAllAsync();
             }
         }
         catch (Exception ex) { }
     }
+
     private void OnPageSizeChanged(ChangeEventArgs e)
     {
         if (e.Value is not null)
@@ -296,6 +301,9 @@
         try
         {
             hardwareDTO.MainWarehouseId = Id;
+            string userId = await localStorage.GetItemAsync<string>("userId");
+            if(userId != string.Empty)
+                hardwareDTO.ResponsibleId = Guid.Parse(userId);
             var response = await HardwareService.AddAsync(hardwareDTO);
             if (!response.Flag)
             {
@@ -335,6 +343,13 @@
                     ClassesAlert = "alert-success";
                     HardwaresId.Clear();
                     MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+                    foreach (var hardware in MainWarehouse.Hardwares)
+                    {
+                        var category = await CategoryHardwareService.GetByIdAsync(hardware.CategoryHardwareId);
+                        var document = await DocumentExternalSystem.GetByIdAsync(hardware.DocumentExternalSystemId);
+                        hardware.CategoryHardware = category;
+                        hardware.DocumentExternalSystem = document;
+                    }
                 }
             }
         }
@@ -389,18 +404,21 @@
             IsChecked = false;
         }
     }
-    private async Task SelectedUser(ChangeEventArgs args)
+
+    private async Task SelectedUserEvent(ChangeEventArgs args)
     {
         var userId = args.Value.ToString();
         Guid.TryParse(userId, out Guid id);
         UserWarehousesList.Clear();
         UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(id);
     }
+
     private async Task UploadFile(InputFileChangeEventArgs e)
     {
         if (e.File is null) return;
         try
         {
+            string userId = await localStorage.GetItemAsync<string>("userId");
             using var stream = new MemoryStream();
             await e.File.OpenReadStream().CopyToAsync(stream);
             stream.Position = 0;
@@ -412,6 +430,7 @@
             {
                 HardwareImportDTO hardwareImport = new HardwareImportDTO
                 {
+                    ResponsibleId = Guid.Parse(userId),
                     MainWarehouseId = Guid.Parse(row.Cell(1).Value.ToString()),
                     CategoryHardwareId = Guid.Parse(row.Cell(2).Value.ToString()),
                     DocumentExternalSystemId = Guid.Parse(row.Cell(3).Value.ToString()),
@@ -436,5 +455,15 @@
             }
         }
         catch(Exception ex){}
+    }
+
+    private async Task AddHardwareEvent(MouseEventArgs args)
+    {
+        Categories = await CategoryHardwareService.GetAllAsync();
+        Documents = await DocumentExternalSystem.GetAllAsync();
+    }
+    private async Task MoveHardwareEvent(MouseEventArgs args)
+    {
+        UsersList = await UserService.GetAllAsync();
     }
 }

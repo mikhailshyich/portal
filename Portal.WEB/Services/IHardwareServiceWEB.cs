@@ -13,5 +13,7 @@ namespace Portal.WEB.Services
         Task<string> GenerateLabel(List<Guid>? idList);
         Task<List<Hardware>> GetByUserIdAsync(Guid userId);
         Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport);
+        Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO);
+        Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId);
     }
 }

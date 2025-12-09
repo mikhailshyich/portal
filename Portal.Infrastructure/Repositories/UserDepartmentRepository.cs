@@ -36,7 +36,7 @@ namespace Portal.Infrastructure.Repositories
 
         public async Task<CustomGeneralResponses> DeleteAsync(Guid id)
         {
-            if(id == Guid.Empty) return new CustomGeneralResponses(false, "Guid не может быть пустым.");
+            if (id == Guid.Empty) return new CustomGeneralResponses(false, "Guid не может быть пустым.");
 
             var department = await context.UserDepartments.FindAsync(id);
             if (department is null) return new CustomGeneralResponses(false, "Отдел не найден.");
@@ -65,7 +65,7 @@ namespace Portal.Infrastructure.Repositories
             }
 
             var mainWarehouse = context.MainWarehouses.Where(m => m.UserDepartmentId == department.Id).ToList();
-            if(mainWarehouse != null)
+            if (mainWarehouse != null)
             {
                 department.MainWarehouses = mainWarehouse;
             }

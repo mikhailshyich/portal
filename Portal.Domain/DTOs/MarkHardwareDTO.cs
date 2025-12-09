@@ -1,6 +1,4 @@
-﻿using Portal.Domain.Entities.Hardwares;
-
-namespace Portal.Domain.DTOs
+﻿namespace Portal.Domain.DTOs
 {
     public class MarkHardwareDTO
     {

@@ -29,7 +29,7 @@ namespace Portal.Application.Services
             return await documentInterface.GetAllAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<DocumentExternalSystem> GetByIdAsync(Guid id)
         {
             return await documentInterface.GetByIdAsync(id);
         }

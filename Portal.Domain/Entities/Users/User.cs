@@ -1,5 +1,4 @@
-﻿using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.Warehouses;
+﻿using Portal.Domain.Entities.Warehouses;
 using System.ComponentModel.DataAnnotations;
 
 namespace Portal.Domain.Entities.Users
@@ -25,7 +24,7 @@ namespace Portal.Domain.Entities.Users
         public string PasswordHash { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 
-        public UserRole? UserRole {  get; set; }
+        public UserRole? UserRole { get; set; }
         public UserDepartment? UserDepartment { get; set; }
         //public List<Hardware> Hardwares { get; set; } = [];
         public List<UserWarehouse> UserWarehouses { get; set; } = [];

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Portal.Domain.DTOs
 {
@@ -11,10 +10,11 @@ namespace Portal.Domain.DTOs
         public Guid CategoryHardwareId { get; set; }
         [Required(ErrorMessage = "Обязательное поле для заполнения.")]
         public Guid DocumentExternalSystemId { get; set; }
+        [Required(ErrorMessage = "Обязательное поле для заполнения.")]
+        public Guid ResponsibleId { get; set; }
         public Guid? UserId { get; set; }
         public Guid? UserWarehouseId { get; set; }
         [Required(ErrorMessage = "Обязательное поле для заполнения.")]
-        [MaxLength(45)]
         public string Title { get; set; } = string.Empty;
         [MaxLength(100)]
         public string Description { get; set; } = string.Empty;

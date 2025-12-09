@@ -171,7 +171,7 @@ namespace Portal.Infrastructure.Repositories
         /// <returns></returns>
         public async Task<CustomGeneralResponses> AddRoleAsync(UserRoleDTO request)
         {
-            if(request is null)
+            if (request is null)
                 return new CustomGeneralResponses(false, "Проверьте правильность введённых данных.");
 
             var roleTitle = request.Title.ToLower();
@@ -199,7 +199,7 @@ namespace Portal.Infrastructure.Repositories
         {
             var users = await context.Users.Where(u => u.IsActive == true).OrderBy(u => u.LastName).ToListAsync();
             var userslist = new List<UserView>();
-            if(users.Count > 0)
+            if (users.Count > 0)
             {
                 foreach (var user in users)
                 {
@@ -208,7 +208,7 @@ namespace Portal.Infrastructure.Repositories
                     {
                         department.Users = null!;
                     }
-                    UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName, 
+                    UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
                                             user.Patronymic, user.Specialization, user.Email, user.IsActive);
                     userslist.Add(userView);
                 }
@@ -269,11 +269,11 @@ namespace Portal.Infrastructure.Repositories
                     string username = Convert.ToString(result.SamAccountName);
                     string email = Convert.ToString(result.EmailAddress);
 
-                    if(surname is null)
+                    if (surname is null)
                     {
                         surname = "";
                     }
-                    if(patronymic is null)
+                    if (patronymic is null)
                     {
                         patronymic = "";
                     }
@@ -323,7 +323,7 @@ namespace Portal.Infrastructure.Repositories
                 await context.SaveChangesAsync();
                 return new CustomGeneralResponses(true, "Пользователи успешно синхронизированы.");
             }
-            catch(Exception ex) { return new CustomGeneralResponses(false, ex.Message); }
+            catch (Exception ex) { return new CustomGeneralResponses(false, ex.Message); }
         }
 
         /// <summary>
@@ -375,6 +375,23 @@ namespace Portal.Infrastructure.Repositories
             {
                 return new CustomGeneralResponses(false, ex.Message);
             }
+        }
+
+        public async Task<UserEdit> GetByIdEditAsync(Guid id)
+        {
+            if (id == Guid.Empty) return null!;
+
+            var user = await context.Users.FindAsync(id);
+            if (user is null) return null!;
+
+            var userRole = await context.UserRoles.FindAsync(user.UserRoleId);
+            if (userRole != null)
+                user.UserRole = userRole;
+
+            UserEdit userEdit = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
+                                    user.Patronymic, user.Specialization, user.Email, user.IsActive);
+
+            return userEdit;
         }
     }
 }

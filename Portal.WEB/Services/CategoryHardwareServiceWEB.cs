@@ -7,7 +7,7 @@ namespace Portal.WEB.Services
     public class CategoryHardwareServiceWEB : ICategoryHardwareServiceWEB
     {
         private readonly HttpClient httpClient;
-        private readonly string BaseURI = "/api/CategoryHardware";
+        private readonly string BaseURI = "/api/Categories";
 
         public CategoryHardwareServiceWEB(HttpClient httpClient)
         {
@@ -16,7 +16,7 @@ namespace Portal.WEB.Services
 
         public async Task<CustomGeneralResponses> AddAsync(CategoryHardwareDTO request)
         {
-            var category = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
+            var category = await httpClient.PostAsJsonAsync($"{BaseURI}", request);
             var response = await category.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }
@@ -28,14 +28,16 @@ namespace Portal.WEB.Services
 
         public async Task<List<CategoryHardware>> GetAllAsync()
         {
-            var categories = await httpClient.GetAsync($"{BaseURI}/all");
+            var categories = await httpClient.GetAsync($"{BaseURI}");
             var response = await categories.Content.ReadFromJsonAsync<List<CategoryHardware>>();
             return response!;
         }
 
-        public Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<CategoryHardware> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var categorie = await httpClient.GetAsync($"{BaseURI}/{id}");
+            var response = await categorie.Content.ReadFromJsonAsync<CategoryHardware>();
+            return response!;
         }
 
         public Task<CustomGeneralResponses> UpdateAsync(CategoryHardware request)

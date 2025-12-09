@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
-using Portal.Domain.Entities.History;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
@@ -24,7 +23,7 @@ namespace Portal.Infrastructure.Repositories
             var categoryTitle = await context.CategoriesHardware.AnyAsync(r => r.Title == request.Title);
             if (categoryTitle) return new CustomGeneralResponses(false, $"Категория [{request.Title}] уже существует.");
 
-            var categoryShortTitle = await context.CategoriesHardware.AnyAsync(c=> c.ShortTitle == request.ShortTitle);
+            var categoryShortTitle = await context.CategoriesHardware.AnyAsync(c => c.ShortTitle == request.ShortTitle);
             if (categoryShortTitle) return new CustomGeneralResponses(false, $"Выберите другое сокращение. [{request.ShortTitle}] уже используется.");
 
             var category = new CategoryHardware()
@@ -55,14 +54,14 @@ namespace Portal.Infrastructure.Repositories
             return await context.CategoriesHardware.ToListAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<CategoryHardware> GetByIdAsync(Guid id)
         {
-            if (id == Guid.Empty) return new CustomGeneralResponses(false, "Guid не может быть пустым.");
+            if (id == Guid.Empty) return null!;
 
             var category = await context.CategoriesHardware.FindAsync(id);
-            if (category is null) return new CustomGeneralResponses(false, "Категория не найдена.");
+            if (category is null) return null!;
 
-            return new CustomGeneralResponses(true, "Категория успешно найдена.", category);
+            return category;
         }
 
         public async Task<CustomGeneralResponses> UpdateAsync(CategoryHardware request)

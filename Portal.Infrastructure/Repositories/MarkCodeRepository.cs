@@ -1,7 +1,6 @@
 ﻿using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Interfaces;
-using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
 
 namespace Portal.Infrastructure.Repositories
@@ -21,9 +20,9 @@ namespace Portal.Infrastructure.Repositories
 
             var markCodeList = new List<MarkCode>();
 
-            if(markCodeDTO.Count > 0)
+            if (markCodeDTO.Count > 0)
             {
-                for(int i = 0; i < markCodeDTO.Count; i++)
+                for (int i = 0; i < markCodeDTO.Count; i++)
                 {
                     var markCode = new MarkCode();
                     markCodeList.Add(markCode);

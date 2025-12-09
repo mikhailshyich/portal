@@ -59,6 +59,7 @@ namespace Portal.WEB.Authentication
         public async Task MarkUserAsLoggedOut()
         {
             await localStorage.DeleteAsync("authToken");
+            await localStorage.DeleteAsync("userId");
             var identity = new ClaimsIdentity();
             var user = new ClaimsPrincipal(identity);
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));

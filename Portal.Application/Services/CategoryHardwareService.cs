@@ -2,11 +2,6 @@
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Portal.Application.Services
 {
@@ -34,7 +29,7 @@ namespace Portal.Application.Services
             return await categoryHardwareDomain.GetAllAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetByIdAsync(Guid id)
+        public async Task<CategoryHardware> GetByIdAsync(Guid id)
         {
             return await categoryHardwareDomain.GetByIdAsync(id);
         }

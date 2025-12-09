@@ -58,5 +58,10 @@ namespace Portal.Application.Services
         {
             return await userInterface.EditUserAsync(request);
         }
+
+        public async Task<UserEdit> GetByIdEditAsync(Guid id)
+        {
+            return await userInterface.GetByIdEditAsync(id);
+        }
     }
 }
