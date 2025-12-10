@@ -101,5 +101,12 @@ namespace Portal.API.Controllers
             var result = await hardwareInterface.MarkAllHardware(hardwareId);
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await hardwareInterface.GetByIdAsync(id);
+            return Ok(result);
+        }
     }
 }

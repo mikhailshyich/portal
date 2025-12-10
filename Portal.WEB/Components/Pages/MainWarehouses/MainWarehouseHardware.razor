@@ -1,4 +1,5 @@
 ﻿@page "/main-warehouse/{Id:guid}"
+@using System.Threading.Tasks
 
 @inject HttpClient httpClient
 @inject IJSRuntime js
@@ -55,7 +56,13 @@
                                     <td>@hardware.InventoryNumberExternalSystem</td>
                                     <td>@hardware.DateTimeAdd</td>
                                     <td><a href="/user/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
-                                    <td><button class="btn btn-secondary btn-sm mx-1">Подробнее</button></td>
+                                    <td><button class="btn btn-secondary btn-sm mx-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewHardware"
+                                                @onclick="() => ViewHardware(hardware.Id)">
+                                            Подробнее
+                                        </button>
+                                    </td>
                                 </tr>
                             }
                         }
@@ -69,7 +76,7 @@
         </div>
 
 
-        <!-- Modal ADD HARDWARE-->
+        <!-- Modal ADD HARDWARE -->
         <div class="modal fade" id="addHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addHardwareTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -234,6 +241,93 @@
             </div>
         </div>
         <!--End modal -->
+
+        <!-- Modal VIEW HARDWARE -->
+        <div class="modal fade" id="viewHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewHardwareTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewHardwareTitle">Оборудование на складе</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <EditForm Model="Hardware" FormName="ViewHardware" Context="ViewHardware">
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="title">ID оборудования</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="HardwareId" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Основной склад</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="HardwareMainWarehouse" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Категория</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="HardwareCategory" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Документ в 1С</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="HardwareDocument" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Сотрудник на ком закреплено</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="HardwareUser" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Код маркировки</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="HardwareMarkCode" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Наименование</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="Hardware.Title" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Наименование (для этикетки)</label>
+                                <InputText id="title" class="form-control" readonly @bind-Value="Hardware.NameForLabel" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Описание</label>
+                                <InputTextArea id="description" class="form-control" readonly @bind-Value="Hardware.Description" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="numberext">Номер 1С</label>
+                                <InputText id="numberext" class="form-control" readonly @bind-Value="Hardware.InventoryNumberExternalSystem" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ttn">ТТН</label>
+                                <InputText id="ttn" class="form-control" readonly @bind-Value="Hardware.TTN" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ttn">Дата и время добавления</label>
+                                <InputText id="ttn" class="form-control" readonly @bind-Value="HardwareDateTimeAdd" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ttn">Инвентарный номер</label>
+                                <InputText id="ttn" class="form-control" readonly @bind-Value="Hardware.CombinedInvNumber" />
+                            </div>
+
+                        </div>
+                        @* <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                        </div> *@
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+        <!-- End modal -->
     }
     else
     {
@@ -266,6 +360,14 @@
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
     private int StringCount;
+    private Hardware Hardware = new();
+    private string HardwareId = string.Empty;
+    private string HardwareMarkCode = string.Empty;
+    private string HardwareUser = string.Empty;
+    private string HardwareDateTimeAdd = string.Empty;
+    private string HardwareMainWarehouse = string.Empty;
+    private string HardwareCategory = string.Empty;
+    private string HardwareDocument = string.Empty;
 
 
     protected override async Task OnInitializedAsync()
@@ -462,8 +564,30 @@
         Categories = await CategoryHardwareService.GetAllAsync();
         Documents = await DocumentExternalSystem.GetAllAsync();
     }
+
     private async Task MoveHardwareEvent(MouseEventArgs args)
     {
         UsersList = await UserService.GetAllAsync();
+    }
+
+    private async Task ViewHardware(Guid id)
+    {
+        Hardware = new();
+        HardwareId = string.Empty;
+        HardwareMarkCode = string.Empty;
+        HardwareUser = string.Empty;
+        HardwareDateTimeAdd = string.Empty;
+        HardwareMainWarehouse = string.Empty;
+        HardwareCategory = string.Empty;
+        HardwareDocument = string.Empty;
+        Hardware = await HardwareService.GetByIdAsync(id);
+        HardwareId = Hardware.Id.ToString();
+        HardwareMarkCode = Hardware.MarkCode.ToString();
+        if (Hardware.User != null)
+            HardwareUser = $"{Hardware.User.LastName} {Hardware.User.FirstName}";
+        HardwareDateTimeAdd = Hardware.DateTimeAdd.ToString();
+        HardwareMainWarehouse = Hardware.MainWarehouse.Title;
+        HardwareCategory = Hardware.CategoryHardware.Title;
+        HardwareDocument = Hardware.DocumentExternalSystem.ShortTitle;
     }
 }

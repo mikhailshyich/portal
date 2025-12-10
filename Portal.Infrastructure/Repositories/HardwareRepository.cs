@@ -413,5 +413,30 @@ namespace Portal.Infrastructure.Repositories
 
             return new CustomGeneralResponses(true, $"Оборудование в количестве {hardwareList.Count} промаркировано.");
         }
+
+        public async Task<Hardware> GetByIdAsync(Guid id)
+        {
+            if (id == Guid.Empty) return null!;
+
+            var hardware = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == id);
+
+            if(hardware == null) return null!;
+
+            var warehouse = await context.MainWarehouses.FirstOrDefaultAsync(w => w.Id == hardware.MainWarehouseId);
+            var category = await context.CategoriesHardware.FirstOrDefaultAsync(c => c.Id == hardware.CategoryHardwareId);
+            var document = await context.DocumentsExternalSystem.FirstOrDefaultAsync(d => d.Id == hardware.DocumentExternalSystemId);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == hardware.UserId);
+            var userWarehouse = await context.UserWarehouses.FirstOrDefaultAsync(uw => uw.Id == hardware.UserWarehouseId);
+
+            hardware.MainWarehouse = warehouse;
+            hardware.CategoryHardware = category;
+            hardware.DocumentExternalSystem = document;
+            if(user != null)
+                hardware.User = user;
+            if(userWarehouse != null)
+                hardware.UserWarehouse = userWarehouse;
+
+            return hardware;
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace Portal.Domain.Interfaces
         Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport);
         Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO);
         Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId);
+        Task<Hardware> GetByIdAsync(Guid id);
     }
 }
