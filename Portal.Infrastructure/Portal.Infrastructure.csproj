@@ -7,6 +7,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net9.0\Portal.Infrastructure.deps.json" />
+    <Content Include="bin\Debug\net9.0\Portal.Infrastructure.runtimeconfig.json" />
+    <Content Include="bin\Release\net9.0\Portal.Infrastructure.deps.json" />
+    <Content Include="bin\Release\net9.0\Portal.Infrastructure.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net9.0\Portal.Application.dll" />
+    <None Include="bin\Debug\net9.0\Portal.Application.pdb" />
+    <None Include="bin\Debug\net9.0\Portal.Domain.dll" />
+    <None Include="bin\Debug\net9.0\Portal.Domain.pdb" />
+    <None Include="bin\Debug\net9.0\Portal.Infrastructure.dll" />
+    <None Include="bin\Debug\net9.0\Portal.Infrastructure.pdb" />
+    <None Include="bin\Release\net9.0\Portal.Application.dll" />
+    <None Include="bin\Release\net9.0\Portal.Application.pdb" />
+    <None Include="bin\Release\net9.0\Portal.Domain.dll" />
+    <None Include="bin\Release\net9.0\Portal.Domain.pdb" />
+    <None Include="bin\Release\net9.0\Portal.Infrastructure.dll" />
+    <None Include="bin\Release\net9.0\Portal.Infrastructure.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="iTextSharp" Version="5.5.13.4" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.3.0" />

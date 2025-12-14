@@ -9,5 +9,7 @@ namespace Portal.Domain.DTOs
         public Guid UserId { get; set; }
         [Required(ErrorMessage = "Обязательное поле для заполнения.")]
         public Guid UserWarehouseId { get; set; }
+        public Guid ResponsibleId { get; set; }
+        public List<Guid> HardwareIdList { get; set; }
     }
 }

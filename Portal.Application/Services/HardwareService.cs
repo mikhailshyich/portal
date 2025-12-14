@@ -60,14 +60,14 @@ namespace Portal.Application.Services
             return await hardwareDomain.MarkHardware(markHardwareDTO);
         }
 
-        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid>? hardwaresID, Guid? userID, Guid? userWarehouseID)
+        public async Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO)
         {
-            return await hardwareDomain.MoveToUserAsync(hardwaresID, userID, userWarehouseID);
+            return await hardwareDomain.MoveToUserAsync(moveDTO);
         }
 
-        public async Task<CustomGeneralResponses> ReturnAsync(List<Guid> hardwaresID)
+        public async Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO)
         {
-            return await hardwareDomain.ReturnAsync(hardwaresID);
+            return await hardwareDomain.ReturnAsync(returnDTO);
         }
     }
 }

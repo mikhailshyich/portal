@@ -2,6 +2,7 @@
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
+using Portal.Application.Services;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Entities.History;
@@ -14,7 +15,7 @@ namespace Portal.Infrastructure.Repositories
     public class HardwareRepository : IHardwareDomain
     {
         private readonly PortalDbContext context;
-        private readonly string prefixMarkCode = "markCode_";
+        private static readonly string prefixMarkCode = "markCode_";
 
         public HardwareRepository(PortalDbContext context)
         {
@@ -223,20 +224,21 @@ namespace Portal.Infrastructure.Repositories
             return await context.Hardwares.ToListAsync();
         }
 
-        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid>? hardwaresID, Guid? userID, Guid? userWarehouseID)
+        public async Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO)
         {
-            if (hardwaresID is null) return new CustomGeneralResponses(false, "Список перемещаемого оборудования равен null.");
-            if (userID == Guid.Empty) return new CustomGeneralResponses(false, "Пользователь на которого перемещаем оборудование равен null.");
+            if (moveDTO.HardwareIdList is null) return new CustomGeneralResponses(false, "Список перемещаемого оборудования равен null.");
+            if (moveDTO.UserId == Guid.Empty) return new CustomGeneralResponses(false, "Пользователь на которого перемещаем оборудование равен null.");
 
-            var userDB = await context.Users.FindAsync(userID);
+            var userDB = await context.Users.FindAsync(moveDTO.UserId);
             if (userDB is null) return new CustomGeneralResponses(false, "Пользователь на которого перемещаем оборудование не найден в базе данных.");
 
-            var userWarehouseDB = await context.UserWarehouses.FirstOrDefaultAsync(u => u.Id == userWarehouseID & u.UserId == userID);
+            var userWarehouseDB = await context.UserWarehouses.FirstOrDefaultAsync(u => u.Id == moveDTO.UserWarehouseId & u.UserId == moveDTO.UserId);
             if (userWarehouseDB is null) return new CustomGeneralResponses(false, $"У пользователя {userDB.Username} нет такого склада.");
 
             List<Hardware> displacedHardware = new();
+            var historyList = new List<History>();
 
-            foreach (var hardwareID in hardwaresID)
+            foreach (var hardwareID in moveDTO.HardwareIdList)
             {
                 var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId != userDB.Id);
                 if (hardwareDB != null)
@@ -252,9 +254,12 @@ namespace Portal.Infrastructure.Repositories
                         HardwareId = hardwareDB.Id,
                         UserId = userDB.Id
                     };
+                    History history = new History(moveDTO.ResponsibleId,moveDTO.UserId,hardwareID,userWarehouseDB.Id,"Перемещение",DateTime.Now);
+                    historyList.Add(history);
                     context.UsersHardware.Add(userHardware);
                 }
             }
+            context.HistoryEntries.AddRange(historyList);
             await context.SaveChangesAsync();
             return new CustomGeneralResponses(true, $"Оборудование в количестве {displacedHardware.Count} перемещено на {userDB.Username}", displacedHardware);
         }
@@ -280,22 +285,37 @@ namespace Portal.Infrastructure.Repositories
             return userHardware;
         }
 
-        public async Task<CustomGeneralResponses> ReturnAsync(List<Guid> hardwaresID)
+        public async Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO)
         {
-            if (hardwaresID.Count == 0) return new CustomGeneralResponses(false, "Список с оборудованием для возврата равен 0.");
+            if (returnDTO.HardwareIdList.Count == 0) return new CustomGeneralResponses(false, "Список с оборудованием для возврата равен 0.");
+            if (returnDTO.ResponsibleId == Guid.Empty) return new CustomGeneralResponses(false, "ID ответственного пустой.");
 
-            foreach (var hardwareID in hardwaresID)
+            var responsible = await context.Users.AnyAsync(r => r.Id == returnDTO.ResponsibleId);
+            if (responsible is false) return new CustomGeneralResponses(false, "Проверьте ID ответственного.");
+
+            var returned = new List<Guid>();
+
+            foreach (var hardwareID in returnDTO.HardwareIdList)
             {
                 var hardwareDB = await context.Hardwares.FindAsync(hardwareID);
-                if (hardwareDB != null)
+                if (hardwareDB != null & hardwareDB.UserId is null)
+                {
+                    continue;
+                }
+                else
                 {
                     hardwareDB.UserId = null;
                     hardwareDB.UserWarehouseId = null;
+                    returned.Add(hardwareDB.Id);
+                    History history = new History(hardwareDB.Id,returnDTO.ResponsibleId,hardwareDB.MainWarehouseId,"Возврат",DateTime.Now);
+                    await context.HistoryEntries.AddAsync(history);
                 }
             }
             await context.SaveChangesAsync();
 
-            return new CustomGeneralResponses(true, $"Оборудование в количестве {hardwaresID.Count} возвращено на склад!");
+            if (returned.Count == 0) return new CustomGeneralResponses(false, "Передаваемое оборудование уже на основном складе.");
+
+            return new CustomGeneralResponses(true, $"Оборудование в количестве {returned.Count} возвращено на склад!");
         }
 
         public async Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport)

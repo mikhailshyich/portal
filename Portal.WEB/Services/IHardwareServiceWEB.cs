@@ -8,7 +8,7 @@ namespace Portal.WEB.Services
     {
         Task<CustomGeneralResponses> AddAsync(HardwareDTO request);
         Task<List<Hardware>> GetAllAsync();
-        Task<CustomGeneralResponses> MoveToUserAsync(List<Guid>? hardwaresID, Guid? userID, Guid? userWarehouseID);
+        Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO);
         Task<string> GenerateQR(List<Guid>? idList);
         Task<string> GenerateLabel(List<Guid>? idList);
         Task<List<Hardware>> GetByUserIdAsync(Guid userId);
@@ -16,5 +16,6 @@ namespace Portal.WEB.Services
         Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO);
         Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId);
         Task<Hardware> GetByIdAsync(Guid id);
+        Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO);
     }
 }

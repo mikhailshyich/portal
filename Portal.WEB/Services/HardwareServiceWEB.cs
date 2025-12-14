@@ -76,9 +76,16 @@ namespace Portal.WEB.Services
             throw new NotImplementedException();
         }
 
-        public async Task<CustomGeneralResponses> MoveToUserAsync(List<Guid> hardwaresID, Guid? userID, Guid? userWarehouseID)
+        public async Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO)
         {
-            var hardwares = await httpClient.PostAsJsonAsync($"{BaseURI}/move/{userID}/{userWarehouseID}", hardwaresID);
+            var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/move", moveDTO);
+            var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+            return response!;
+        }
+
+        public async Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO)
+        {
+            var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/return", returnDTO);
             var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }

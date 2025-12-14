@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net9.0\Portal.Domain.deps.json" />
+    <Content Include="bin\Release\net9.0\Portal.Domain.deps.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net9.0\Portal.Domain.dll" />
+    <None Include="bin\Debug\net9.0\Portal.Domain.pdb" />
+    <None Include="bin\Release\net9.0\Portal.Domain.dll" />
+    <None Include="bin\Release\net9.0\Portal.Domain.pdb" />
     <None Include="Responses\CustomResponses.cs~RFccb4d8.TMP" />
   </ItemGroup>
 

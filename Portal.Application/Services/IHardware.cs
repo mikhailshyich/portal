@@ -8,8 +8,8 @@ namespace Portal.Application.Services
     {
         Task<CustomGeneralResponses> AddAsync(HardwareDTO request);
         Task<List<Hardware>> GetAllAsync();
-        Task<CustomGeneralResponses> MoveToUserAsync(List<Guid>? hardwaresID, Guid? userID, Guid? userWarehouseID);
-        Task<CustomGeneralResponses> ReturnAsync(List<Guid> hardwaresID);
+        Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO);
+        Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO);
         Task<string> GenerateQR(List<Guid>? idList);
         Task<string> GenerateLabel(List<Guid>? idList);
         Task<List<Hardware>> GetByUserIdAsync(Guid userId);

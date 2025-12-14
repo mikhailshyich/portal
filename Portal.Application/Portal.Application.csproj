@@ -7,6 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net9.0\Portal.Application.deps.json" />
+    <Content Include="bin\Release\net9.0\Portal.Application.deps.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net9.0\Portal.Application.dll" />
+    <None Include="bin\Debug\net9.0\Portal.Application.pdb" />
+    <None Include="bin\Debug\net9.0\Portal.Domain.dll" />
+    <None Include="bin\Debug\net9.0\Portal.Domain.pdb" />
+    <None Include="bin\Release\net9.0\Portal.Application.dll" />
+    <None Include="bin\Release\net9.0\Portal.Application.pdb" />
+    <None Include="bin\Release\net9.0\Portal.Domain.dll" />
+    <None Include="bin\Release\net9.0\Portal.Domain.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Portal.Domain\Portal.Domain.csproj" />
   </ItemGroup>
 

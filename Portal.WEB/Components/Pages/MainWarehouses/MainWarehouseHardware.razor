@@ -26,7 +26,7 @@
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onclick="AddHardwareEvent"><b>+ Добавить</b></button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Переместить</b></button>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
-                        <button type="button" class="btn btn-secondary"><b>Вернуть</b></button>
+                        <button type="button" class="btn btn-secondary" @onclick="ReturnHardware"><b>Вернуть</b></button>
                         <button type="button" class="btn btn-danger"><b>Списать</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
@@ -348,6 +348,7 @@
     private MainWarehouse MainWarehouse = new();
     private HardwareDTO hardwareDTO = new();
     private HardwareMoveDTO hardwareMoveDTO = new();
+    private HardwareReturnDTO returnDTO = new();
     private List<CategoryHardware> Categories = new();
     private List<DocumentExternalSystem> Documents = new();
     private List<Guid> HardwaresId = new();
@@ -378,13 +379,6 @@
             var response = await MainWarehouseService.GetByIdAsync(Id);
             if (response != null)
             {
-                // foreach (var hardware in response.Hardwares)
-                // {
-                //    var category = await CategoryHardwareService.GetByIdAsync(hardware.CategoryHardwareId);
-                //    var document = await DocumentExternalSystem.GetByIdAsync(hardware.DocumentExternalSystemId);
-                //    hardware.CategoryHardware = category;
-                //    hardware.DocumentExternalSystem = document;
-                // }
                 MainWarehouse = response;
             }
         }
@@ -398,6 +392,7 @@
             pagination.ItemsPerPage = int.Parse((string)e.Value);
         }
     }
+
     private async Task AddHardware()
     {
         try
@@ -433,7 +428,11 @@
         {
             if(HardwaresId.Count > 0)
             {
-                var response = await HardwareService.MoveToUserAsync(HardwaresId, hardwareMoveDTO.UserId, hardwareMoveDTO.UserWarehouseId);
+                string userId = await localStorage.GetItemAsync<string>("userId");
+                if (userId != string.Empty)
+                    hardwareMoveDTO.ResponsibleId = Guid.Parse(userId);
+                hardwareMoveDTO.HardwareIdList = HardwaresId;
+                var response = await HardwareService.MoveToUserAsync(hardwareMoveDTO);
                 if (!response.Flag)
                 {
                     ResponseMessage = response.Message;
@@ -589,5 +588,21 @@
         HardwareMainWarehouse = Hardware.MainWarehouse.Title;
         HardwareCategory = Hardware.CategoryHardware.Title;
         HardwareDocument = Hardware.DocumentExternalSystem.ShortTitle;
+    }
+    private async Task ReturnHardware()
+    {
+        if(HardwaresId.Count > 0)
+        {
+            string userId = await localStorage.GetItemAsync<string>("userId");
+            if (userId != string.Empty)
+                returnDTO.ResponsibleId = Guid.Parse(userId);
+            returnDTO.HardwareIdList = HardwaresId;
+            var result = await HardwareService.ReturnAsync(returnDTO);
+            var response = await MainWarehouseService.GetByIdAsync(Id);
+            if (response != null)
+            {
+                MainWarehouse = response;
+            }
+        }
     }
 }

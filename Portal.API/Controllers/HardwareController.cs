@@ -60,10 +60,10 @@ namespace Portal.API.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-        [HttpPost("move/{userId}/{userWarehouseId}")]
-        public async Task<IActionResult> Move(List<Guid>? hardwaresId, Guid? userId, Guid? userWarehouseId)
+        [HttpPatch("move")]
+        public async Task<IActionResult> Move([FromBody] HardwareMoveDTO moveDTO)
         {
-            var result = await hardwareInterface.MoveToUserAsync(hardwaresId, userId, userWarehouseId);
+            var result = await hardwareInterface.MoveToUserAsync(moveDTO);
             return Ok(result);
         }
 
@@ -74,10 +74,12 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("return")]
-        public async Task<IActionResult> Return(List<Guid> hardwaresId)
+        [HttpPatch("return")]
+        public async Task<IActionResult> Return([FromBody] HardwareReturnDTO returnDTO)
         {
-            var result = await hardwareInterface.ReturnAsync(hardwaresId);
+            var result = await hardwareInterface.ReturnAsync(returnDTO);
+            if (result.Flag is false)
+                return BadRequest(result);
             return Ok(result);
         }
 
