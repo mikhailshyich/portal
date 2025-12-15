@@ -49,6 +49,8 @@ builder.Services.AddScoped<MainWarehouseServiceWEB>();
 builder.Services.AddScoped<HardwareServiceWEB>();
 builder.Services.AddScoped<UserWarehouseServiceWEB>();
 
+
+
 builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();

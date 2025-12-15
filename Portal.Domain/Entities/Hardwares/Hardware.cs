@@ -21,7 +21,7 @@ namespace Portal.Domain.Entities.Hardwares
         [MaxLength(150)]
         public string Description { get; set; } = string.Empty;
         public int Count { get; set; }
-        [MaxLength(20)]
+        [MaxLength(13)]
         public string InventoryNumberExternalSystem { get; set; } = string.Empty;
         [MaxLength(60)]
         public string TTN { get; set; } = string.Empty;

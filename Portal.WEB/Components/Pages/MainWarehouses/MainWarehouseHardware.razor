@@ -250,12 +250,11 @@
                         <h5 class="modal-title" id="viewHardwareTitle">Оборудование на складе</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <EditForm Model="Hardware" FormName="ViewHardware" Context="ViewHardware">
+                    <EditForm Model="updateDTO" FormName="ViewHardware" Context="ViewHardware" OnValidSubmit="EditHardware">
                         <div class="modal-body">
 
                             <div class="form-group">
-                                <label for="title">ID оборудования</label>
-                                <InputText id="title" class="form-control" readonly @bind-Value="HardwareId" />
+                                <label for="title">ID - @Hardware.Id</label>
                             </div>
 
                             <div class="form-group">
@@ -289,8 +288,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="title">Наименование (для этикетки)</label>
+                                <label for="title">Наименование (для этикетки) текущее</label>
                                 <InputText id="title" class="form-control" readonly @bind-Value="Hardware.NameForLabel" />
+                                <ValidationMessage For="@(() => updateDTO.NameForLabel)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Наименование (для этикетки) новое</label>
+                                <InputText id="title" class="form-control" @bind-Value="updateDTO.NameForLabel" />
+                                <ValidationMessage For="@(() => updateDTO.NameForLabel)" />
                             </div>
 
                             <div class="form-group">
@@ -299,8 +305,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="numberext">Номер 1С</label>
+                                <label for="numberext">Номер 1С (текущий)</label>
                                 <InputText id="numberext" class="form-control" readonly @bind-Value="Hardware.InventoryNumberExternalSystem" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="numberext">Номер 1С (новый)</label>
+                                <InputText id="numberext" class="form-control" @bind-Value="updateDTO.InventoryNumberExternalSystem" />
+                                <ValidationMessage For="@(() => updateDTO.InventoryNumberExternalSystem)" />
                             </div>
 
                             <div class="form-group">
@@ -317,12 +329,11 @@
                                 <label for="ttn">Инвентарный номер</label>
                                 <InputText id="ttn" class="form-control" readonly @bind-Value="Hardware.CombinedInvNumber" />
                             </div>
-
                         </div>
-                        @* <div class="modal-footer">
+                        <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                            <button type="submit" class="btn btn-success" id="submit">Добавить</button>
-                        </div> *@
+                            <button type="submit" class="btn btn-success" id="submit">Сохранить</button>
+                        </div>
                     </EditForm>
                 </div>
             </div>
@@ -349,6 +360,7 @@
     private HardwareDTO hardwareDTO = new();
     private HardwareMoveDTO hardwareMoveDTO = new();
     private HardwareReturnDTO returnDTO = new();
+    private HardwareUpdateDTO updateDTO = new();
     private List<CategoryHardware> Categories = new();
     private List<DocumentExternalSystem> Documents = new();
     private List<Guid> HardwaresId = new();
@@ -613,5 +625,13 @@
         {
             MainWarehouse = response;
         }
+    }
+    private async Task EditHardware()
+    {
+        updateDTO.HardwareId = Hardware.Id;
+        var result = await HardwareService.UpdateAsync(updateDTO);
+        updateDTO = new();
+        Hardware = new();
+        Hardware = result;
     }
 }

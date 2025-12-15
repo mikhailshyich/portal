@@ -69,5 +69,10 @@ namespace Portal.Application.Services
         {
             return await hardwareDomain.ReturnAsync(returnDTO);
         }
+
+        public async Task<Hardware> UpdateAsync(HardwareUpdateDTO updateDTO)
+        {
+            return await hardwareDomain.UpdateAsync(updateDTO);
+        }
     }
 }

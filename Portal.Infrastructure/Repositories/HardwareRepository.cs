@@ -1,8 +1,6 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
-using Portal.Application.Services;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Entities.History;
@@ -456,6 +454,21 @@ namespace Portal.Infrastructure.Repositories
             if(userWarehouse != null)
                 hardware.UserWarehouse = userWarehouse;
 
+            return hardware;
+        }
+
+        public async Task<Hardware> UpdateAsync(HardwareUpdateDTO updateDTO)
+        {
+            if (updateDTO is null) return null!;
+
+            var hardware = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == updateDTO.HardwareId);
+            if(hardware is null) return null!;
+
+            if(updateDTO.NameForLabel != string.Empty)
+                hardware.NameForLabel = updateDTO.NameForLabel;
+            if(updateDTO.InventoryNumberExternalSystem != string.Empty)
+                hardware.InventoryNumberExternalSystem = updateDTO.InventoryNumberExternalSystem;
+            await context.SaveChangesAsync();
             return hardware;
         }
     }

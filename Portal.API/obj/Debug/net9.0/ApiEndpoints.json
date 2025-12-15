@@ -111,6 +111,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "Update",
+    "RelativePath": "api/Hardwares",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateDTO",
+        "Type": "Portal.Domain.DTOs.HardwareUpdateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "GetById",
     "RelativePath": "api/Hardwares/{id}",
     "HttpMethod": "GET",

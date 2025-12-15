@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
@@ -17,6 +18,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Add(HardwareDTO request)
         {
             var result = await hardwareInterface.AddAsync(request);
@@ -24,6 +26,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetAll()
         {
             var result = await hardwareInterface.GetAllAsync();
@@ -31,18 +34,21 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("qr")]
+        [Authorize(Roles = "admin,user")]
         public async Task<string> GenerateQR(List<Guid>? listId)
         {
             return await hardwareInterface.GenerateQR(listId);
         }
 
         [HttpPost("label")]
+        [Authorize(Roles = "admin,user")]
         public async Task<string> GenerateLabel(List<Guid>? listId)
         {
             return await hardwareInterface.GenerateLabel(listId);
         }
 
         [HttpGet("label/{fileName}")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> File(string fileName)
         {
             try
@@ -61,12 +67,14 @@ namespace Portal.API.Controllers
         }
 
         [HttpPatch("move")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Move([FromBody] HardwareMoveDTO moveDTO)
         {
             var result = await hardwareInterface.MoveToUserAsync(moveDTO);
             return Ok(result);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("users/{userId}")]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
@@ -75,6 +83,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPatch("return")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Return([FromBody] HardwareReturnDTO returnDTO)
         {
             var result = await hardwareInterface.ReturnAsync(returnDTO);
@@ -84,6 +93,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("import")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Import(List<HardwareImportDTO> hardwares)
         {
             var result = await hardwareInterface.Import(hardwares);
@@ -91,6 +101,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("mark")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> MarkHardware(MarkHardwareDTO markHardwareDTO)
         {
             var result = await hardwareInterface.MarkHardware(markHardwareDTO);
@@ -98,6 +109,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPatch("marking")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> MarkHardware([FromBody]List<Guid> hardwareId)
         {
             var result = await hardwareInterface.MarkAllHardware(hardwareId);
@@ -105,9 +117,18 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await hardwareInterface.GetByIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Update([FromBody] HardwareUpdateDTO updateDTO)
+        {
+            var result = await hardwareInterface.UpdateAsync(updateDTO);
             return Ok(result);
         }
     }
