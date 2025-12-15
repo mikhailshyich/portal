@@ -84,25 +84,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
-    "Method": "GetById",
-    "RelativePath": "api/Hardware/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "Add",
-    "RelativePath": "api/Hardware/add",
+    "RelativePath": "api/Hardwares",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -116,9 +100,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "GetAll",
-    "RelativePath": "api/Hardware/all",
+    "RelativePath": "api/Hardwares",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -126,67 +110,15 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
-    "Method": "GenerateLabel",
-    "RelativePath": "api/Hardware/generatelabel",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "listId",
-        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
-    "Method": "GenerateQR",
-    "RelativePath": "api/Hardware/generateqr",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "listId",
-        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
-    "Method": "GetByUserId",
-    "RelativePath": "api/Hardware/get/{userId}",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "GetById",
+    "RelativePath": "api/Hardwares/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
       }
@@ -194,25 +126,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
-    "Method": "File",
-    "RelativePath": "api/Hardware/getlabel/{fileName}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "fileName",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "Import",
-    "RelativePath": "api/Hardware/import",
+    "RelativePath": "api/Hardwares/import",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -226,9 +142,51 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "GenerateLabel",
+    "RelativePath": "api/Hardwares/label",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "listId",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "File",
+    "RelativePath": "api/Hardwares/label/{fileName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "MarkHardware",
-    "RelativePath": "api/Hardware/mark",
+    "RelativePath": "api/Hardwares/mark",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -242,9 +200,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "MarkHardware",
-    "RelativePath": "api/Hardware/marking",
+    "RelativePath": "api/Hardwares/marking",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -258,9 +216,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "Move",
-    "RelativePath": "api/Hardware/move",
+    "RelativePath": "api/Hardwares/move",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -274,9 +232,35 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Portal.API.Controllers.HardwareController",
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "GenerateQR",
+    "RelativePath": "api/Hardwares/qr",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "listId",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "Return",
-    "RelativePath": "api/Hardware/return",
+    "RelativePath": "api/Hardwares/return",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -284,6 +268,22 @@
       {
         "Name": "returnDTO",
         "Type": "Portal.Domain.DTOs.HardwareReturnDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "GetByUserId",
+    "RelativePath": "api/Hardwares/users/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

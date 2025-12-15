@@ -7,42 +7,42 @@ namespace Portal.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HardwareController : ControllerBase
+    public class HardwaresController : ControllerBase
     {
         private readonly IHardware hardwareInterface;
 
-        public HardwareController(IHardware hardwareInterface)
+        public HardwaresController(IHardware hardwareInterface)
         {
             this.hardwareInterface = hardwareInterface;
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add(HardwareDTO request)
         {
             var result = await hardwareInterface.AddAsync(request);
-            return Ok(result);
+            return CreatedAtRoute("", result);
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await hardwareInterface.GetAllAsync();
             return Ok(result);
         }
 
-        [HttpPost("generateqr")]
+        [HttpPost("qr")]
         public async Task<string> GenerateQR(List<Guid>? listId)
         {
             return await hardwareInterface.GenerateQR(listId);
         }
 
-        [HttpPost("generatelabel")]
+        [HttpPost("label")]
         public async Task<string> GenerateLabel(List<Guid>? listId)
         {
             return await hardwareInterface.GenerateLabel(listId);
         }
 
-        [HttpGet("getlabel/{fileName}")]
+        [HttpGet("label/{fileName}")]
         public async Task<IActionResult> File(string fileName)
         {
             try
@@ -67,7 +67,7 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("get/{userId}")]
+        [HttpGet("users/{userId}")]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
             var result = await hardwareInterface.GetByUserIdAsync(userId);

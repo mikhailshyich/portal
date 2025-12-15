@@ -1,5 +1,4 @@
 ﻿@page "/main-warehouse/{Id:guid}"
-@using System.Threading.Tasks
 
 @inject HttpClient httpClient
 @inject IJSRuntime js
@@ -26,6 +25,7 @@
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onclick="AddHardwareEvent"><b>+ Добавить</b></button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Переместить</b></button>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
+                        <button type="button" class="btn btn-primary" @onclick="MarkHardware"><b>Маркировать</b></button>
                         <button type="button" class="btn btn-secondary" @onclick="ReturnHardware"><b>Вернуть</b></button>
                         <button type="button" class="btn btn-danger"><b>Списать</b></button>
                         <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
@@ -465,7 +465,7 @@
         if (HardwaresId?.Count > 0)
         {
             var fileName = await HardwareService.GenerateQR(HardwaresId);
-            var response = await httpClient.GetAsync($"{host}/api/Hardware/getlabel/{fileName}");
+            var response = await httpClient.GetAsync($"{host}/api/Hardwares/label/{fileName}");
             await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
         }
         navigationManager.Refresh(true);
@@ -476,7 +476,7 @@
         if (HardwaresId?.Count > 0)
         {
             var fileName = await HardwareService.GenerateLabel(HardwaresId);
-            var response = await httpClient.GetAsync($"{host}/api/Hardware/getlabel/{fileName}");
+            var response = await httpClient.GetAsync($"{host}/api/Hardwares/label/{fileName}");
             await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
         }
         navigationManager.Refresh(true);
@@ -603,6 +603,15 @@
             {
                 MainWarehouse = response;
             }
+        }
+    }
+    private async Task MarkHardware()
+    {
+        var result = await HardwareService.MarkAllHardware(HardwaresId);
+        var response = await MainWarehouseService.GetByIdAsync(Id);
+        if (response != null)
+        {
+            MainWarehouse = response;
         }
     }
 }
