@@ -34,7 +34,7 @@ namespace Portal.Application.Services
             return await userDepartment.GetByIdAsync(id);
         }
 
-        public Task<CustomGeneralResponses> UpdateAsync(UserDepartment request)
+        public Task<CustomGeneralResponses> UpdateAsync(UserDepartmentUpdateDTO request)
         {
             return userDepartment.UpdateAsync(request);
         }

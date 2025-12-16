@@ -7,7 +7,7 @@ namespace Portal.Domain.Interfaces
     public interface IUserDepartmentDomain
     {
         Task<CustomGeneralResponses> AddAsync(UserDepartmentDTO request);
-        Task<CustomGeneralResponses> UpdateAsync(UserDepartment request);
+        Task<CustomGeneralResponses> UpdateAsync(UserDepartmentUpdateDTO request);
         Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<UserDepartment>> GetAllAsync();
         Task<UserDepartment> GetByIdAsync(Guid id);

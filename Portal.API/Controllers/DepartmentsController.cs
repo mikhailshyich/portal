@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
@@ -7,37 +8,41 @@ namespace Portal.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserDepartmentController : ControllerBase
+    public class DepartmentsController : ControllerBase
     {
         private readonly IUserDepartment userDepartment;
 
-        public UserDepartmentController(IUserDepartment userDepartment)
+        public DepartmentsController(IUserDepartment userDepartment)
         {
             this.userDepartment = userDepartment;
         }
 
-        [HttpPost("add")]
-        public async Task<IActionResult> Add(UserDepartmentDTO request)
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Add([FromBody]UserDepartmentDTO request)
         {
             var result = await userDepartment.AddAsync(request);
             return Ok(result);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Update(UserDepartment request)
+        [HttpPatch]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Update(UserDepartmentUpdateDTO request)
         {
             var result = await userDepartment.UpdateAsync(request);
             return Ok(result);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await userDepartment.DeleteAsync(id);
             return Ok(result);
         }
 
-        [HttpGet("all")]
+        [HttpGet]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetAll()
         {
             var result = await userDepartment.GetAllAsync();
@@ -45,6 +50,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await userDepartment.GetByIdAsync(id);

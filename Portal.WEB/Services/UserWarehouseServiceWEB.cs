@@ -13,11 +13,11 @@ namespace Portal.WEB.Services
             this.httpClient = httpClient;
         }
 
-        private readonly string BaseURI = "api/UserWarehouse";
+        private readonly string BaseURI = "api/UsersWarehouses";
 
         public async Task<CustomGeneralResponses> AddAsync(UserWarehouseDTO request)
         {
-            var warehouse = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
+            var warehouse = await httpClient.PostAsJsonAsync($"{BaseURI}", request);
             var response = await warehouse.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }
@@ -34,14 +34,14 @@ namespace Portal.WEB.Services
 
         public async Task<List<UserWarehouse>> GetAllAsync()
         {
-            var warehouses = await httpClient.GetAsync($"{BaseURI}/all");
+            var warehouses = await httpClient.GetAsync($"{BaseURI}");
             var response = await warehouses.Content.ReadFromJsonAsync<List<UserWarehouse>>();
             return response!;
         }
 
         public async Task<List<UserWarehouse>> GetAllByUserIdAsync(Guid id)
         {
-            var warehouses = await httpClient.GetAsync($"{BaseURI}/get/user/{id}");
+            var warehouses = await httpClient.GetAsync($"{BaseURI}/users/{id}");
             var response = await warehouses.Content.ReadFromJsonAsync<List<UserWarehouse>>();
             return response!;
         }

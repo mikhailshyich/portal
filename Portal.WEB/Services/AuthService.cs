@@ -12,7 +12,7 @@ namespace Portal.WEB.Services
             this.httpClient = httpClient;
         }
 
-        private readonly string BaseURI = "api/User";
+        private readonly string BaseURI = "api/Users";
 
         public Task CheckTokens(LoginDTO request)
         {

@@ -34,21 +34,18 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("qr")]
-        [Authorize(Roles = "admin,user")]
         public async Task<string> GenerateQR(List<Guid>? listId)
         {
             return await hardwareInterface.GenerateQR(listId);
         }
 
         [HttpPost("label")]
-        [Authorize(Roles = "admin,user")]
         public async Task<string> GenerateLabel(List<Guid>? listId)
         {
             return await hardwareInterface.GenerateLabel(listId);
         }
 
         [HttpGet("label/{fileName}")]
-        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> File(string fileName)
         {
             try

@@ -73,17 +73,19 @@ namespace Portal.Infrastructure.Repositories
             return department;
         }
 
-        public async Task<CustomGeneralResponses> UpdateAsync(UserDepartment request)
+        public async Task<CustomGeneralResponses> UpdateAsync(UserDepartmentUpdateDTO request)
         {
             if (request is null) return new CustomGeneralResponses(false, "Передаваемый объект равен null.");
 
             var department = await context.UserDepartments.FindAsync(request.Id);
-            if (department is null) return new CustomGeneralResponses(false, "Департамент не найден.");
+            if (department is null) return new CustomGeneralResponses(false, "Отдел не найден.");
 
-            department.Title = request.Title;
-            department.ShortTitle = request.ShortTitle;
+            if(request.Title is not null)
+                department.Title = request.Title;
+            if(request.ShortTitle is not null)
+                department.ShortTitle = request.ShortTitle;
             await context.SaveChangesAsync();
-            return new CustomGeneralResponses(true, "Департамент успешно обновлён.", department);
+            return new CustomGeneralResponses(true, "Отдел успешно обновлён.", department);
         }
     }
 }

@@ -1,13 +1,8 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.VisualBasic;
+﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Responses;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 
 namespace Portal.WEB.Services
 {
@@ -25,63 +20,98 @@ namespace Portal.WEB.Services
 
         public async Task<CustomGeneralResponses> AddAsync(HardwareDTO request)
         {
-            var token = await localStorage.GetAsync<string>("authToken");
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-            var identity = string.IsNullOrEmpty(token.Value) ? new ClaimsIdentity() : GetClaimsIdentity(token.Value);
-            var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}", request);
-            var response = await hardware.Content.ReadFromJsonAsync<CustomGeneralResponses>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}", request);
+                var response = await hardware.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<string> GenerateLabel(List<Guid>? idList)
         {
-            var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/label", idList);
-            var response = await hardware.Content.ReadAsStringAsync();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/label", idList);
+                var response = await hardware.Content.ReadAsStringAsync();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<string> GenerateQR(List<Guid>? idList)
         {
-            var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/qr", idList);
-            var response = await hardware.Content.ReadAsStringAsync();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/qr", idList);
+                var response = await hardware.Content.ReadAsStringAsync();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<List<Hardware>> GetAllAsync()
         {
-            var hardwares = await httpClient.GetAsync($"{BaseURI}");
-            var response = await hardwares.Content.ReadFromJsonAsync<List<Hardware>>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.GetAsync($"{BaseURI}");
+                var response = await hardwares.Content.ReadFromJsonAsync<List<Hardware>>();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<Hardware> GetByIdAsync(Guid id)
         {
-            var token = await localStorage.GetAsync<string>("authToken");
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-            var hardwares = await httpClient.GetAsync($"{BaseURI}/{id}");
-            var response = await hardwares.Content.ReadFromJsonAsync<Hardware>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.GetAsync($"{BaseURI}/{id}");
+                var response = await hardwares.Content.ReadFromJsonAsync<Hardware>();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<List<Hardware>> GetByUserIdAsync(Guid userId)
         {
-            var hardwares = await httpClient.GetAsync($"{BaseURI}/users/{userId}");
-            var response = await hardwares.Content.ReadFromJsonAsync<List<Hardware>>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.GetAsync($"{BaseURI}/users/{userId}");
+                var response = await hardwares.Content.ReadFromJsonAsync<List<Hardware>>();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport)
         {
-            var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/import", hardwareImport);
-            var response = await hardware.Content.ReadFromJsonAsync<CustomGeneralResponses>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardware = await httpClient.PostAsJsonAsync($"{BaseURI}/import", hardwareImport);
+                var response = await hardware.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId)
         {
-            var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/marking", hardwareId);
-            var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/marking", hardwareId);
+                var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
         }
 
         public Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO)
@@ -91,31 +121,49 @@ namespace Portal.WEB.Services
 
         public async Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO)
         {
-            var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/move", moveDTO);
-            var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/move", moveDTO);
+                var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO)
         {
-            var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/return", returnDTO);
-            var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/return", returnDTO);
+                var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
         }
 
         public async Task<Hardware> UpdateAsync(HardwareUpdateDTO updateDTO)
         {
-            var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}", updateDTO);
-            var response = await hardwares.Content.ReadFromJsonAsync<Hardware>();
-            return response!;
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}", updateDTO);
+                var response = await hardwares.Content.ReadFromJsonAsync<Hardware>();
+                return response!;
+            }
+            return null!;
         }
 
-        private ClaimsIdentity GetClaimsIdentity(string token)
+        private async Task<bool> GetAddToken()
         {
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-            var claims = jwtToken.Claims;
-            return new ClaimsIdentity(claims, "jwt");
+            var token = await localStorage.GetAsync<string>("authToken");
+            if(token.Value != string.Empty)
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+                return true;
+            }
+            return false;
         }
     }
 }

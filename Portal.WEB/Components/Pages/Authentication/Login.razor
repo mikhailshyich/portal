@@ -1,6 +1,7 @@
 ﻿@layout LoginLayout
 @page "/login"
 @inject AuthenticationStateProvider AuthStateProvider
+@inject UserServiceWEB userService
 @inject AuthService authService
 @inject NavigationManager navigationManager
 @* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
@@ -42,7 +43,7 @@
     {
         try
         {
-            var response = await authService.LoginAsync(loginModel);
+            var response = await userService.LoginAsync(loginModel);
             if (response != null && response.Token != null)
             {
                 await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(response.Token);

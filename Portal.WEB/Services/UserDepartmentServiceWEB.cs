@@ -7,7 +7,7 @@ namespace Portal.WEB.Services
     public class UserDepartmentServiceWEB : IUserDepartmentServiceWEB
     {
         private readonly HttpClient httpClient;
-        private readonly string BaseURI = "api/UserDepartment";
+        private readonly string BaseURI = "api/Departments";
 
         public UserDepartmentServiceWEB(HttpClient httpClient)
         {
@@ -16,7 +16,7 @@ namespace Portal.WEB.Services
 
         public async Task<CustomGeneralResponses> AddAsync(UserDepartmentDTO request)
         {
-            var departmen = await httpClient.PostAsJsonAsync($"{BaseURI}/add", request);
+            var departmen = await httpClient.PostAsJsonAsync($"{BaseURI}", request);
             var response = await departmen.Content.ReadFromJsonAsync<CustomGeneralResponses>();
             return response!;
         }
@@ -28,7 +28,7 @@ namespace Portal.WEB.Services
 
         public async Task<List<UserDepartment>> GetAllAsync()
         {
-            var departmens = await httpClient.GetAsync($"{BaseURI}/all");
+            var departmens = await httpClient.GetAsync($"{BaseURI}");
             var response = await departmens.Content.ReadFromJsonAsync<List<UserDepartment>>();
             return response!;
         }
@@ -40,7 +40,7 @@ namespace Portal.WEB.Services
             return response!;
         }
 
-        public Task<CustomGeneralResponses> UpdateAsync(UserDepartment request)
+        public Task<CustomGeneralResponses> UpdateAsync(UserDepartmentUpdateDTO request)
         {
             throw new NotImplementedException();
         }

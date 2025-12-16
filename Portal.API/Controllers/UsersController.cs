@@ -8,18 +8,17 @@ namespace Portal.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly IConfiguration configuration;
         private readonly IUserService userService;
 
-        public UserController(IConfiguration configuration, IUserService userService)
+        public UsersController(IUserService userService)
         {
-            this.configuration = configuration;
             this.userService = userService;
         }
 
         [HttpPost("register")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> Register(RegisterDTO request)
         {
             var user = await userService.RegisterAsync(request);
@@ -38,7 +37,8 @@ namespace Portal.API.Controllers
             return Ok(user);
         }
 
-        [HttpPost("addRole")]
+        [HttpPost("roles")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> AddUserRole(UserRoleDTO request)
         {
             if (request is null)
@@ -49,7 +49,8 @@ namespace Portal.API.Controllers
             return Ok(role);
         }
 
-        [HttpGet("all")]
+        [HttpGet]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> AllUsers()
         {
             var result = await userService.GetAllAsync();
@@ -57,6 +58,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await userService.GetByIdAsync(id);
@@ -64,6 +66,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("roles")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllRoles()
         {
             var result = await userService.GetAllUserRolesAsync();
@@ -71,13 +74,15 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("sync")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> SyncUsers()
         {
             var result = await userService.SyncUsersAsync();
             return Ok(result);
         }
 
-        [HttpGet("username/{username}")]
+        [HttpGet("usernames/{username}")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetByUsername(string username)
         {
             var result = await userService.GetByUsernameAsync(username);
@@ -85,6 +90,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPut("edit")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> EditUser(UserView request)
         {
             var result = await userService.EditUserAsync(request);

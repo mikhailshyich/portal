@@ -1,4 +1,4 @@
-﻿@page "/main-warehouses"
+﻿@page "/warehouses/main"
 
 @inject AuthenticationStateProvider AuthStateProvider
 @inject MainWarehouseServiceWEB MainWarehouseService
@@ -128,6 +128,6 @@
 
     private void GoToMainWarehouse(Guid id)
     {
-        navigationManager.NavigateTo($"/main-warehouse/{id}");
+        navigationManager.NavigateTo($"/warehouses/main/{id}");
     }
 }

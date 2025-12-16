@@ -1,4 +1,4 @@
-﻿@page "/main-warehouse/{Id:guid}"
+﻿@page "/warehouses/main/{Id:guid}"
 
 @inject HttpClient httpClient
 @inject IJSRuntime js
@@ -10,6 +10,7 @@
 @inject UserWarehouseServiceWEB UserWarehouseService
 @inject HardwareServiceWEB HardwareService
 @inject NavigationManager navigationManager
+@inject ProtectedLocalStorage protectedLocalStorage
 @inject ILocalStorageService localStorage
 
 <title>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</title>
@@ -55,7 +56,7 @@
                                     <td>@hardware.CombinedInvNumber</td>
                                     <td>@hardware.InventoryNumberExternalSystem</td>
                                     <td>@hardware.DateTimeAdd</td>
-                                    <td><a href="/user/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
+                                    <td><a href="/users/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
                                     <td><button class="btn btn-secondary btn-sm mx-1"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#viewHardware"
@@ -476,9 +477,14 @@
     {
         if (HardwaresId?.Count > 0)
         {
-            var fileName = await HardwareService.GenerateQR(HardwaresId);
-            var response = await httpClient.GetAsync($"{host}/api/Hardwares/label/{fileName}");
-            await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
+            var token = await protectedLocalStorage.GetAsync<string>("authToken");
+            if (token.Value != string.Empty)
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+                var fileName = await HardwareService.GenerateQR(HardwaresId);
+                var response = await httpClient.GetAsync($"{host}/api/Hardwares/label/{fileName}");
+                await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
+            }
         }
         navigationManager.Refresh(true);
     }
@@ -487,9 +493,15 @@
     {
         if (HardwaresId?.Count > 0)
         {
-            var fileName = await HardwareService.GenerateLabel(HardwaresId);
-            var response = await httpClient.GetAsync($"{host}/api/Hardwares/label/{fileName}");
-            await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
+            var token = await protectedLocalStorage.GetAsync<string>("authToken");
+            if (token.Value != string.Empty)
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+                var fileName = await HardwareService.GenerateLabel(HardwaresId);
+                var response = await httpClient.GetAsync($"{host}/api/Hardwares/label/{fileName}");
+                if(response.IsSuccessStatusCode)
+                    await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
+            }
         }
         navigationManager.Refresh(true);
     }
@@ -601,6 +613,7 @@
         HardwareCategory = Hardware.CategoryHardware.Title;
         HardwareDocument = Hardware.DocumentExternalSystem.ShortTitle;
     }
+
     private async Task ReturnHardware()
     {
         if(HardwaresId.Count > 0)
@@ -617,6 +630,7 @@
             }
         }
     }
+
     private async Task MarkHardware()
     {
         var result = await HardwareService.MarkAllHardware(HardwaresId);
@@ -626,6 +640,7 @@
             MainWarehouse = response;
         }
     }
+
     private async Task EditHardware()
     {
         updateDTO.HardwareId = Hardware.Id;

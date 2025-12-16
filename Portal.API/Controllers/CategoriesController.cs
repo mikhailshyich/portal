@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
 
@@ -16,6 +17,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Add([FromBody]CategoryHardwareDTO request)
         {
             var result = await categoryHardware.AddAsync(request);
@@ -26,6 +28,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetAll()
         {
             var result = await categoryHardware.GetAllAsync();
@@ -36,6 +39,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await categoryHardware.GetByIdAsync(id);

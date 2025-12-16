@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
 
@@ -16,6 +17,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Add([FromBody]DocumentExternalSystemDTO request)
         {
             var result = await documentExternalSystem.AddAsync(request);
@@ -23,6 +25,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetAll()
         {
             var result = await documentExternalSystem.GetAllAsync();
@@ -30,6 +33,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await documentExternalSystem.GetByIdAsync(id);

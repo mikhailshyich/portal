@@ -54,9 +54,16 @@
             if (user.Identity != null)
             {
                 username = user.Identity.Name;
-                userView = await userService.GetByUsernameAsync(username);
-                if (userView != null)
-                    await localStorage.SetItemAsync("userId", userView.Id);
+                try
+                {
+                    userView = await userService.GetByUsernameAsync(username);
+                    if (userView != null)
+                        await localStorage.SetItemAsync("userId", userView.Id);
+                }
+                catch(Exception ex)
+                {
+                    
+                }
             }
         }
     }

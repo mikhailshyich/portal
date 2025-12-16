@@ -45,7 +45,7 @@
             {
                 <tr>
                     <td><input class="form-check-input" type="checkbox" @bind-value="@warehouse.Id" /></td>
-                    <td><a href="/user/@warehouse.User?.Id">@warehouse.User?.LastName @warehouse.User?.FirstName</a></td>
+                    <td><a href="/users/@warehouse.User?.Id">@warehouse.User?.LastName @warehouse.User?.FirstName</a></td>
                     <td>@warehouse.Title</td>
                     <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToUserWarehouse(warehouse.Id)">Перейти</button></td>
                 </tr>
@@ -147,12 +147,12 @@
 
     private void GoToMainWarehouse(Guid id)
     {
-        navigationManager.NavigateTo($"/main-warehouse/{id}");
+        navigationManager.NavigateTo($"/warehouses/main/{id}");
     }
 
     private void GoToUserWarehouse(Guid id)
     {
-        navigationManager.NavigateTo($"/main-warehouse/{id}");
+        navigationManager.NavigateTo($"/warehouses/main/{id}");
     }
 
     private void CheckboxChanged(ChangeEventArgs args)
@@ -162,12 +162,12 @@
 
     private void ShowUser(Guid id)
     {
-        navigationManager.NavigateTo($"/user/{id}");
+        navigationManager.NavigateTo($"/users/{id}");
     }
 
     private void EditUser(Guid id)
     {
-        navigationManager.NavigateTo($"/user/edit/{id}");
+        navigationManager.NavigateTo($"/users/edit/{id}");
         
     }
 
