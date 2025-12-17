@@ -20,6 +20,9 @@
                         <Authorized>
                             <div class="row">
                                 <div class="p-0 m-1 col-auto">
+                                    <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                </div>
+                                <div class="p-0 m-1 col-auto">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMainwarehouse"><b>+ Добавить</b></button>
                                 </div>
                             </div>
@@ -29,7 +32,7 @@
             </div>
         </div>
         <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-            <TableView MainWarehouses="MainWarehouses" TableHeader="TableHeaders" />
+            <TableView MainWarehouses="FilteredWarehouses" TableHeader="TableHeaders" />
         </div>
         <div class="card-footer">
 
@@ -93,7 +96,9 @@
 @code {
     private MainWarehouseDTO mainWarehouseDTO = new();
     private List<MainWarehouse> MainWarehouses = new();
+    private List<MainWarehouse> FilteredWarehouses = new();
     private List<UserDepartment> UserDepartments = new();
+    private string SearchString { get; set; } = string.Empty;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
     private List<string> TableHeaders = ["Наименование", "Подразделение", "Описание", ""];
@@ -105,6 +110,8 @@
             await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
             MainWarehouses = await MainWarehouseService.GetAllAsync();
             UserDepartments = await userDepartment.GetAllAsync();
+            FilteredWarehouses.Clear();
+            FilteredWarehouses = MainWarehouses;
         }
         catch (Exception ex) { }
     }
@@ -129,5 +136,19 @@
     private void GoToMainWarehouse(Guid id)
     {
         navigationManager.NavigateTo($"/warehouses/main/{id}");
+    }
+    private async Task SearchEvent(ChangeEventArgs args)
+    {
+        SearchString = args.Value.ToString();
+        if (string.IsNullOrWhiteSpace(SearchString))
+        {
+            FilteredWarehouses = MainWarehouses;
+        }
+        else
+        {
+            FilteredWarehouses = MainWarehouses.Where(d => d.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                           d.UserDepartment.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) || 
+                                                           d.Description.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
     }
 }

@@ -20,6 +20,9 @@
                         <Authorized>
                             <div class="row">
                                 <div class="p-0 m-1 col-auto">
+                                    <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                </div>
+                                <div class="p-0 m-1 col-auto">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDepartment"><b>+ Добавить</b></button>
                                 </div>
                             </div>
@@ -29,7 +32,7 @@
             </div>
         </div>
         <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-            <TableView UserDepartments="UserDepartments" TableHeader="TableHeaders" />
+            <TableView UserDepartments="FilteredDepartmentsList" TableHeader="TableHeaders" />
         </div>
         <div class="card-footer">
         </div>
@@ -79,7 +82,9 @@
 
 @code {
     private List<UserDepartment> UserDepartments = new();
+    private List<UserDepartment> FilteredDepartmentsList = new();
     private UserDepartmentDTO DepartmentDTO = new();
+    private string SearchString { get; set; } = string.Empty;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
     private List<string> TableHeaders = ["Полное наименование", "Краткое наименование", ""];
@@ -92,6 +97,8 @@
             if (authState.User.Identity.IsAuthenticated)
             {
                 UserDepartments = await userDepartmentService.GetAllAsync();
+                FilteredDepartmentsList.Clear();
+                FilteredDepartmentsList = UserDepartments;
             }
         }
         catch (Exception ex) { }
@@ -111,6 +118,19 @@
             ClassesAlert = "alert-success";
             DepartmentDTO = new();
             UserDepartments = await userDepartmentService.GetAllAsync();
+        }
+    }
+    private async Task SearchEvent(ChangeEventArgs args)
+    {
+        SearchString = args.Value.ToString();
+        if (string.IsNullOrWhiteSpace(SearchString))
+        {
+            FilteredDepartmentsList = UserDepartments;
+        }
+        else
+        {
+            FilteredDepartmentsList = UserDepartments.Where(d => d.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                 d.ShortTitle.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
         }
     }
 }

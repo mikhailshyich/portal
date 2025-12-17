@@ -22,6 +22,9 @@
                         <Authorized>
                             <div class="row">
                                 <div class="p-0 m-1 col-auto">
+                                    <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                </div>
+                                <div class="p-0 m-1 col-auto">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
                                 </div>
                                 <div class="p-0 m-1 col-auto">
@@ -34,7 +37,7 @@
             </div>
         </div>
         <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-            <TableView UsersList="UsersList" TableHeader="TableHeaders" />
+            <TableView UsersList="FilteredUsersList" TableHeader="TableHeaders" />
         </div>
         <div class="card-footer">
 
@@ -140,9 +143,11 @@
 
 @code {
     private List<UserView> UsersList = new();
+    private List<UserView> FilteredUsersList = new();
     private List<UserRole> UserRoles = new();
     private List<UserDepartment> UserDepartments = new();
     private RegisterDTO RegisterDTO = new();
+    private string SearchString { get; set; } = string.Empty;
     private string TitleSyncButton = "Sync";
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
@@ -158,6 +163,8 @@
                 UsersList = await userService.GetAllAsync();
                 UserRoles = await userService.GetAllUserRolesAsync();
                 UserDepartments = await userDepartment.GetAllAsync();
+                FilteredUsersList.Clear();
+                FilteredUsersList = UsersList;
             }
             else
             {
@@ -193,5 +200,18 @@
             TitleSyncButton = "Sync";
         }
         catch{}
+    }
+    private async Task SearchEvent(ChangeEventArgs args)
+    {
+        SearchString = args.Value.ToString();
+        if (string.IsNullOrWhiteSpace(SearchString))
+        {
+            FilteredUsersList = UsersList;
+        }
+        else
+        {
+            FilteredUsersList = UsersList.Where(u => u.FirstName.Contains(SearchString, StringComparison.OrdinalIgnoreCase) || 
+                                                     u.LastName.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
     }
 }

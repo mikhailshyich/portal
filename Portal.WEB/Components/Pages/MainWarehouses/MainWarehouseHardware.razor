@@ -23,14 +23,21 @@
             <div class="card-header">
                 <AuthorizeView Roles="admin">
                     <Authorized>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onclick="AddHardwareEvent"><b>+ Добавить</b></button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Переместить</b></button>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
-                        <button type="button" class="btn btn-primary" @onclick="MarkHardware"><b>Маркировать</b></button>
-                        <button type="button" class="btn btn-secondary" @onclick="ReturnHardware"><b>Вернуть</b></button>
-                        <button type="button" class="btn btn-danger"><b>Списать</b></button>
-                        <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
-                        <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
+                        <div class="row">
+                            <div class="p-0 m-1 col-auto">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onclick="AddHardwareEvent"><b>+ Добавить</b></button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Переместить</b></button>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
+                                <button type="button" class="btn btn-primary" @onclick="MarkHardware"><b>Маркировать</b></button>
+                                <button type="button" class="btn btn-secondary" @onclick="ReturnHardware"><b>Вернуть</b></button>
+                                <button type="button" class="btn btn-danger"><b>Списать</b></button>
+                                <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
+                                <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
+                            </div>
+                        </div>
+                        <div class="p-0 m-1 col-auto">
+                            <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                        </div>
                     </Authorized>
                 </AuthorizeView>
             </div>
@@ -48,7 +55,7 @@
                     <tbody>
                         @if (MainWarehouse.Hardwares.Count > 0)
                         {
-                            @foreach (Hardware hardware in MainWarehouse.Hardwares)
+                            @foreach (Hardware hardware in FilteredHardwares)
                             {
                                 <tr>
                                     <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
@@ -358,6 +365,7 @@
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
     private MainWarehouse MainWarehouse = new();
+    private List<Hardware> FilteredHardwares = new();
     private HardwareDTO hardwareDTO = new();
     private HardwareMoveDTO hardwareMoveDTO = new();
     private HardwareReturnDTO returnDTO = new();
@@ -365,11 +373,12 @@
     private List<CategoryHardware> Categories = new();
     private List<DocumentExternalSystem> Documents = new();
     private List<Guid> HardwaresId = new();
+    private string SearchString { get; set; } = string.Empty;
     private bool IsChecked = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    //private readonly string host = "http://hardware-vm:81";
-    private readonly string host = "https://localhost:7266";
+    private readonly string host = "http://hardware-vm:81";
+    //private readonly string host = "https://localhost:7266";
     private List<string> TableHeaders = ["Наименование", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ", ""];
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
@@ -393,6 +402,8 @@
             if (response != null)
             {
                 MainWarehouse = response;
+                FilteredHardwares.Clear();
+                FilteredHardwares = response.Hardwares;
             }
         }
         catch (Exception ex) { }
@@ -499,8 +510,7 @@
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
                 var fileName = await HardwareService.GenerateLabel(HardwaresId);
                 var response = await httpClient.GetAsync($"{host}/api/Hardwares/label/{fileName}");
-                if(response.IsSuccessStatusCode)
-                    await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
+                await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
             }
         }
         navigationManager.Refresh(true);
@@ -648,5 +658,21 @@
         updateDTO = new();
         Hardware = new();
         Hardware = result;
+    }
+    private async Task SearchEvent(ChangeEventArgs args)
+    {
+        SearchString = args.Value.ToString();
+        if (string.IsNullOrWhiteSpace(SearchString))
+        {
+            FilteredHardwares = MainWarehouse.Hardwares;
+        }
+        else
+        {
+            FilteredHardwares = MainWarehouse.Hardwares.Where(d => d.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.Description.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.InventoryNumberExternalSystem.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.TTN.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
     }
 }

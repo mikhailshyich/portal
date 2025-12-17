@@ -35,8 +35,8 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped(sp =>
 {
-    //return new HttpClient { BaseAddress = new Uri("http://192.168.1.47:81") };
-    return new HttpClient { BaseAddress = new Uri("https://localhost:7266") };
+    return new HttpClient { BaseAddress = new Uri("http://192.168.1.47:81") };
+    //return new HttpClient { BaseAddress = new Uri("https://localhost:7266") };
 });
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
