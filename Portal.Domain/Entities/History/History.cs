@@ -93,5 +93,20 @@ namespace Portal.Domain.Entities.History
             this.OperationType = operationType;
             this.DateTimeChanges = dateTimeChanges;
         }
+
+        /// <summary>
+        /// Списание оборудования со склада
+        /// </summary>
+        /// <param name="responsibleId">ID ответственного</param>
+        /// <param name="hardwareId">ID оборудования</param>
+        /// <param name="operationType">Вид операции</param>
+        /// <param name="dateTimeChanges">Дата и время изменений</param>
+        public History(Guid responsibleId, Guid hardwareId, string operationType, DateTime dateTimeChanges)
+        {
+            this.ResponsibleId = responsibleId;
+            this.HardwareId = hardwareId;
+            this.OperationType = operationType;
+            this.DateTimeChanges = dateTimeChanges;
+        }
     }
 }

@@ -73,6 +73,7 @@ namespace Portal.Infrastructure.Repositories
                     }
                     //hardware.CategoryHardware = category;
                     //hardware.DocumentExternalSystem = document;
+
                 }
             }
             mainWarehouse.Hardwares = hardwares!;

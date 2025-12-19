@@ -155,6 +155,18 @@ namespace Portal.WEB.Services
             return null!;
         }
 
+        public async Task<CustomGeneralResponses> WriteOff(HardwareWriteOffDTO writeOffDTO)
+        {
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/writeoff", writeOffDTO);
+                var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
+        }
+
         private async Task<bool> GetAddToken()
         {
             var token = await localStorage.GetAsync<string>("authToken");

@@ -22,7 +22,14 @@
                         <Authorized>
                             <div class="row">
                                 <div class="p-0 m-1 col-auto">
-                                    <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <span>Всего: <span class="fw-bold">@UsersList.Count()</span></span>
+                                        </div>
+                                        <div class="col">
+                                            <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                        </div>                                       
+                                    </div>
                                 </div>
                                 <div class="p-0 m-1 col-auto">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
@@ -40,36 +47,39 @@
             <TableView UsersList="FilteredUsersList" TableHeader="TableHeaders" />
         </div>
         <div class="card-footer">
-            <div class="row">
-                <div class="col-1">
-                    <InputSelect class="form-select" style="cursor: pointer;" @bind-Value="ItemPerPage" @oninput="selectChange">
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="50">50</option>
-                    </InputSelect>
-                </div>
-                <div class="col">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-end">
-                            <li class="@PrevClasses" style="cursor: pointer;"><a class="page-link" alt="prev" @onclick="prevEvent">&laquo;</a></li>
-                            @for (int i = 1; PageCount >= i; i++)
-                            {
-                                int j = i;
-                                @if(i == PageNumber)
+            @if(PageCount > 0)
+            {
+                <div class="row">
+                    <div class="col-1">
+                        <InputSelect class="form-select" style="cursor: pointer;" @bind-Value="ItemPerPage" @oninput="selectChange">
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                        </InputSelect>
+                    </div>
+                    <div class="col">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-end">
+                                <li class="@PrevClasses" style="cursor: pointer;"><a class="page-link" alt="prev" @onclick="prevEvent">&laquo;</a></li>
+                                @for (int i = 1; PageCount >= i; i++)
                                 {
-                                    <li class="page-item" style="cursor: pointer;"><a class="page-link active" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j); }">@i</a></li>
+                                    int j = i;
+                                    @if (i == PageNumber)
+                                    {
+                                        <li class="page-item" style="cursor: pointer;"><a class="page-link active" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j); }">@i</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item" style="cursor: pointer;"><a class="page-link" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j); }">@i</a></li>
+                                    }
                                 }
-                                else
-                                {
-                                    <li class="page-item" style="cursor: pointer;"><a class="page-link" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j); }">@i</a></li>
-                                }
-                            }
-                            <li class="@NextClasses" style="cursor: pointer;"><a class="page-link" @onclick="nextEvent">&raquo;</a></li>
-                        </ul>
-                    </nav>
+                                <li class="@NextClasses" style="cursor: pointer;"><a class="page-link" @onclick="nextEvent">&raquo;</a></li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 </div>
@@ -200,7 +210,7 @@
                 UserDepartments = await userDepartment.GetAllAsync();
                 FilteredUsersList.Clear();
                 FilteredUsersList = UsersList.Take(ItemPerPage).ToList();
-                CalculateQuantity(ItemPerPage, PageNumber);
+                await CalculateQuantity(ItemPerPage, PageNumber);
             }
             else
             {
@@ -243,7 +253,7 @@
         if (string.IsNullOrWhiteSpace(SearchString))
         {
             FilteredUsersList = UsersList;
-            CalculateQuantity(ItemPerPage, PageNumber);
+            await CalculateQuantity(ItemPerPage, PageNumber);
         }
         else
         {
@@ -251,13 +261,14 @@
                                                      u.LastName.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
         }
     }
-    private void selectChange(ChangeEventArgs args)
+    private async Task selectChange(ChangeEventArgs args)
     {
         int itemPerPage = int.Parse(args.Value.ToString());
-        CalculateQuantity(itemPerPage, PageNumber);
+        PageNumber = 1;
+        await CalculateQuantity(itemPerPage, PageNumber);
     }
 
-    private void CalculateQuantity(int itemPerPage, int pageNumber)
+    private async Task CalculateQuantity(int itemPerPage, int pageNumber)
     {
         int calculatedValue = 0;
         int itemQuantity = itemPerPage;
@@ -267,22 +278,25 @@
             calculatedValue = (itemPerPage * pageNumber) - itemPerPage;
         }
         int currentQuantity = UsersList.Count() - calculatedValue;
-        if (itemPerPage > currentQuantity & currentQuantity > 0)
+        if (currentQuantity > 0)
         {
-            itemQuantity = currentQuantity;
+            if (itemPerPage > currentQuantity & currentQuantity > 0)
+            {
+                itemQuantity = currentQuantity;
+            }
+            FilteredUsersList = UsersList.GetRange(calculatedValue, itemQuantity).ToList();
+            PageCount = (UsersList.Count() + itemPerPage - 1) / itemPerPage;
+            NextClasses = "page-item";
+            PrevClasses = "page-item";
         }
-        FilteredUsersList = UsersList.GetRange(calculatedValue, itemQuantity).ToList();
-        PageCount = (UsersList.Count() + itemPerPage - 1) / itemPerPage;
-        NextClasses = "page-item";
-        PrevClasses = "page-item";
     }
 
-    private void prevEvent(MouseEventArgs args)
+    private async Task prevEvent(MouseEventArgs args)
     {
         if (PageNumber > 1)
         {
             PageNumber--;
-            CalculateQuantity(ItemPerPage, PageNumber);
+            await CalculateQuantity(ItemPerPage, PageNumber);
             PrevClasses = "page-item";
         }
         else
@@ -291,12 +305,12 @@
         }
     }
 
-    private void nextEvent(MouseEventArgs args)
+    private async Task nextEvent(MouseEventArgs args)
     {
         if (PageNumber < PageCount)
         {
             PageNumber++;
-            CalculateQuantity(ItemPerPage, PageNumber);
+            await CalculateQuantity(ItemPerPage, PageNumber);
             PrevClasses = "page-item";
         }
         else

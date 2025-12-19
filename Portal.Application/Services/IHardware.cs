@@ -18,5 +18,6 @@ namespace Portal.Application.Services
         Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId);
         Task<Hardware> GetByIdAsync(Guid id);
         Task<Hardware> UpdateAsync(HardwareUpdateDTO updateDTO);
+        Task<CustomGeneralResponses> WriteOff(HardwareWriteOffDTO writeOffDTO);
     }
 }

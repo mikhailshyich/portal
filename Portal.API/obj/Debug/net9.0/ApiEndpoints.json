@@ -380,6 +380,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "WriteOff",
+    "RelativePath": "api/Hardwares/writeoff",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "writeOffDTO",
+        "Type": "Portal.Domain.DTOs.HardwareWriteOffDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.MainWarehousesController",
     "Method": "Add",
     "RelativePath": "api/MainWarehouses",

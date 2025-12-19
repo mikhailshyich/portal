@@ -128,5 +128,13 @@ namespace Portal.API.Controllers
             var result = await hardwareInterface.UpdateAsync(updateDTO);
             return Ok(result);
         }
+
+        [HttpPatch("writeoff")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> WriteOff([FromBody] HardwareWriteOffDTO writeOffDTO)
+        {
+            var result = await hardwareInterface.WriteOff(writeOffDTO);
+            return Ok(result);
+        }
     }
 }

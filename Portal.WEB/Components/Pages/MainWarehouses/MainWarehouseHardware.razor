@@ -30,13 +30,20 @@
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
                                 <button type="button" class="btn btn-primary" @onclick="MarkHardware"><b>Маркировать</b></button>
                                 <button type="button" class="btn btn-secondary" @onclick="ReturnHardware"><b>Вернуть</b></button>
-                                <button type="button" class="btn btn-danger"><b>Списать</b></button>
+                                <button type="button" class="btn btn-danger" @onclick="WriteOffHardware"><b>Списать</b></button>
                                 <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
                                 <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
                             </div>
                         </div>
                         <div class="p-0 m-1 col-auto">
-                            <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                            <div class="row justify-content-center">
+                                <div class="col">
+                                    <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                </div>
+                                <div class="col-1">
+                                    <span>Всего: <span class="fw-bold">@Hardwares.Count()</span></span>
+                                </div>
+                            </div>
                         </div>
                     </Authorized>
                 </AuthorizeView>
@@ -79,7 +86,39 @@
                 
             </div>
             <div class="card-footer">
-
+                @if (PageCount > 0)
+                {
+                    <div class="row">
+                        <div class="col-1">
+                            <InputSelect class="form-select" style="cursor: pointer;" @bind-Value="ItemPerPage" @oninput="selectChange">
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                            </InputSelect>
+                        </div>
+                        <div class="col">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-end">
+                                    <li class="@PrevClasses" style="cursor: pointer;"><a class="page-link" alt="prev" @onclick="prevEvent">&laquo;</a></li>
+                                    @for (int i = 1; PageCount >= i; i++)
+                                    {
+                                        int j = i;
+                                        @if (i == PageNumber)
+                                        {
+                                            <li class="page-item" style="cursor: pointer;"><a class="page-link active" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j); }">@i</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item" style="cursor: pointer;"><a class="page-link" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j); }">@i</a></li>
+                                        }
+                                    }
+                                    <li class="@NextClasses" style="cursor: pointer;"><a class="page-link" @onclick="nextEvent">&raquo;</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
 
@@ -366,10 +405,12 @@
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
     private MainWarehouse MainWarehouse = new();
     private List<Hardware> FilteredHardwares = new();
+    private List<Hardware> Hardwares = new();
     private HardwareDTO hardwareDTO = new();
     private HardwareMoveDTO hardwareMoveDTO = new();
     private HardwareReturnDTO returnDTO = new();
     private HardwareUpdateDTO updateDTO = new();
+    private HardwareWriteOffDTO writeOffDTO = new();
     private List<CategoryHardware> Categories = new();
     private List<DocumentExternalSystem> Documents = new();
     private List<Guid> HardwaresId = new();
@@ -391,6 +432,11 @@
     private string HardwareMainWarehouse = string.Empty;
     private string HardwareCategory = string.Empty;
     private string HardwareDocument = string.Empty;
+    private int PageCount = 0;
+    private int PageNumber = 1;
+    private int ItemPerPage = 10;
+    private string PrevClasses = "page-item disabled";
+    private string NextClasses = "page-item";
 
 
     protected override async Task OnInitializedAsync()
@@ -402,8 +448,10 @@
             if (response != null)
             {
                 MainWarehouse = response;
+                Hardwares = response.Hardwares;
                 FilteredHardwares.Clear();
-                FilteredHardwares = response.Hardwares;
+                FilteredHardwares = Hardwares.Take(ItemPerPage).ToList();
+                CalculateQuantity(ItemPerPage, PageNumber);
             }
         }
         catch (Exception ex) { }
@@ -674,5 +722,77 @@
                                                                    d.TTN.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
                                                                    d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
         }
+    }
+
+    private void CalculateQuantity(int itemPerPage, int pageNumber)
+    {
+        int calculatedValue = 0;
+        int itemQuantity = itemPerPage;
+        PageNumber = pageNumber;
+        if (pageNumber > 1)
+        {
+            calculatedValue = (itemPerPage * pageNumber) - itemPerPage;
+        }
+        int currentQuantity = Hardwares.Count() - calculatedValue;
+        if(currentQuantity > 0)
+        {
+            if (itemPerPage > currentQuantity & currentQuantity > 0)
+            {
+                itemQuantity = currentQuantity;
+            }
+            FilteredHardwares = Hardwares.GetRange(calculatedValue, itemQuantity).ToList();
+            PageCount = (Hardwares.Count() + itemPerPage - 1) / itemPerPage;
+            NextClasses = "page-item";
+            PrevClasses = "page-item";
+        }
+    }
+
+    private void selectChange(ChangeEventArgs args)
+    {
+        int itemPerPage = int.Parse(args.Value.ToString());
+        PageNumber = 1;
+        CalculateQuantity(itemPerPage, PageNumber);
+    }
+
+    private void prevEvent(MouseEventArgs args)
+    {
+        if (PageNumber > 1)
+        {
+            PageNumber--;
+            CalculateQuantity(ItemPerPage, PageNumber);
+            PrevClasses = "page-item";
+        }
+        else
+        {
+            PrevClasses = "page-item disabled";
+        }
+    }
+
+    private void nextEvent(MouseEventArgs args)
+    {
+        if (PageNumber < PageCount)
+        {
+            PageNumber++;
+            CalculateQuantity(ItemPerPage, PageNumber);
+            PrevClasses = "page-item";
+        }
+        else
+        {
+            NextClasses = "page-item disabled";
+        }
+    }
+
+    private async Task WriteOffHardware(MouseEventArgs args)
+    {
+        try
+        {
+            string userId = await localStorage.GetItemAsync<string>("userId");
+            if (userId != string.Empty)
+                writeOffDTO.ResponsibleId = Guid.Parse(userId);
+            writeOffDTO.HardwareIdList = HardwaresId;
+            var result = await HardwareService.WriteOff(writeOffDTO);
+            navigationManager.Refresh(true);
+        }
+        catch(Exception ex){}
     }
 }

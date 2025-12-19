@@ -73,7 +73,7 @@ namespace Portal.Infrastructure.Repositories
         {
             try
             {
-                iTextSharp.text.Rectangle qrSize = new(37, 37);
+                iTextSharp.text.Rectangle qrSize = new(30, 30);
                 Document document = new Document(qrSize, 0, 0, 0, 0);
                 //var randomNumber = new byte[10];
                 //using var rng = RandomNumberGenerator.Create();
@@ -99,9 +99,11 @@ namespace Portal.Infrastructure.Repositories
                             // URL or text to be encoded in the QR code
                             string text = $"{prefixMarkCode}{hardware?.MarkCode.ToString()}";
                             // Create the QR code
-                            BarcodeQRCode qrcode = new BarcodeQRCode(text, 25, 25, null);
+                            BarcodeQRCode qrcode = new BarcodeQRCode(text, 30, 30, null);
                             // Convert the QR code to an image
                             iTextSharp.text.Image img = qrcode.GetImage();
+                            img.ScaleToFit(28, 28);
+                            img.SetAbsolutePosition((document.PageSize.Width - img.ScaledWidth) / 2, (document.PageSize.Height - img.ScaledHeight) / 2); // изображение по центру
                             // Create a PdfWriter instance
                             //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
                             document.Add(img);
@@ -160,7 +162,6 @@ namespace Portal.Infrastructure.Repositories
                             {
                                 //Paragraph tmk = new("ОАО Туровский молочный комбинат", fontTmk);
                                 //tmk.Alignment = Element.ALIGN_CENTER;
-                                //tmk.SpacingAfter = 0;
 
                                 string invExt = "";
                                 if (hardware.InventoryNumberExternalSystem != "")
@@ -169,20 +170,14 @@ namespace Portal.Infrastructure.Repositories
                                 }
                                 Paragraph title = new($"{hardware.NameForLabel}", fontTitle);
                                 title.Alignment = Element.ALIGN_CENTER;
-                                title.SpacingAfter = 0;
                                 title.Leading = 5;
 
                                 Paragraph inventoryNumber = new($"ИНВ. {hardware.CombinedInvNumber}", fontInventory);
                                 inventoryNumber.Alignment = Element.ALIGN_CENTER;
-                                inventoryNumber.SpacingAfter = 0;
-                                inventoryNumber.SpacingBefore = 0;
                                 inventoryNumber.Leading = 8;
 
                                 Paragraph extNumber = new($"{invExt}", fontExt);
                                 extNumber.Alignment = Element.ALIGN_CENTER;
-                                extNumber.SpacingAfter = 0;
-                                extNumber.SpacingBefore = 0;
-                                extNumber.PaddingTop = 0;
                                 extNumber.Leading = 15;
 
                                 // URL or text to be encoded in the QR code
@@ -192,8 +187,6 @@ namespace Portal.Infrastructure.Repositories
                                 // Convert the QR code to an image
                                 iTextSharp.text.Image img = qrcode.GetImage();
                                 img.Alignment = Element.ALIGN_CENTER;
-                                img.SpacingAfter = 0;
-                                img.SpacingBefore = 0;
                                 img.ScaleToFit(40, 40);
                                 // Create a PdfWriter instance
                                 //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
@@ -470,6 +463,32 @@ namespace Portal.Infrastructure.Repositories
                 hardware.InventoryNumberExternalSystem = updateDTO.InventoryNumberExternalSystem;
             await context.SaveChangesAsync();
             return hardware;
+        }
+
+        public async Task<CustomGeneralResponses> WriteOff(HardwareWriteOffDTO writeOffDTO)
+        {
+            if (writeOffDTO is null) return new CustomGeneralResponses(false, "Передаваемый объект равен null.");
+            if (writeOffDTO.HardwareIdList.Count == 0 ) return new CustomGeneralResponses(false, "Передаваемый список оборудования пустой.");
+            if (writeOffDTO.ResponsibleId == Guid.Empty ) return new CustomGeneralResponses(false, "Передаваемый ID ответственного пустой.");
+
+            var responsible = await context.Users.AnyAsync(r => r.Id ==  writeOffDTO.ResponsibleId);
+            if(responsible == false) return new CustomGeneralResponses(false, "Ответственный сотрудник не найден.");
+
+            var hardwareList = new List<Hardware>();
+
+            foreach (var id in writeOffDTO.HardwareIdList)
+            {
+                var hardware = await context.Hardwares.FirstOrDefaultAsync(h =>h.Id == id);
+                if( hardware is null) continue;
+                hardware.IsActive = false;
+                hardwareList.Add(hardware);
+                History history = new History(writeOffDTO.ResponsibleId, hardware.Id, "Списание", DateTime.Now);
+                await context.HistoryEntries.AddAsync(history);
+            }
+
+            await context.SaveChangesAsync();
+
+            return new CustomGeneralResponses(true, $"Оборудование в количестве {hardwareList.Count} списано!");
         }
     }
 }

@@ -74,5 +74,10 @@ namespace Portal.Application.Services
         {
             return await hardwareDomain.UpdateAsync(updateDTO);
         }
+
+        public async Task<CustomGeneralResponses> WriteOff(HardwareWriteOffDTO writeOffDTO)
+        {
+            return await hardwareDomain.WriteOff(writeOffDTO);
+        }
     }
 }
