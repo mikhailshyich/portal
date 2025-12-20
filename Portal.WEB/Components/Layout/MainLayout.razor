@@ -3,6 +3,8 @@
 @inject UserServiceWEB userService
 @inherits LayoutComponentBase
 @inject ILocalStorageService localStorage
+@inject NavigationManager navigationManager
+@inject ILocalStorageService localStorage
 
 <AuthorizeView>
     <Authorized>
@@ -14,13 +16,16 @@
         <main>
             <div class="top-row">
                 <div class="row align-items-center justify-content-end" style="width: 100%;">
-                    <div class="col-auto">
+                    <div class="col-auto" @onclick="profileEvent" style="cursor: pointer;">
+                        <img src="img/user_profile/default.png" width="50" class="rounded-circle">
+                    </div>
+                    <div class="col-auto" @onclick="profileEvent" style="cursor: pointer;">
                         <p class="m-0"><b>@userView.LastName @userView.FirstName</b></p>
                         <p class="m-0">@userView.Specialization</p>
                     </div>
-                    <div class="col-auto">
-                        <a href="/logout">Выйти</a>
-                    </div>
+                        <div class="col-auto">
+                            <a href="/logout">Выйти</a>
+                        </div>
                 </div>
             </div>
 
@@ -62,7 +67,7 @@
                 }
                 catch(Exception ex)
                 {
-                    
+
                 }
             }
         }
@@ -87,6 +92,12 @@
         {
             userView = await userService.GetByUsernameAsync(username);
         }
+    }
+    private async Task profileEvent(MouseEventArgs args)
+    {
+        string userId = await localStorage.GetItemAsync<string>("userId");
+        if (userId != string.Empty)
+            navigationManager.NavigateTo($"/users/{userId}");
     }
 }
 

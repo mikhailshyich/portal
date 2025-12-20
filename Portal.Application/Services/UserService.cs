@@ -54,14 +54,9 @@ namespace Portal.Application.Services
             return await userInterface.GetByUsernameAsync(username);
         }
 
-        public async Task<CustomGeneralResponses> EditUserAsync(UserView request)
+        public async Task<CustomGeneralResponses> EditUserAsync(UserEdit request)
         {
             return await userInterface.EditUserAsync(request);
-        }
-
-        public async Task<UserEdit> GetByIdEditAsync(Guid id)
-        {
-            return await userInterface.GetByIdEditAsync(id);
         }
     }
 }

@@ -108,25 +108,13 @@ namespace Portal.WEB.Services
             catch(Exception ex) { return null!; }
         }
 
-        public async Task<CustomGeneralResponses> EditUserAsync(UserView request)
+        public async Task<CustomGeneralResponses> EditUserAsync(UserEdit request)
         {
             bool status = await GetAddToken();
             if (status)
             {
                 var user = await httpClient.PutAsJsonAsync($"{BaseURI}/edit", request);
                 var response = await user.Content.ReadFromJsonAsync<CustomGeneralResponses>();
-                return response!;
-            }
-            return null!;
-        }
-
-        public async Task<UserEdit> GetByIdEditAsync(Guid id)
-        {
-            bool status = await GetAddToken();
-            if (status)
-            {
-                var user = await httpClient.GetAsync($"{BaseURI}/{id}");
-                var response = await user.Content.ReadFromJsonAsync<UserEdit>();
                 return response!;
             }
             return null!;

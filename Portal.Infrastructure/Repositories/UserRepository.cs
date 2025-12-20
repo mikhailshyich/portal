@@ -350,7 +350,7 @@ namespace Portal.Infrastructure.Repositories
         /// Редактирование данных пользователя
         /// </summary>
         /// <returns></returns>
-        public async Task<CustomGeneralResponses> EditUserAsync(UserView request)
+        public async Task<CustomGeneralResponses> EditUserAsync(UserEdit request)
         {
             try
             {
@@ -366,7 +366,8 @@ namespace Portal.Infrastructure.Repositories
                 user.Specialization = request.Specialization!;
                 user.Email = request.Email!;
                 user.IsActive = request.IsActive;
-
+                if(request.Password != string.Empty)
+                    user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.Password);
 
                 await context.SaveChangesAsync();
                 return new CustomGeneralResponses(true, "Данные о пользователе успешно обновлены!");
@@ -375,23 +376,6 @@ namespace Portal.Infrastructure.Repositories
             {
                 return new CustomGeneralResponses(false, ex.Message);
             }
-        }
-
-        public async Task<UserEdit> GetByIdEditAsync(Guid id)
-        {
-            if (id == Guid.Empty) return null!;
-
-            var user = await context.Users.FindAsync(id);
-            if (user is null) return null!;
-
-            var userRole = await context.UserRoles.FindAsync(user.UserRoleId);
-            if (userRole != null)
-                user.UserRole = userRole;
-
-            UserEdit userEdit = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
-                                    user.Patronymic, user.Specialization, user.Email, user.IsActive);
-
-            return userEdit;
         }
     }
 }

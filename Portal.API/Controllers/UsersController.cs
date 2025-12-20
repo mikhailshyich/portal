@@ -66,7 +66,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("roles")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetAllRoles()
         {
             var result = await userService.GetAllUserRolesAsync();
@@ -91,7 +91,7 @@ namespace Portal.API.Controllers
 
         [HttpPut("edit")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> EditUser(UserView request)
+        public async Task<IActionResult> EditUser(UserEdit request)
         {
             var result = await userService.EditUserAsync(request);
             return Ok(result);

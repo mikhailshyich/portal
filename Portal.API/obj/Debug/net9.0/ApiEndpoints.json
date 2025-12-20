@@ -489,7 +489,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Portal.Domain.Entities.Users.UserView",
+        "Type": "Portal.Domain.Entities.Users.UserEdit",
         "IsRequired": true
       }
     ],

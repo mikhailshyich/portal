@@ -1,4 +1,6 @@
-﻿namespace Portal.Domain.Entities.Users
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Portal.Domain.Entities.Users
 {
     public class UserView
     {
@@ -10,7 +12,13 @@
         public string? Patronymic { get; set; } = string.Empty; //отчество
         public string? Specialization { get; set; } = string.Empty;
         public string? Email { get; set; } = string.Empty;
+        public string? NewPassword { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+
+        public string? Password { get; set; } = string.Empty;
+        [DataType(DataType.Password)]
+        [Compare(nameof(Password), ErrorMessage = "Введённые пароли не совпадают.")]
+        public string? ConfirmPassword { get; set; } = string.Empty;
 
         public UserView() { }
 
