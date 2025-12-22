@@ -1,16 +1,20 @@
-﻿using Portal.Domain.DTOs;
+﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Responses;
+using System.Net.Http.Headers;
 
 namespace Portal.WEB.Services
 {
     public class UserWarehouseServiceWEB : IUserWarehouseServiceWEB
     {
         private readonly HttpClient httpClient;
+        private readonly ProtectedLocalStorage localStorage;
 
-        public UserWarehouseServiceWEB(HttpClient httpClient)
+        public UserWarehouseServiceWEB(HttpClient httpClient, ProtectedLocalStorage localStorage)
         {
             this.httpClient = httpClient;
+            this.localStorage = localStorage;
         }
 
         private readonly string BaseURI = "api/UsersWarehouses";
@@ -44,6 +48,33 @@ namespace Portal.WEB.Services
             var warehouses = await httpClient.GetAsync($"{BaseURI}/users/{id}");
             var response = await warehouses.Content.ReadFromJsonAsync<List<UserWarehouse>>();
             return response!;
+        }
+
+        public async Task<UserWarehouse> GetByIdAsync(Guid id)
+        {
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var warehouse = await httpClient.GetAsync($"{BaseURI}/{id}");
+                var response = await warehouse.Content.ReadFromJsonAsync<UserWarehouse>();
+                return response!;
+            }
+            return null!;
+        }
+
+        private async Task<bool> GetAddToken()
+        {
+            try
+            {
+                var token = await localStorage.GetAsync<string>("authToken");
+                if (token.Value != string.Empty)
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
         }
     }
 }

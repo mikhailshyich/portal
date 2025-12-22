@@ -34,6 +34,11 @@ namespace Portal.Application.Services
             return await userWarehouseDomain.GetAllByUserIdAsync(id);
         }
 
+        public async Task<UserWarehouse> GetByIdAsync(Guid id)
+        {
+            return await userWarehouseDomain.GetByIdAsync(id);
+        }
+
         public Task<CustomGeneralResponses> UpdateAsync(UserWarehouse request)
         {
             throw new NotImplementedException();

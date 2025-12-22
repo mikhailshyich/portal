@@ -1,4 +1,6 @@
-﻿using iTextSharp.text;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Spreadsheet;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
@@ -212,7 +214,13 @@ namespace Portal.Infrastructure.Repositories
 
         public async Task<List<Hardware>> GetAllAsync()
         {
-            return await context.Hardwares.ToListAsync();
+            var hardware = await context.Hardwares.ToListAsync();
+            var pagedItems = hardware
+                            .Skip((1 - 1) * 10)
+                            .Take(10)
+                            .ToList();
+
+            return hardware;
         }
 
         public async Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO)

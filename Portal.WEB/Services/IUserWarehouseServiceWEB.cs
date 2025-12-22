@@ -11,5 +11,6 @@ namespace Portal.WEB.Services
         Task<CustomGeneralResponses> DeleteAsync(Guid id);
         Task<List<UserWarehouse>> GetAllAsync();
         Task<List<UserWarehouse>> GetAllByUserIdAsync(Guid id);
+        Task<UserWarehouse> GetByIdAsync(Guid id);
     }
 }

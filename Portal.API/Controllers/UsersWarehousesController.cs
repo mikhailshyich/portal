@@ -39,5 +39,13 @@ namespace Portal.API.Controllers
             var result = await userWarehouse.GetAllAsync();
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "admin,user")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await userWarehouse.GetByIdAsync(id);
+            return Ok(result);
+        }
     }
 }

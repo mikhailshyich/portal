@@ -60,6 +60,17 @@ namespace Portal.Infrastructure.Repositories
             return warehouses;
         }
 
+        public async Task<UserWarehouse> GetByIdAsync(Guid id)
+        {
+            if (id == Guid.Empty) return null!;
+
+            var warehouse = await context.UserWarehouses.FirstOrDefaultAsync(r => r.Id == id);
+
+            if(warehouse is null) return null!;
+
+            return warehouse;
+        }
+
         public Task<CustomGeneralResponses> UpdateAsync(UserWarehouse request)
         {
             throw new NotImplementedException();

@@ -607,6 +607,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.UsersWarehousesController",
+    "Method": "GetById",
+    "RelativePath": "api/UsersWarehouses/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.UsersWarehousesController",
     "Method": "GetAllByUserId",
     "RelativePath": "api/UsersWarehouses/users/{id}",
     "HttpMethod": "GET",

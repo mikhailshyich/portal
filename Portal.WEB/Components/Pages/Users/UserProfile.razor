@@ -2,6 +2,7 @@
 @inject UserServiceWEB userService
 @inject UserDepartmentServiceWEB userDepartmentService
 @inject HardwareServiceWEB hardwareService
+@inject UserWarehouseServiceWEB UserWarehouseService
 
 <title>Профиль - @User.LastName @User.FirstName</title>
 
@@ -26,59 +27,127 @@
     </div>
     @if (UserHardwaresList.Count > 0)
     {
-        <div class="row">
-            <h4 class="text-center mb-3">Закреплённое за сотрудником оборудование</h4>
-            <div class="col">
-                <button class="btn btn-primary d-none" id="print" type="submit" onclick="goToLabel()" title="Распечатать выделенные" asp-controller="Employee" asp-action="PrintSelectLabel"><img class="m-1" src="~/img/print.png"></button>
+        <div class="card text-center">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <InputSelect class="form-select" id="warehouseSelect" @oninput="selectedChange" @bind-Value="UserWarehouse.Id">
+                            <option value="" selected>Все склады</option>
+                            @foreach (UserWarehouse warehouse in UserWarehouses)
+                            {
+                                <option value="@warehouse.Id">@warehouse.Title</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="col">
+                        <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                    </div>
+                    <div class="col-1">
+                        <span>Всего: <span class="fw-bold">@FilteredHardwareCount</span></span>
+                    </div>
+                </div>
             </div>
-            <div class="col pull-right">
-                <input type="text" class="search form-control" onkeyup="myFunction()" id="search" placeholder="Поиск по всей таблице">
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover text-center">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="selectAll" title="Выбрать всё" /></th>
-                            <th>Изображение</th>
-                            <th>Наименование</th>
-                            <th>Описание</th>
-                            <th>№ вн. систем</th>
-                            <th>Инв. №</th>
-                            <th>ТТН</th>
-                            <th>Склад</th>
-                            <th>Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody id="hardware">
-                        @foreach (var userHardware in UserHardwaresList)
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        @if (FilteredHardware.Count > 0)
+                        {
+                            <thead>
+
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll" title="Выбрать всё" /></th>
+                                    <th>Изображение</th>
+                                    <th>Наименование</th>
+                                    <th>Описание</th>
+                                    <th>№ вн. систем</th>
+                                    <th>Инв. №</th>
+                                    <th>ТТН</th>
+                                    <th>Склад</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hardware">
+                                @foreach (var userHardware in FilteredHardware)
+                                {
+                                    <tr>
+                                        <td><input value="@userHardware.Id" class="checkbox" type="checkbox" name="items" id="item" /></td>
+                                        @if (userHardware.FileNameImage != string.Empty)
+                                        {
+                                            <td><a href="img/hardware/@userHardware.FileNameImage" target="_blank"><img src="img/hardware/@userHardware.FileNameImage" width="80" height="80" /></a></td>
+                                        }
+                                        else
+                                        {
+                                            <td><img src="img/hardware/default.png" width="80" height="80" /></td>
+                                        }
+                                        <td>@userHardware.Title</td>
+                                        <td>@userHardware.Description</td>
+                                        <td>@userHardware.InventoryNumberExternalSystem</td>
+                                        <td>@userHardware.CombinedInvNumber</td>
+                                        <td>@userHardware.TTN</td>
+                                        <td>@userHardware.UserWarehouse?.Title</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm mb-1" id="qrcode" title="Печать QR-кода" asp-controller="Employee" asp-action="PrintQr" asp-route-id="@userHardware.Id" onclick="setTimeout(window.open('/files/qrcode.pdf'),1000)"><img src="~/img/qr.png"></a>
+                                            <a class="btn btn-primary btn-sm mb-1" title="Переместить на другого сотрудника" asp-controller="Hardware" asp-action="Move" asp-route-id="@userHardware.Id"><img src="~/img/employee.png"></a>
+                                            @* <button class="btn btn-primary btn-sm mb-1" onclick="goTo()">Открыть</button> *@
+                                            @* <a class="btn btn-info btn-sm mb-1" title="Вернуть на склад" asp-controller="Hardware" asp-action="Return" asp-route-id="@employeeHdw.Id"><img src="~/img/return.png"></a> *@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                        else
                         {
                             <tr>
-                                <td><input value="@userHardware.Id" class="checkbox" type="checkbox" name="items" id="item" /></td>
-                                @if (userHardware.FileNameImage != string.Empty)
-                                {
-                                    <td><a href="img/hardware/@userHardware.FileNameImage" target="_blank"><img src="img/hardware/@userHardware.FileNameImage" width="80" height="80" /></a></td>
-                                }
-                                else
-                                {
-                                    <td><img src="img/hardware/default.png" width="80" height="80" /></td>
-                                }
-                                <td>@userHardware.Title</td>
-                                <td>@userHardware.Description</td>
-                                <td>@userHardware.InventoryNumberExternalSystem</td>
-                                <td>@userHardware.CombinedInvNumber</td>
-                                <td>@userHardware.TTN</td>
-                                <td>@userHardware.UserWarehouse?.Title</td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm mb-1" id="qrcode" title="Печать QR-кода" asp-controller="Employee" asp-action="PrintQr" asp-route-id="@userHardware.Id" onclick="setTimeout(window.open('/files/qrcode.pdf'),1000)"><img src="~/img/qr.png"></a>
-                                    <a class="btn btn-primary btn-sm mb-1" title="Переместить на другого сотрудника" asp-controller="Hardware" asp-action="Move" asp-route-id="@userHardware.Id"><img src="~/img/employee.png"></a>
-                                    @* <button class="btn btn-primary btn-sm mb-1" onclick="goTo()">Открыть</button> *@
-                                    @* <a class="btn btn-info btn-sm mb-1" title="Вернуть на склад" asp-controller="Hardware" asp-action="Return" asp-route-id="@employeeHdw.Id"><img src="~/img/return.png"></a> *@
+                                <td colspan="10">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Загрузка...</span>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
+            <div class="card-footer text-body-secondary">
+                @if (PageCount > 0)
+                {
+                    <div class="row">
+                        <div class="col-1">
+                            <InputSelect class="form-select" style="cursor: pointer;" @bind-Value="ItemPerPage" @oninput="selectChange">
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                            </InputSelect>
+                        </div>
+                        <div class="col">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-end">
+                                    <li class="@PrevClasses" style="cursor: pointer;"><a class="page-link" alt="prev" @onclick="prevEvent">&laquo;</a></li>
+                                    @for (int i = 1; PageCount >= i; i++)
+                                    {
+                                        int j = i;
+                                        @if (i == PageNumber)
+                                        {
+                                            <li class="page-item" style="cursor: pointer;"><a class="page-link active" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j, null); }">@i</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item" style="cursor: pointer;"><a class="page-link" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j, null); }">@i</a></li>
+                                        }
+                                    }
+                                    <li class="@NextClasses" style="cursor: pointer;"><a class="page-link" @onclick="nextEvent">&raquo;</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row">
+            
 
         </div>
     }
@@ -94,14 +163,175 @@
 
     private UserView User = new();
     private UserDepartment Department = new();
+    private UserWarehouse UserWarehouse = new();
     private List<Hardware> UserHardwaresList = new();
+    private List<Hardware> FilteredHardware = new();
+    private List<UserWarehouse> UserWarehouses = new();
+    private string SearchString { get; set; } = string.Empty;
+    private int FilteredHardwareCount = 0;
+    private int PageCount = 0;
+    private int PageNumber = 1;
+    private int ItemPerPage = 10;
+    private string PrevClasses = "page-item disabled";
+    private string NextClasses = "page-item";
 
     protected override async Task OnInitializedAsync()
     {
-        User = await userService.GetByIdAsync(Id);
-        var department = await userDepartmentService.GetByIdAsync(User.UserDepartmentId);
-        if (department != null)
-            Department = department;
-        UserHardwaresList = await hardwareService.GetByUserIdAsync(Id);
+        try
+        {
+            User = await userService.GetByIdAsync(Id);
+            var department = await userDepartmentService.GetByIdAsync(User.UserDepartmentId);
+            if (department != null)
+                Department = department;
+            UserHardwaresList = await hardwareService.GetByUserIdAsync(Id);
+            UserWarehouses = await UserWarehouseService.GetAllByUserIdAsync(Id);
+            FilteredHardware = UserHardwaresList;
+            FilteredHardwareCount = FilteredHardware.Count();
+            CalculateQuantity(ItemPerPage, PageNumber, null);
+        }
+        catch(Exception ex){}
+
+    }
+    private async Task SearchEvent(ChangeEventArgs args)
+    {
+
+        SearchString = args.Value.ToString();
+        if (string.IsNullOrWhiteSpace(SearchString))
+        {
+            if (UserWarehouse.Id != Guid.Empty)
+            {
+                FilteredHardware = UserHardwaresList.Where(w => w.UserWarehouseId == UserWarehouse.Id).ToList();
+            }
+            else
+            {
+                FilteredHardware = UserHardwaresList;
+            }
+        }
+        else
+        {
+            if (UserWarehouse.Id != Guid.Empty)
+            {
+                FilteredHardware = UserHardwaresList.Where(d => d.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.Description.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.InventoryNumberExternalSystem.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.TTN.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList().Where(d => d.UserWarehouseId == UserWarehouse.Id).ToList();
+            }
+            else
+            {
+                FilteredHardware = UserHardwaresList.Where(d => d.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.Description.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.InventoryNumberExternalSystem.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.TTN.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+        FilteredHardwareCount = FilteredHardware.Count;
+    }
+
+    private void selectChange(ChangeEventArgs args)
+    {
+        int itemPerPage = int.Parse(args.Value.ToString());
+        PageNumber = 1;
+        CalculateQuantity(itemPerPage, PageNumber, null);
+    }
+
+    private void prevEvent(MouseEventArgs args)
+    {
+        if (PageNumber > 1)
+        {
+            PageNumber--;
+            CalculateQuantity(ItemPerPage, PageNumber, null);
+            PrevClasses = "page-item";
+        }
+        else
+        {
+            PrevClasses = "page-item disabled";
+        }
+    }
+
+    private void nextEvent(MouseEventArgs args)
+    {
+        if (PageNumber < PageCount)
+        {
+            PageNumber++;
+            CalculateQuantity(ItemPerPage, PageNumber, null);
+            PrevClasses = "page-item";
+        }
+        else
+        {
+            NextClasses = "page-item disabled";
+        }
+    }
+
+    private void CalculateQuantity(int itemPerPage, int pageNumber, List<Hardware>? filteredHdw)
+    {
+        int calculatedValue = 0;
+        int itemQuantity = itemPerPage;
+        PageNumber = pageNumber;
+        if (UserWarehouse.Id != Guid.Empty)
+        {
+            filteredHdw = UserHardwaresList.Where(d => d.UserWarehouseId == UserWarehouse.Id).ToList();
+            if(itemPerPage > filteredHdw.Count)
+                pageNumber = 1;
+        }
+        if (pageNumber > 1)
+        {
+            calculatedValue = (itemPerPage * pageNumber) - itemPerPage;
+        }
+        if(filteredHdw != null)
+        {
+            int currentQuantity = filteredHdw.Count - calculatedValue;
+            if (currentQuantity > 0)
+            {
+                if (itemPerPage > currentQuantity & currentQuantity > 0)
+                {
+                    itemQuantity = currentQuantity;
+                }
+
+            }
+            else
+            {
+                itemQuantity = filteredHdw.Count();
+            }
+            FilteredHardware = filteredHdw.GetRange(calculatedValue, itemQuantity).ToList();
+            PageCount = (filteredHdw.Count + itemPerPage - 1) / itemPerPage;
+            FilteredHardwareCount = filteredHdw.Count;
+            NextClasses = "page-item";
+            PrevClasses = "page-item";
+        }
+        else
+        {
+            int currentQuantity = UserHardwaresList.Count() - calculatedValue;
+            if (currentQuantity > 0)
+            {
+                if (itemPerPage > currentQuantity & currentQuantity > 0)
+                {
+                    itemQuantity = currentQuantity;
+                }
+                FilteredHardware = UserHardwaresList.GetRange(calculatedValue, itemQuantity).ToList();
+                PageCount = (UserHardwaresList.Count + itemPerPage - 1) / itemPerPage;
+                FilteredHardwareCount = UserHardwaresList.Count;
+                NextClasses = "page-item";
+                PrevClasses = "page-item";
+            }
+        }
+    }
+    private async Task selectedChange(ChangeEventArgs args)
+    {
+        var searchString = args.Value.ToString();
+        if (string.IsNullOrWhiteSpace(searchString))
+        {
+            FilteredHardware = UserHardwaresList;
+            UserWarehouse = new();
+            CalculateQuantity(ItemPerPage, PageNumber, FilteredHardware);
+        }
+        else
+        {
+            var searchGuid = Guid.Parse(searchString);
+            UserWarehouse = await UserWarehouseService.GetByIdAsync(searchGuid);
+            FilteredHardware = UserHardwaresList.Where(d => d.UserWarehouseId == searchGuid).ToList();
+            CalculateQuantity(ItemPerPage, PageNumber, FilteredHardware);
+        }
     }
 }
