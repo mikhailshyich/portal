@@ -103,12 +103,12 @@ namespace Portal.WEB.Services
             return null!;
         }
 
-        public async Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId)
+        public async Task<CustomGeneralResponses> MarkAllHardware(MarkAllHardwareDTO markAllHardwareDTO)
         {
             bool status = await GetAddToken();
             if (status)
             {
-                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/marking", hardwareId);
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/marking", markAllHardwareDTO);
                 var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
                 return response!;
             }

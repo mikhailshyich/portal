@@ -48,6 +48,7 @@ builder.Services.AddScoped<DocumentExternalSystemServiceWEB>();
 builder.Services.AddScoped<MainWarehouseServiceWEB>();
 builder.Services.AddScoped<HardwareServiceWEB>();
 builder.Services.AddScoped<UserWarehouseServiceWEB>();
+builder.Services.AddScoped<HistoryServiceWEB>();
 
 
 

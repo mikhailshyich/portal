@@ -59,7 +59,7 @@ namespace Portal.Infrastructure.Repositories
                 mainWarehouse.UserDepartment = department;
             }
 
-            var hardwares = context.Hardwares.Where(m => m.MainWarehouseId == mainWarehouse.Id & m.IsActive == true).ToList();
+            var hardwares = context.Hardwares.Where(m => m.MainWarehouseId == mainWarehouse.Id & m.IsActive == true).OrderDescending().ToList();
             if (hardwares != null)
             {
                 foreach (var hardware in hardwares)

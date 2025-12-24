@@ -97,8 +97,8 @@ namespace Portal.Infrastructure.Migrations
 
                     b.Property<string>("InventoryNumberExternalSystem")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -193,27 +193,45 @@ namespace Portal.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Annotation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateTimeChanges")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("HardwareId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("HardwareMarkCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MainWarehouse")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OperationType")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Recipient")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("RecipientId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Responsible")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("ResponsibleId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Sender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserWarehouse")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("UserWarehouseId")
                         .HasColumnType("uniqueidentifier");
@@ -222,8 +240,6 @@ namespace Portal.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("HistoryEntries");
                 });
@@ -524,15 +540,6 @@ namespace Portal.Infrastructure.Migrations
                         .HasForeignKey("HardwareId");
 
                     b.Navigation("Hardware");
-                });
-
-            modelBuilder.Entity("Portal.Domain.Entities.History.History", b =>
-                {
-                    b.HasOne("Portal.Domain.Entities.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>

@@ -50,9 +50,9 @@ namespace Portal.Application.Services
             return await hardwareDomain.Import(hardwareImport);
         }
 
-        public async Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId)
+        public async Task<CustomGeneralResponses> MarkAllHardware(MarkAllHardwareDTO markAllHardwareDTO)
         {
-            return await hardwareDomain.MarkAllHardware(hardwareId);
+            return await hardwareDomain.MarkAllHardware(markAllHardwareDTO);
         }
 
         public async Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO)

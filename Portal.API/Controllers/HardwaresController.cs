@@ -107,9 +107,9 @@ namespace Portal.API.Controllers
 
         [HttpPatch("marking")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> MarkHardware([FromBody]List<Guid> hardwareId)
+        public async Task<IActionResult> MarkHardware([FromBody]MarkAllHardwareDTO hardwareDTO)
         {
-            var result = await hardwareInterface.MarkAllHardware(hardwareId);
+            var result = await hardwareInterface.MarkAllHardware(hardwareDTO);
             return Ok(result);
         }
 

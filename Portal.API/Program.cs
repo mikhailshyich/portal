@@ -47,6 +47,9 @@ builder.Services.AddScoped<IUserWarehouseDomain, UserWarehouseRepositiry>();
 builder.Services.AddScoped<IMarkCode, MarkCodeService>();
 builder.Services.AddScoped<IMarkCodeDomain, MarkCodeRepository>();
 
+builder.Services.AddScoped<IHistoryService, HistoryService>();
+builder.Services.AddScoped<IHistoryDomain, HistoryRepository>();
+
 
 
 builder.Services.AddAuthentication(x =>

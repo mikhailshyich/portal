@@ -298,8 +298,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "hardwareId",
-        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Name": "hardwareDTO",
+        "Type": "Portal.Domain.DTOs.MarkAllHardwareDTO",
         "IsRequired": true
       }
     ],
@@ -390,6 +390,22 @@
       {
         "Name": "writeOffDTO",
         "Type": "Portal.Domain.DTOs.HardwareWriteOffDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HistoryController",
+    "Method": "GetById",
+    "RelativePath": "api/History/hardwares/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

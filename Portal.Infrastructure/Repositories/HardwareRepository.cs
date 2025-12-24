@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Spreadsheet;
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
@@ -55,6 +53,7 @@ namespace Portal.Infrastructure.Repositories
                     History history = new History(
                     request.ResponsibleId,
                     hardware.Id,
+                    null,
                     request.MainWarehouseId,
                     "Добавление",
                     DateTime.Now
@@ -242,6 +241,16 @@ namespace Portal.Infrastructure.Repositories
                 var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId != userDB.Id);
                 if (hardwareDB != null)
                 {
+                    if (hardwareDB.UserId.HasValue)
+                    {
+                        History historySender = new History(moveDTO.ResponsibleId, moveDTO.UserId, hardwareDB.UserId, hardwareDB.Id, userWarehouseDB.Id, "Перемещение", DateTime.Now);
+                        historyList.Add(historySender);
+                    }
+                    else
+                    {
+                        History history = new History(moveDTO.ResponsibleId, moveDTO.UserId, null, hardwareID, userWarehouseDB.Id, "Перемещение", DateTime.Now);
+                        historyList.Add(history);
+                    }
                     hardwareDB.UserId = userDB.Id;
                     hardwareDB.User = userDB;
                     hardwareDB.UserWarehouseId = userWarehouseDB.Id;
@@ -253,8 +262,7 @@ namespace Portal.Infrastructure.Repositories
                         HardwareId = hardwareDB.Id,
                         UserId = userDB.Id
                     };
-                    History history = new History(moveDTO.ResponsibleId,moveDTO.UserId,hardwareID,userWarehouseDB.Id,"Перемещение",DateTime.Now);
-                    historyList.Add(history);
+                    
                     context.UsersHardware.Add(userHardware);
                 }
             }
@@ -306,7 +314,7 @@ namespace Portal.Infrastructure.Repositories
                     hardwareDB.UserId = null;
                     hardwareDB.UserWarehouseId = null;
                     returned.Add(hardwareDB.Id);
-                    History history = new History(hardwareDB.Id,returnDTO.ResponsibleId,hardwareDB.MainWarehouseId,"Возврат",DateTime.Now);
+                    History history = new History(returnDTO.ResponsibleId, hardwareDB.Id, null, hardwareDB.MainWarehouseId, "Возврат", DateTime.Now);
                     await context.HistoryEntries.AddAsync(history);
                 }
             }
@@ -347,6 +355,7 @@ namespace Portal.Infrastructure.Repositories
                         History history = new History(
                         hardware.ResponsibleId,
                         newHardware.Id,
+                        null,
                         newHardware.MainWarehouseId,
                         "Импорт",
                         DateTime.Now
@@ -387,19 +396,22 @@ namespace Portal.Infrastructure.Repositories
             markCode.HardwareId = hardware.Id;
             markCode.Used = true;
 
+            History history = new History(markHardwareDTO.ResponsibleId, hardware.Id, markCode.Id, null, "Маркировка", DateTime.Now);
+            await context.HistoryEntries.AddAsync(history);
+
             await context.SaveChangesAsync();
             return new CustomGeneralResponses(true, $"Оборудование успешно промаркировано!", hardware);
         }
 
-        public async Task<CustomGeneralResponses> MarkAllHardware(List<Guid> hardwareId)
+        public async Task<CustomGeneralResponses> MarkAllHardware(MarkAllHardwareDTO hardwareDTO)
         {
-            if (hardwareId.Count == 0) return new CustomGeneralResponses(false, "Список с ID оборудования пустой");
+            if (hardwareDTO.HardwareIdList.Count == 0) return new CustomGeneralResponses(false, "Список с ID оборудования пустой");
 
             var hardwareList = new List<Hardware>();
             var markCodesList = new List<MarkCode>();
             markCodesList = await context.MarkCodes.Where(c => c.Used == false).ToListAsync();
 
-            foreach (var id in hardwareId)
+            foreach (var id in hardwareDTO.HardwareIdList)
             {
                 var hardware = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == id & h.MarkCode == null);
                 if (hardware is null) continue;
@@ -427,9 +439,10 @@ namespace Portal.Infrastructure.Repositories
                 hardware.CombinedInvNumber = $"{categoryHdwr.ShortTitle}-{markCode.MarkCodeNumber}";
                 markCode.Used = true;
                 markCode.HardwareId = hardware.Id;
+                History history = new History(hardwareDTO.ResponsibleId, hardware.Id, markCode.Id, null, "Маркировка", DateTime.Now);
+                await context.HistoryEntries.AddAsync(history);
                 await context.SaveChangesAsync();
             }
-
             return new CustomGeneralResponses(true, $"Оборудование в количестве {hardwareList.Count} промаркировано.");
         }
 
@@ -490,7 +503,7 @@ namespace Portal.Infrastructure.Repositories
                 if( hardware is null) continue;
                 hardware.IsActive = false;
                 hardwareList.Add(hardware);
-                History history = new History(writeOffDTO.ResponsibleId, hardware.Id, "Списание", DateTime.Now);
+                History history = new History(writeOffDTO.ResponsibleId, hardware.Id, null, hardware.MainWarehouseId, "Списание", DateTime.Now);
                 await context.HistoryEntries.AddAsync(history);
             }
 
