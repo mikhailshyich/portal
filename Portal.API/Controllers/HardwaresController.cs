@@ -97,6 +97,17 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("export")]
+        [Authorize(Roles = "admin,user")]
+        public async Task<IActionResult> Export()
+        {
+            var result = await hardwareInterface.Export();
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            DateTime now = DateTime.Now;
+            string dateString = now.ToString("dd.MM.yyyy");
+            return File(result, contentType, $"Оборудование ({dateString}).xlsx");
+        }
+
         [HttpPost("mark")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> MarkHardware(MarkHardwareDTO markHardwareDTO)

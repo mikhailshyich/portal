@@ -1,9 +1,11 @@
-﻿using iTextSharp.text;
+﻿using ClosedXML.Excel;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Entities.History;
+using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
@@ -214,11 +216,6 @@ namespace Portal.Infrastructure.Repositories
         public async Task<List<Hardware>> GetAllAsync()
         {
             var hardware = await context.Hardwares.ToListAsync();
-            var pagedItems = hardware
-                            .Skip((1 - 1) * 10)
-                            .Take(10)
-                            .ToList();
-
             return hardware;
         }
 
@@ -278,7 +275,7 @@ namespace Portal.Infrastructure.Repositories
             var userDB = await context.Users.FindAsync(userId);
             if (userDB is null) return null!;
 
-            var userHardware = await context.Hardwares.Where(h => h.UserId == userId).ToListAsync();
+            var userHardware = await context.Hardwares.Where(h => h.UserId == userId & h.IsActive == true).ToListAsync();
 
             foreach(var hardware in userHardware)
             {
@@ -352,14 +349,7 @@ namespace Portal.Infrastructure.Repositories
                         };
                         context.Hardwares.Add(newHardware);
                         await context.SaveChangesAsync();
-                        History history = new History(
-                        hardware.ResponsibleId,
-                        newHardware.Id,
-                        null,
-                        newHardware.MainWarehouseId,
-                        "Импорт",
-                        DateTime.Now
-                        );
+                        History history = new History(hardware.ResponsibleId,newHardware.Id,null,newHardware.MainWarehouseId,"Импорт",DateTime.Now);
                         historyList.Add(history);
                     }
                 }
@@ -478,10 +468,27 @@ namespace Portal.Infrastructure.Repositories
             var hardware = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == updateDTO.HardwareId);
             if(hardware is null) return null!;
 
-            if(updateDTO.NameForLabel != string.Empty)
+            Guid responsibleId = new Guid();
+            Guid userId = new Guid();
+
+            if (updateDTO.NameForLabel != string.Empty)
                 hardware.NameForLabel = updateDTO.NameForLabel;
             if(updateDTO.InventoryNumberExternalSystem != string.Empty)
                 hardware.InventoryNumberExternalSystem = updateDTO.InventoryNumberExternalSystem;
+            if (updateDTO.UserId.HasValue)
+            {
+                userId = updateDTO.UserId.Value;
+                hardware.UserId = userId;
+            }
+                
+            if (updateDTO.UserWarehouseId.HasValue)
+            {
+                hardware.UserWarehouseId = updateDTO.UserWarehouseId.Value;
+                if (updateDTO.ResponsibleId.HasValue)
+                    responsibleId = updateDTO.ResponsibleId.Value;
+                History history = new History(responsibleId, userId, null, updateDTO.HardwareId, updateDTO.UserWarehouseId.Value, "Перемещение", DateTime.Now);
+                await context.HistoryEntries.AddAsync(history);
+            }
             await context.SaveChangesAsync();
             return hardware;
         }
@@ -510,6 +517,32 @@ namespace Portal.Infrastructure.Repositories
             await context.SaveChangesAsync();
 
             return new CustomGeneralResponses(true, $"Оборудование в количестве {hardwareList.Count} списано!");
+        }
+
+        public async Task<byte[]> Export()
+        {
+            var hardwares = await context.Hardwares.Where(h => h.IsActive == true).ToListAsync();
+
+            using(var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Не списанное оборудование");
+
+                worksheet.Cell(1, 1).Value = "Номер 1С";
+                worksheet.Cell(1, 2).Value = "Инвентарный";
+                worksheet.Cell(1, 3).Value = "Наименование";
+
+                for(int i=0; i<hardwares.Count; i++)
+                {
+                    worksheet.Cell(i + 2, 1).Value = hardwares[i].InventoryNumberExternalSystem;
+                    worksheet.Cell(i + 2, 2).Value = hardwares[i].CombinedInvNumber;
+                    worksheet.Cell(i + 2, 3).Value = hardwares[i].Title;
+                }
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    return stream.ToArray();
+                }
+            }
         }
     }
 }

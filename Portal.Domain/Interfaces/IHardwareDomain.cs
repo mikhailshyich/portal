@@ -14,6 +14,7 @@ namespace Portal.Domain.Interfaces
         Task<string> GenerateLabel(List<Guid>? idList);
         Task<List<Hardware>> GetByUserIdAsync(Guid userId);
         Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport);
+        Task<Byte[]> Export();
         Task<CustomGeneralResponses> MarkHardware(MarkHardwareDTO markHardwareDTO);
         Task<CustomGeneralResponses> MarkAllHardware(MarkAllHardwareDTO markAllHardwareDTO);
         Task<Hardware> GetByIdAsync(Guid id);

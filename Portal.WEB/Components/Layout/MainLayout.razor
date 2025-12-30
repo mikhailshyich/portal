@@ -51,25 +51,31 @@
     public UserView userView = new();
     public string username = string.Empty;
 
+
+    private async Task SetUserIdToLocalStorageAsync()
+    {
+        user = (await AuthStat).User;
+        if (user.Identity != null)
+        {
+            username = user.Identity.Name;
+            try
+            {
+                userView = await userService.GetByUsernameAsync(username);
+                if (userView != null)
+                    await localStorage.SetItemAsync("userId", userView.Id);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            user = (await AuthStat).User;
-            if (user.Identity != null)
-            {
-                username = user.Identity.Name;
-                try
-                {
-                    userView = await userService.GetByUsernameAsync(username);
-                    if (userView != null)
-                        await localStorage.SetItemAsync("userId", userView.Id);
-                }
-                catch(Exception ex)
-                {
-
-                }
-            }
+            await SetUserIdToLocalStorageAsync();
         }
     }
 
@@ -95,6 +101,7 @@
     }
     private async Task profileEvent(MouseEventArgs args)
     {
+        await SetUserIdToLocalStorageAsync();
         string userId = await localStorage.GetItemAsync<string>("userId");
         if (userId != string.Empty)
             navigationManager.NavigateTo($"/users/{userId}");

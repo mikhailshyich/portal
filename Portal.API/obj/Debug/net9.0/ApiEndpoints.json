@@ -217,6 +217,16 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "Export",
+    "RelativePath": "api/Hardwares/export",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "Import",
     "RelativePath": "api/Hardwares/import",
     "HttpMethod": "POST",

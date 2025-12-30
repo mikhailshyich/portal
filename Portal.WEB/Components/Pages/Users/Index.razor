@@ -4,6 +4,7 @@
 @inject UserServiceWEB userService
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager navigationManager
+@inject IJSRuntime js
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
@@ -244,6 +245,7 @@
             await userService.SyncUsersAsync();
             UsersList = await userService.GetAllAsync();
             TitleSyncButton = "Sync";
+            await js.InvokeVoidAsync("showAlert");
         }
         catch{}
     }

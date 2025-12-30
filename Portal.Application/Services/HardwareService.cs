@@ -20,6 +20,11 @@ namespace Portal.Application.Services
             return await hardwareDomain.AddAsync(request);
         }
 
+        public async Task<byte[]> Export()
+        {
+            return await hardwareDomain.Export();
+        }
+
         public async Task<string> GenerateLabel(List<Guid>? idList)
         {
             return await hardwareDomain.GenerateLabel(idList);

@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Application", "Porta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.WEB", "Portal.WEB\Portal.WEB.csproj", "{3DC2E5C6-6D02-4259-9D29-158004CF02BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.MAUIHybrid", "Portal.MAUIHybrid\Portal.MAUIHybrid.csproj", "{7CC274E9-535D-4911-BCBA-97E6D554CD5F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,19 +83,6 @@ Global
 		{3DC2E5C6-6D02-4259-9D29-158004CF02BB}.Release|ARM64.Build.0 = Release|Any CPU
 		{3DC2E5C6-6D02-4259-9D29-158004CF02BB}.Release|x64.ActiveCfg = Release|Any CPU
 		{3DC2E5C6-6D02-4259-9D29-158004CF02BB}.Release|x64.Build.0 = Release|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Debug|x64.Build.0 = Debug|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Release|ARM64.Build.0 = Release|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Release|x64.ActiveCfg = Release|Any CPU
-		{7CC274E9-535D-4911-BCBA-97E6D554CD5F}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

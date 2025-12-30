@@ -31,6 +31,18 @@ namespace Portal.WEB.Services
             return null!;
         }
 
+        public async Task<byte[]> Export()
+        {
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var bytes = await httpClient.GetAsync($"{BaseURI}/export");
+                var response = await bytes.Content.ReadAsByteArrayAsync();
+                return response!;
+            }
+            return null!;
+        }
+
         public async Task<string> GenerateLabel(List<Guid>? idList)
         {
             bool status = await GetAddToken();

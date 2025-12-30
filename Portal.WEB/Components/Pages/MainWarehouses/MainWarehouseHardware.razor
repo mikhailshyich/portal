@@ -16,7 +16,7 @@
 
 <title>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</title>
 
-<div class="container" @onkeypress="keydownAddEvent" @onkeydown="keydownAddEvent">
+<div class="container">
     @if (MainWarehouse != null)
     {
         <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
@@ -28,7 +28,8 @@
                             <div class="p-0 m-1 col-auto">
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onmousedown="AddHardwareEvent"><b>+ Добавить</b></button>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onmousedown="MoveHardwareEvent"><b>Переместить</b></button>
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт из Excel</b></button>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт Excel</b></button>
+                                <button type="button" class="btn btn-warning" @onmousedown="ExportHardwareEvent"><b>Экспорт Excel</b></button>
                                 <button type="button" class="btn btn-primary" @onmousedown="MarkHardware"><b>Маркировать</b></button>
                                 <button type="button" class="btn btn-secondary" @onmousedown="ReturnHardware"><b>Вернуть</b></button>
                                 <button type="button" class="btn btn-danger" @onmousedown="WriteOffHardware"><b>Списать</b></button>
@@ -291,7 +292,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Строк импортировано: @StringCount</label>
+                            <label>Строк импортировано: @ImportStringCount</label>
                         </div>
                     </div>
                 </div>
@@ -336,12 +337,25 @@
                                         <hr />
                                         <div class="row">
                                             <div class="col"><h6>Категория</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.CategoryHardware?.Title</div>
+                                            <div class="col-9 d-flex justify-content-end">@Hardware.CategoryHardware?.Title
+                                            </div>
                                         </div>
                                         <hr />
                                         <div class="row">
                                             <div class="col"><h6>Сотрудник</h6></div>
                                             <div class="col-9 d-flex justify-content-end">@Hardware.User?.LastName @Hardware.User?.FirstName</div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col"><h6>Склад сотрудника</h6></div>
+                                            <div class="col-9 d-flex justify-content-end">
+                                                <InputSelect id="user" class="form-select" @bind-Value="Hardware.UserWarehouseId" @oninput="SelectedUserWarehouseEvent">
+                                                    @foreach (UserWarehouse warehouse in UserWarehousesList)
+                                                    {
+                                                        <option value="@warehouse.Id">@warehouse.Title</option>
+                                                    }
+                                                </InputSelect>
+                                            </div>
                                         </div>
                                         <hr />
                                         <div class="row">
@@ -426,7 +440,7 @@
                                             @ShowAllHistoryTextButton
                                         </a>
                                     </div>
-                                    <div class="col-12" style="height: 400px; overflow-y: auto;">
+                                    <div class="col-12" style="height: 410px; overflow-y: auto;">
                                         @foreach (History history in ShowHistoryList)
                                         {
                                             <hr />
@@ -495,6 +509,12 @@
     [Parameter]
     public Guid Id { get; set; }
 
+    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
+
+    private ClaimsPrincipal user = new();
+    public UserView userView = new();
+    public string username = string.Empty;
+
     PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
     private MainWarehouse MainWarehouse = new();
     private List<Hardware> FilteredHardwares = new();
@@ -511,6 +531,7 @@
     private List<Guid> HardwaresId = new();
     private string SearchString { get; set; } = string.Empty;
     private bool IsChecked = false;
+    private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
     //private readonly string host = "http://hardware-vm:81";
@@ -519,6 +540,7 @@
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
     private int StringCount;
+    private int ImportStringCount;
     private Hardware Hardware = new();
     private List<History> HideHistoryList = new();
     private List<History> ShowHistoryList = new();
@@ -557,10 +579,30 @@
         catch (Exception ex) { }
     }
 
+    private async Task SetUserIdToLocalStorageAsync()
+    {
+        user = (await AuthStat).User;
+        if (user.Identity != null)
+        {
+            username = user.Identity.Name;
+            try
+            {
+                userView = await UserService.GetByUsernameAsync(username);
+                if (userView != null)
+                    await localStorage.SetItemAsync("userId", userView.Id);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+    }
+
     private async Task AddHardware()
     {
         try
         {
+            await SetUserIdToLocalStorageAsync();
             hardwareDTO.MainWarehouseId = Id;
             string userId = await localStorage.GetItemAsync<string>("userId");
             if(userId != string.Empty)
@@ -592,6 +634,7 @@
         {
             if(HardwaresId.Count > 0)
             {
+                await SetUserIdToLocalStorageAsync();
                 string userId = await localStorage.GetItemAsync<string>("userId");
                 if (userId != string.Empty)
                     hardwareMoveDTO.ResponsibleId = Guid.Parse(userId);
@@ -637,7 +680,8 @@
                 await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
             }
         }
-        navigationManager.Refresh(true);
+        if (ViewModalShow == false)
+            navigationManager.Refresh(true);
     }
 
     private async Task GenerateLabel()
@@ -653,7 +697,8 @@
                 await js.InvokeVoidAsync("window.open", $"{response.RequestMessage.RequestUri}", "_blank");
             }
         }
-        navigationManager.Refresh(true);
+        if (ViewModalShow == false)
+            navigationManager.Refresh(true);
     }
 
     private void CheckboxChanged(Guid id, object checkedValue)
@@ -661,9 +706,11 @@
         if ((bool)checkedValue)
         {
             HardwaresId.Add(id);
+            ViewModalShow = false;
         }
         else
         {
+            ViewModalShow = false;
             HardwaresId.Remove(id);
         }
     }
@@ -693,6 +740,7 @@
         if (e.File is null) return;
         try
         {
+            await SetUserIdToLocalStorageAsync();
             string userId = await localStorage.GetItemAsync<string>("userId");
             using var stream = new MemoryStream();
             await e.File.OpenReadStream().CopyToAsync(stream);
@@ -714,7 +762,7 @@
                     InventoryNumberExternalSystem = row.Cell(6).Value.ToString(),
                     TTN = row.Cell(7).Value.ToString()
                 };
-                StringCount += 1;
+                ImportStringCount += 1;
                 hardwares.Add(hardwareImport);
             }
             var result = await HardwareService.Import(hardwares);
@@ -745,6 +793,9 @@
 
     private async Task ViewHardware(Guid hardwareId)
     {
+        ViewModalShow = true;
+        HardwaresId.Clear();
+        UserWarehousesList.Clear();
         HardwaresId.Add(hardwareId);
         Hardware = new();
         try
@@ -752,6 +803,10 @@
             HideHistoryList.Clear();
             ShowHistoryList.Clear();
             Hardware = await HardwareService.GetByIdAsync(hardwareId);
+            if (Hardware.UserId.HasValue)
+            {
+                UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(Hardware.UserId.Value);
+            }
             HideHistoryList = await HistoryService.GetByHardwareIdAsync(hardwareId);
             if(HideHistoryList.Count > 0)
             {
@@ -919,6 +974,7 @@
     {
         if(HardwaresId.Count > 0)
         {
+            await SetUserIdToLocalStorageAsync();
             string userId = await localStorage.GetItemAsync<string>("userId");
             if (userId != string.Empty)
                 returnDTO.ResponsibleId = Guid.Parse(userId);
@@ -934,6 +990,7 @@
 
     private async Task MarkHardware()
     {
+        await SetUserIdToLocalStorageAsync();
         string userId = await localStorage.GetItemAsync<string>("userId");
         if (userId != string.Empty)
             markAllHardwareDTO.ResponsibleId = Guid.Parse(userId);
@@ -1088,6 +1145,7 @@
     {
         try
         {
+            await SetUserIdToLocalStorageAsync();
             string userId = await localStorage.GetItemAsync<string>("userId");
             if (userId != string.Empty)
                 writeOffDTO.ResponsibleId = Guid.Parse(userId);
@@ -1115,6 +1173,7 @@
     private void closeModalView(MouseEventArgs args)
     {
         HardwaresId.Clear();
+        ViewModalShow = false;
     }
 
     private async Task selectedCategoryEvent(ChangeEventArgs args)
@@ -1134,11 +1193,36 @@
             CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
         }
     }
-    private void keydownAddEvent(KeyboardEventArgs e)
+    private async Task ExportHardwareEvent(MouseEventArgs args)
     {
-        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        try
         {
-            // ...
+            var excelBytes = await HardwareService.Export();
+            DateTime now = DateTime.Now;
+            string dateString = now.ToString("dd.MM.yyyy");
+            await js.InvokeVoidAsync("downloadFileFromBytes", $"Оборудование ({dateString}).xlsx", excelBytes);
         }
+        catch(Exception ex){}
+    }
+    private async Task SelectedUserWarehouseEvent(ChangeEventArgs args)
+    {
+        try
+        {
+            updateDTO = new();
+            if (Hardware.UserId.HasValue)
+            {
+                await SetUserIdToLocalStorageAsync();
+                string userId = await localStorage.GetItemAsync<string>("userId");
+                if (userId != string.Empty)
+                    updateDTO.ResponsibleId = Guid.Parse(userId);
+                updateDTO.HardwareId = Hardware.Id;
+                updateDTO.UserId = Hardware.UserId.Value;
+                updateDTO.UserWarehouseId = Guid.Parse(args.Value.ToString());
+                await HardwareService.UpdateAsync(updateDTO);
+                await ViewHardware(Hardware.Id);
+            }
+        }
+        catch(Exception ex){}
+    
     }
 }
