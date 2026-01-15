@@ -25,7 +25,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("users/{id}")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetAllByUserId(Guid id)
         {
             var result = await userWarehouse.GetAllByUserIdAsync(id);
@@ -33,7 +33,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,employee_it")]
         public async Task<IActionResult> GetAll()
         {
             var result = await userWarehouse.GetAllAsync();
@@ -41,7 +41,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await userWarehouse.GetByIdAsync(id);

@@ -23,8 +23,10 @@ namespace Portal.API.Controllers
         [Authorize(Roles = "admin")]
         public async Task<ActionResult> Register(RegisterDTO request)
         {
-            var user = await userService.RegisterAsync(request);
-            return Ok(user);
+            var result = await userService.RegisterAsync(request);
+            if (result.Flag is false)
+                return Ok(result);
+            return Created("", result);
         }
 
         [AllowAnonymous]
@@ -35,6 +37,8 @@ namespace Portal.API.Controllers
                 return BadRequest("Заполните обязательные поля.");
 
             var user = await userService.LoginAsync(request);
+            if (user.Flag is false)
+                return NotFound(user);
 
             return Ok(user);
         }
@@ -52,7 +56,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> AllUsers()
         {
             var result = await userService.GetAllAsync();
@@ -60,7 +64,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await userService.GetByIdAsync(id);
@@ -68,7 +72,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("roles")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetAllRoles()
         {
             var result = await userService.GetAllUserRolesAsync();
@@ -76,7 +80,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("sync")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,employee_it")]
         public async Task<IActionResult> SyncUsers()
         {
             var result = await userService.SyncUsersAsync();
@@ -84,7 +88,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("usernames/{username}")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetByUsername(string username)
         {
             var result = await userService.GetByUsernameAsync(username);

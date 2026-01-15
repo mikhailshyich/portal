@@ -35,8 +35,12 @@
                                 <div class="p-0 m-1 col-auto">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
                                 </div>
+                            </Authorized>
+                        </AuthorizeView>
+                        <AuthorizeView Roles="admin,employee_it">
+                            <Authorized>
                                 <div class="p-0 m-1 col-auto">
-                                    <button type="button" class="btn btn-primary" @onclick="SyncUsers"><b>@TitleSyncButton</b></button>
+                                    <button type="button" class="btn btn-primary" id="liveAlertBtn" @onclick="SyncUsers"><b>@TitleSyncButton</b></button>
                                 </div>
                             </Authorized>
                         </AuthorizeView>
@@ -84,6 +88,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Modal Add user -->
 <div class="modal fade" id="addUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserTitle" aria-hidden="true">
@@ -245,7 +251,7 @@
             await userService.SyncUsersAsync();
             UsersList = await userService.GetAllAsync();
             TitleSyncButton = "Sync";
-            await js.InvokeVoidAsync("showAlert");
+            await js.InvokeVoidAsync("appendAlert", "Привет!", "danger");
         }
         catch{}
     }

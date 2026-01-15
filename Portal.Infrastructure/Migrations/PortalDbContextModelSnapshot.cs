@@ -114,6 +114,10 @@ namespace Portal.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TTN")
                         .IsRequired()
                         .HasMaxLength(60)

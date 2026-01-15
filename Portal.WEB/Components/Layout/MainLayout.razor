@@ -73,22 +73,27 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        var claims = await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+        if (claims.User.Identity != null)
         {
-            await SetUserIdToLocalStorageAsync();
+            if (claims.User.Identity.IsAuthenticated != false)
+            {
+                await SetUser(claims.User.Identity.Name);
+                await SetUserIdToLocalStorageAsync();
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login", true);
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
         var claims = await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
-        if(claims.User.Identity != null)
+        if (claims.User.Identity != null)
         {
-            await SetUser(claims.User.Identity.Name);
-        }
-        else
-        {
-            NavigationManager.NavigateTo("/login");
+            await SetUserIdToLocalStorageAsync();
         }
     }
 

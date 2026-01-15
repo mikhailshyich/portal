@@ -75,6 +75,7 @@ namespace Portal.Infrastructure.Repositories
                 Patronymic = request.Patronymic,
                 Username = request.Username,
                 Email = request.Email,
+                IsActive = true
             };
             newUser.PasswordHash = new PasswordHasher<User>().HashPassword(newUser, request.Password);
 

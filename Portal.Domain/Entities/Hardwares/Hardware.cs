@@ -28,6 +28,7 @@ namespace Portal.Domain.Entities.Hardwares
         public DateTime DateTimeAdd { get; set; }
         public string FileNameImage { get; set; } = string.Empty;
         public string CombinedInvNumber { get; set; } = string.Empty;
+        public string SerialNumber { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 
         public MainWarehouse? MainWarehouse { get; set; }

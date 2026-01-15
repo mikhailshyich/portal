@@ -201,6 +201,12 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="numberext">Серийный номер</label>
+                                        <InputText id="numberext" class="form-control" @bind-Value="hardwareDTO.SerialNumber" />
+                                        <ValidationMessage For="@(() => hardwareDTO.SerialNumber)" />
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="ttn">ТТН</label>
                                         <InputText id="ttn" class="form-control" @bind-Value="hardwareDTO.TTN" />
                                         <ValidationMessage For="@(() => hardwareDTO.TTN)" />
@@ -399,11 +405,16 @@
                                             <div class="col">
                                                 <div class="row">
                                                     <div class="col-3">
-                                                        <h6>ТТН</h6>
+                                                        <h6>SN</h6>
                                                     </div>
-                                                    <div class="col d-flex justify-content-end">@Hardware.TTN</div>
+                                                    <div class="col d-flex justify-content-end">@Hardware.SerialNumber</div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col"><h6>ТТН</h6></div>
+                                            <div class="col-9 d-flex justify-content-end">@Hardware.TTN</div>
                                         </div>
                                         <hr />
                                         <div class="row">
@@ -534,8 +545,9 @@
     private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    //private readonly string host = "http://hardware-vm:81";
-    private readonly string host = "https://localhost:7266";
+    private readonly string host = "http://hardware-vm:81";
+    //private readonly string host = "http://apitmk.site";
+    //private readonly string host = "https://localhost:7266";
     private List<string> TableHeaders = ["Наименование", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ", ""];
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
@@ -619,6 +631,8 @@
                 ClassesAlert = "alert-success";
                 hardwareDTO = new();
                 MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+                FilteredHardwares.Clear();
+                FilteredHardwares = MainWarehouse.Hardwares.Take(ItemPerPage).ToList();
             }
         }
         catch(Exception ex)

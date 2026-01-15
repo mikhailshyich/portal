@@ -47,7 +47,8 @@ namespace Portal.Infrastructure.Repositories
                         DateTimeAdd = DateTime.Now,
                         FileNameImage = request.FileNameImage,
                         IsActive = true,
-                        NameForLabel = request.Title
+                        NameForLabel = request.Title,
+                        SerialNumber = request.SerialNumber
                     };
                     context.Hardwares.Add(hardware);
                     await context.SaveChangesAsync();
@@ -74,9 +75,10 @@ namespace Portal.Infrastructure.Repositories
 
         public async Task<string> GenerateQR(List<Guid>? idList)
         {
+            int sizeQR = 10;
             try
             {
-                iTextSharp.text.Rectangle qrSize = new(30, 30);
+                iTextSharp.text.Rectangle qrSize = new(sizeQR, sizeQR);
                 Document document = new Document(qrSize, 0, 0, 0, 0);
                 //var randomNumber = new byte[10];
                 //using var rng = RandomNumberGenerator.Create();
@@ -102,11 +104,12 @@ namespace Portal.Infrastructure.Repositories
                             // URL or text to be encoded in the QR code
                             string text = $"{prefixMarkCode}{hardware?.MarkCode.ToString()}";
                             // Create the QR code
-                            BarcodeQRCode qrcode = new BarcodeQRCode(text, 30, 30, null);
+                            BarcodeQRCode qrcode = new BarcodeQRCode(text, sizeQR, sizeQR, null);
                             // Convert the QR code to an image
                             iTextSharp.text.Image img = qrcode.GetImage();
-                            img.ScaleToFit(28, 28);
+                            img.ScaleToFit(sizeQR, sizeQR);
                             img.SetAbsolutePosition((document.PageSize.Width - img.ScaledWidth) / 2, (document.PageSize.Height - img.ScaledHeight) / 2); // изображение по центру
+                            //img.SetAbsolutePosition(3, (document.PageSize.Height - img.ScaledHeight) / 2); // изображение по центру
                             // Create a PdfWriter instance
                             //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
                             document.Add(img);
@@ -129,21 +132,18 @@ namespace Portal.Infrastructure.Repositories
         {
             try
             {
-                iTextSharp.text.Rectangle labelSize = new(111, 84); //49,4x31,7mm 111, 84
+                iTextSharp.text.Rectangle labelSize = new(115, 90); //49,4x31,7mm 111, 84
                 string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "BAHNSCHRIFT.TTF");           //
                 var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);                                //нужно для отображения кирилицы
                 var fontExt = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.BOLD);    //
-                var fontInventory = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.BOLD);
                 var fontTitle = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.BOLD);
-                fontInventory.Size = 7;
-                fontExt.Size = 17;
-                fontTitle.Size = 5;
+                fontTitle.Size = 10;
+                fontExt.Size = 14;
+                int titleLeading = 9;
+                int extNumberLeading = 14;
 
-                Document document = new Document(labelSize, 0, 0, 0, 0);
-                //var randomNumber = new byte[10];
-                //using var rng = RandomNumberGenerator.Create();
-                //rng.GetBytes(randomNumber);
-                //var randomText = Convert.ToBase64String(randomNumber);
+                Document document = new Document(labelSize, 0, 0, 1, 0);
+
                 var fileName = $"{Guid.NewGuid()}.pdf";
                 var pathQR = $"labels\\{fileName}";
                 if (System.IO.File.Exists(pathQR))
@@ -163,25 +163,17 @@ namespace Portal.Infrastructure.Repositories
 
                             if (hardware.MarkCode != null & hardware.NameForLabel != string.Empty)
                             {
-                                //Paragraph tmk = new("ОАО Туровский молочный комбинат", fontTmk);
-                                //tmk.Alignment = Element.ALIGN_CENTER;
-
-                                string invExt = "";
-                                if (hardware.InventoryNumberExternalSystem != "")
+                                string invExt = $"{hardware.CombinedInvNumber}";
+                                if (hardware.InventoryNumberExternalSystem != string.Empty)
                                 {
                                     invExt = $"{hardware.InventoryNumberExternalSystem}";
                                 }
-                                Paragraph title = new($"{hardware.NameForLabel}", fontTitle);
+
+                                Paragraph title = new(titleLeading, $"{hardware.NameForLabel}", fontTitle);
                                 title.Alignment = Element.ALIGN_CENTER;
-                                title.Leading = 5;
 
-                                Paragraph inventoryNumber = new($"ИНВ. {hardware.CombinedInvNumber}", fontInventory);
-                                inventoryNumber.Alignment = Element.ALIGN_CENTER;
-                                inventoryNumber.Leading = 8;
-
-                                Paragraph extNumber = new($"{invExt}", fontExt);
+                                Paragraph extNumber = new(extNumberLeading, $"{invExt}", fontExt);
                                 extNumber.Alignment = Element.ALIGN_CENTER;
-                                extNumber.Leading = 15;
 
                                 // URL or text to be encoded in the QR code
                                 string qrText = $"{prefixMarkCode}{hardware?.MarkCode.ToString()}";
@@ -190,15 +182,13 @@ namespace Portal.Infrastructure.Repositories
                                 // Convert the QR code to an image
                                 iTextSharp.text.Image img = qrcode.GetImage();
                                 img.Alignment = Element.ALIGN_CENTER;
-                                img.ScaleToFit(40, 40);
-                                // Create a PdfWriter instance
-                                //PdfWriter.GetInstance(document, new FileStream(pathQR, FileMode.Create));
-                                //document.Add(tmk);
+                                img.ScaleToFit(45, 45);
+
                                 document.Add(img);
                                 document.Add(title);
-                                document.Add(inventoryNumber);
                                 document.Add(extNumber);
                                 document.NewPage();
+                                document.SetPageSize(labelSize);
                             }
                         }
                     }

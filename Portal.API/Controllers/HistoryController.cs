@@ -16,7 +16,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("hardwares/{id}")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _historyService.GetByHardwareIdAsync(id);

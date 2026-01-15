@@ -27,5 +27,6 @@ namespace Portal.Domain.DTOs
         public string TTN { get; set; } = string.Empty;
         public DateTime DateTimeAdd { get; set; }
         public string FileNameImage { get; set; } = string.Empty;
+        public string SerialNumber { get; set; } = string.Empty;
     }
 }

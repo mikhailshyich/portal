@@ -20,7 +20,7 @@ namespace Portal.Infrastructure.Repositories
         {
             if (request is null) return new CustomGeneralResponses(false, "Передаваемый объект равен null.");
 
-            var result = await context.UserWarehouses.AnyAsync(r => r.Title == request.Title);
+            var result = await context.UserWarehouses.AnyAsync(r => r.Title == request.Title & r.UserId == request.UserId);
             if (result) return new CustomGeneralResponses(false, "Такой склад у пользователя уже существует.");
 
             var userWarehouse = new UserWarehouse()

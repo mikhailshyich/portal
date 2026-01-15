@@ -51,7 +51,7 @@ namespace Portal.Infrastructure.Repositories
 
         public async Task<List<CategoryHardware>> GetAllAsync()
         {
-            return await context.CategoriesHardware.ToListAsync();
+            return await context.CategoriesHardware.OrderBy(c=>c.Title).ToListAsync();
         }
 
         public async Task<CategoryHardware> GetByIdAsync(Guid id)

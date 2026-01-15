@@ -26,7 +26,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetAll()
         {
             var result = await hardwareInterface.GetAllAsync();
@@ -98,7 +98,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("export")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> Export()
         {
             var result = await hardwareInterface.Export();
@@ -125,7 +125,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "admin,user,employee_it")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await hardwareInterface.GetByIdAsync(id);
