@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj": {}
+    "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj": {}
   },
   "projects": {
-    "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj": {
+    "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj",
+        "projectUniqueName": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj",
         "projectName": "Portal.API",
-        "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj",
+        "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\Portal.API.csproj",
         "packagesPath": "C:\\Users\\shiich\\.nuget\\packages\\",
-        "outputPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\obj\\",
+        "outputPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -33,11 +33,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj": {
-                "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj"
+              "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj": {
+                "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj"
               },
-              "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj": {
-                "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj"
+              "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj": {
+                "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj"
               }
             }
           }
@@ -96,18 +96,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj": {
+    "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj",
+        "projectUniqueName": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj",
         "projectName": "Portal.Application",
-        "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj",
+        "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj",
         "packagesPath": "C:\\Users\\shiich\\.nuget\\packages\\",
-        "outputPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\obj\\",
+        "outputPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -129,8 +129,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj": {
-                "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj"
+              "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj": {
+                "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj"
               }
             }
           }
@@ -166,18 +166,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj": {
+    "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj",
+        "projectUniqueName": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj",
         "projectName": "Portal.Domain",
-        "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj",
+        "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\Portal.Domain.csproj",
         "packagesPath": "C:\\Users\\shiich\\.nuget\\packages\\",
-        "outputPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\obj\\",
+        "outputPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -232,18 +232,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj": {
+    "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj",
+        "projectUniqueName": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj",
         "projectName": "Portal.Infrastructure",
-        "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj",
+        "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\Portal.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\shiich\\.nuget\\packages\\",
-        "outputPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\obj\\",
+        "outputPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -265,8 +265,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj": {
-                "projectPath": "D:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj"
+              "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj": {
+                "projectPath": "E:\\#Disk D\\MyProject\\c#\\Portal\\Portal.Application\\Portal.Application.csproj"
               }
             }
           }
@@ -342,7 +342,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

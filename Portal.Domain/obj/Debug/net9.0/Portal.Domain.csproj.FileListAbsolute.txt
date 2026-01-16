@@ -10,3 +10,15 @@ D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\refint\Portal.Domain.dll
 D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.pdb
 D:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\ref\Portal.Domain.dll
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\bin\Debug\net9.0\Portal.Domain.deps.json
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\bin\Debug\net9.0\Portal.Domain.dll
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\bin\Debug\net9.0\Portal.Domain.pdb
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.AssemblyInfoInputs.cache
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.AssemblyInfo.cs
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.csproj.CoreCompileInputs.cache
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.sourcelink.json
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.dll
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\refint\Portal.Domain.dll
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\Portal.Domain.pdb
+E:\#Disk D\MyProject\c#\Portal\Portal.Domain\obj\Debug\net9.0\ref\Portal.Domain.dll

@@ -249,7 +249,10 @@
         {
             TitleSyncButton = "Идёт синхронизация ...";
             await userService.SyncUsersAsync();
+            FilteredUsersList.Clear();
             UsersList = await userService.GetAllAsync();
+            FilteredUsersList = UsersList.Take(ItemPerPage).ToList();
+            await CalculateQuantity(ItemPerPage, PageNumber);
             TitleSyncButton = "Sync";
             await js.InvokeVoidAsync("appendAlert", "Привет!", "danger");
         }
