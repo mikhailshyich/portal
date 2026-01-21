@@ -298,10 +298,8 @@ namespace Portal.Infrastructure.Repositories
                 }
                 else
                 {
-                    hardwareDB.UserId = null;
-                    hardwareDB.UserWarehouseId = null;
                     returned.Add(hardwareDB.Id);
-                    History history = new History(returnDTO.ResponsibleId, hardwareDB.Id, null, hardwareDB.MainWarehouseId, "Возврат", DateTime.Now);
+                    History history = new History(returnDTO.ResponsibleId, hardwareDB.Id, hardwareDB.MainWarehouseId, hardwareDB.UserId, hardwareDB.UserWarehouseId, "Возврат", DateTime.Now);
                     await context.HistoryEntries.AddAsync(history);
                 }
             }
@@ -533,6 +531,90 @@ namespace Portal.Infrastructure.Repositories
                     return stream.ToArray();
                 }
             }
+        }
+
+        public async Task<CustomGeneralResponses> GiveToUserAsync(HardwareMoveDTO giveDTO)
+        {
+            if (giveDTO.HardwareIdList is null) return new CustomGeneralResponses(false, "Список выдаваемого оборудования равен null.");
+            if (giveDTO.UserId == Guid.Empty) return new CustomGeneralResponses(false, "Пользователь которому выдаётся оборудование равен null.");
+
+            var userDB = await context.Users.FindAsync(giveDTO.UserId);
+            if (userDB is null) return new CustomGeneralResponses(false, "Пользователь которому выдаём оборудование не найден в базе данных.");
+
+            var userWarehouseDB = await context.UserWarehouses.FirstOrDefaultAsync(u => u.Id == giveDTO.UserWarehouseId & u.UserId == giveDTO.UserId);
+            if (userWarehouseDB is null) return new CustomGeneralResponses(false, $"У пользователя {userDB.Username} нет такого склада.");
+
+            List<Hardware> displacedHardware = new();
+            var historyList = new List<History>();
+
+            foreach (var hardwareID in giveDTO.HardwareIdList)
+            {
+                var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId != userDB.Id);
+                if (hardwareDB != null)
+                {
+                    if (hardwareDB.UserId.HasValue)
+                    {
+                        History historySender = new History(giveDTO.ResponsibleId, giveDTO.UserId, hardwareDB.UserId, hardwareDB.Id, userWarehouseDB.Id, "Выдача", DateTime.Now);
+                        historyList.Add(historySender);
+                    }
+                    else
+                    {
+                        History history = new History(giveDTO.ResponsibleId, giveDTO.UserId, null, hardwareID, userWarehouseDB.Id, "Выдача", DateTime.Now);
+                        historyList.Add(history);
+                    }
+
+                    displacedHardware.Add(hardwareDB);
+                }
+            }
+            context.HistoryEntries.AddRange(historyList);
+            await context.SaveChangesAsync();
+            return new CustomGeneralResponses(true, $"Оборудование в количестве {displacedHardware.Count} выдано {userDB.Username}", displacedHardware);
+        }
+
+        public async Task<CustomGeneralResponses> RepairAsync(HardwareRepairDTO repairDTO)
+        {
+            if (repairDTO.HardwareIdList is null) return new CustomGeneralResponses(false, "Список перемещаемого оборудования равен null.");
+
+            List<Hardware> displacedHardware = new();
+            var historyList = new List<History>();
+
+            foreach (var hardwareID in repairDTO.HardwareIdList)
+            {
+                var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID);
+                if (hardwareDB != null)
+                {
+                    History history = new History(repairDTO.ResponsibleId, hardwareDB.Id, repairDTO.Annotation, "Ремонт", DateTime.Now);
+                    historyList.Add(history);
+
+                    displacedHardware.Add(hardwareDB);
+                }
+            }
+            context.HistoryEntries.AddRange(historyList);
+            await context.SaveChangesAsync();
+            return new CustomGeneralResponses(true, $"Оборудование в количестве {displacedHardware.Count} передано на ремонт. Комментарий: {repairDTO.Annotation}", displacedHardware);
+        }
+
+        public async Task<CustomGeneralResponses> ReturnRepairAsync(HardwareRepairDTO repairDTO)
+        {
+            if (repairDTO.HardwareIdList is null) return new CustomGeneralResponses(false, "Список перемещаемого оборудования равен null.");
+
+            List<Hardware> displacedHardware = new();
+            var historyList = new List<History>();
+
+            foreach (var hardwareID in repairDTO.HardwareIdList)
+            {
+                var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID);
+                if (hardwareDB != null)
+                {
+                    History history = new History(repairDTO.ResponsibleId, hardwareDB.Id, repairDTO.Annotation, "Возврат из ремонта", DateTime.Now);
+                    historyList.Add(history);
+
+                    displacedHardware.Add(hardwareDB);
+                }
+            }
+            context.HistoryEntries.AddRange(historyList);
+            await context.SaveChangesAsync();
+            return new CustomGeneralResponses(true, $"Оборудование в количестве {displacedHardware.Count} возвращено из ремонта. Комментарий: {repairDTO.Annotation}", displacedHardware);
         }
     }
 }

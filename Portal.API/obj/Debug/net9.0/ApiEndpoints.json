@@ -227,6 +227,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "Give",
+    "RelativePath": "api/Hardwares/give",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "moveDTO",
+        "Type": "Portal.Domain.DTOs.HardwareMoveDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "Import",
     "RelativePath": "api/Hardwares/import",
     "HttpMethod": "POST",
@@ -356,6 +372,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "Repair",
+    "RelativePath": "api/Hardwares/repair",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "repairDTO",
+        "Type": "Portal.Domain.DTOs.HardwareRepairDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "ReturnRepair",
+    "RelativePath": "api/Hardwares/repair/return",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "repairDTO",
+        "Type": "Portal.Domain.DTOs.HardwareRepairDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwaresController",

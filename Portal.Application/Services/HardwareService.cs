@@ -50,6 +50,11 @@ namespace Portal.Application.Services
             return await hardwareDomain.GetByUserIdAsync(userId);
         }
 
+        public async Task<CustomGeneralResponses> GiveToUserAsync(HardwareMoveDTO giveDTO)
+        {
+            return await hardwareDomain.GiveToUserAsync(giveDTO);
+        }
+
         public async Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport)
         {
             return await hardwareDomain.Import(hardwareImport);
@@ -70,9 +75,19 @@ namespace Portal.Application.Services
             return await hardwareDomain.MoveToUserAsync(moveDTO);
         }
 
+        public async Task<CustomGeneralResponses> RepairAsync(HardwareRepairDTO repairDTO)
+        {
+            return await hardwareDomain.RepairAsync(repairDTO);
+        }
+
         public async Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO)
         {
             return await hardwareDomain.ReturnAsync(returnDTO);
+        }
+
+        public async Task<CustomGeneralResponses> ReturnRepairAsync(HardwareRepairDTO repairDTO)
+        {
+            return await hardwareDomain.ReturnRepairAsync(repairDTO);
         }
 
         public async Task<Hardware> UpdateAsync(HardwareUpdateDTO updateDTO)

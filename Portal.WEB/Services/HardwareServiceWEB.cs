@@ -103,6 +103,18 @@ namespace Portal.WEB.Services
             return null!;
         }
 
+        public async Task<CustomGeneralResponses> GiveToUserAsync(HardwareMoveDTO giveDTO)
+        {
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/give", giveDTO);
+                var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
+        }
+
         public async Task<CustomGeneralResponses> Import(List<HardwareImportDTO> hardwareImport)
         {
             bool status = await GetAddToken();
@@ -144,12 +156,36 @@ namespace Portal.WEB.Services
             return null!;
         }
 
+        public async Task<CustomGeneralResponses> RepairAsync(HardwareRepairDTO repairDTO)
+        {
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/repair", repairDTO);
+                var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
+        }
+
         public async Task<CustomGeneralResponses> ReturnAsync(HardwareReturnDTO returnDTO)
         {
             bool status = await GetAddToken();
             if (status)
             {
                 var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/return", returnDTO);
+                var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
+        }
+
+        public async Task<CustomGeneralResponses> ReturnRepairAsync(HardwareRepairDTO repairDTO)
+        {
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var hardwares = await httpClient.PatchAsJsonAsync($"{BaseURI}/repair/return", repairDTO);
                 var response = await hardwares.Content.ReadFromJsonAsync<CustomGeneralResponses>();
                 return response!;
             }

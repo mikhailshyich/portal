@@ -28,10 +28,13 @@
                             <div class="p-0 m-1 col-auto">
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onmousedown="AddHardwareEvent"><b>+ Добавить</b></button>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onmousedown="MoveHardwareEvent"><b>Переместить</b></button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#giveHardware" @onmousedown="GiveHardwareEvent"><b>Выдать</b></button>
+                                <button type="button" class="btn btn-secondary" @onmousedown="ReturnHardware"><b>Вернуть</b></button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт Excel</b></button>
                                 <button type="button" class="btn btn-warning" @onmousedown="ExportHardwareEvent"><b>Экспорт Excel</b></button>
                                 <button type="button" class="btn btn-primary" @onmousedown="MarkHardware"><b>Маркировать</b></button>
-                                <button type="button" class="btn btn-secondary" @onmousedown="ReturnHardware"><b>Вернуть</b></button>
                                 <button type="button" class="btn btn-danger" @onmousedown="WriteOffHardware"><b>Списать</b></button>
                                 <button type="button" class="btn btn-info" @onmousedown="GenerateQR"><b>QR</b></button>
                                 <button type="button" class="btn btn-info" @onmousedown="GenerateLabel"><b>Label</b></button>
@@ -276,6 +279,129 @@
                 </div>
         <!--End modal -->
 
+        <!-- Modal GIVE HARDWARE -->
+        <div class="modal fade" id="giveHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="giveHardwareTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="giveHardwareTitle">Выдать оборудование сотруднику</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <EditForm Model="hardwareMoveDTO" FormName="GiveHardware" Context="GiveHardware" OnValidSubmit="GiveHardware">
+                        <div class="modal-body">
+                            <DataAnnotationsValidator />
+
+                            <!-- Alert -->
+                            <div class="alert @ClassesAlert" role="alert">
+                                @ResponseMessage
+                            </div>
+                            <!-- End alert -->
+
+                            <div class="form-group">
+                                <label for="user">Сотрудник</label>
+                                <InputSelect id="user" class="form-control" @oninput="SelectedUserEvent" @bind-Value="hardwareMoveDTO.UserId">
+                                    <option value="">Выберите нужного сотрудника</option>
+                                    @foreach (UserView user in UsersList.OrderBy(u => u.LastName))
+                                    {
+                                        <option value="@user.Id">@user.LastName @user.FirstName</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => hardwareMoveDTO.UserId)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="user">Склад сотрудника</label>
+                                <InputSelect id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
+                                    <option selected value="">Выберите нужный склад</option>
+                                    @foreach (UserWarehouse warehouse in UserWarehousesList)
+                                    {
+                                        <option value="@warehouse.Id">@warehouse.Title</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => hardwareMoveDTO.UserWarehouseId)" />
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-success" id="submit">Выдать</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+        <!--End modal -->
+
+        <!-- Modal REPAIR HARDWARE -->
+        <div class="modal fade" id="repairHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="repairHardwareTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="repairHardwareTitle">Передача оборудования на ремонт</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <EditForm Model="repairDTO" FormName="RepairHardware" Context="RepairHardware" OnValidSubmit="RepairHardware">
+                        <div class="modal-body">
+                            <DataAnnotationsValidator />
+
+                            <!-- Alert -->
+                            <div class="alert @ClassesAlert" role="alert">
+                                @ResponseMessage
+                            </div>
+                            <!-- End alert -->
+
+                            <div class="form-group">
+                                <label for="numberext">Комментарий (если нужен)</label>
+                                <InputText id="numberext" class="form-control" @bind-Value="repairDTO.Annotation" />
+                                <ValidationMessage For="@(() => repairDTO.Annotation)" />
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-success" id="submit">Передать в ремонт</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+        <!--End modal -->
+
+        <!-- Modal RETURN REPAIR HARDWARE -->
+        <div class="modal fade" id="returnRepairHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnRepairHardwareTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="returnRepairHardwareTitle">Возврат оборудования из ремонта</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <EditForm Model="repairDTO" FormName="ReturnRepairHardware" Context="ReturnRepairHardware" OnValidSubmit="ReturnRepairHardware">
+                        <div class="modal-body">
+                            <DataAnnotationsValidator />
+
+                            <!-- Alert -->
+                            <div class="alert @ClassesAlert" role="alert">
+                                @ResponseMessage
+                            </div>
+                            <!-- End alert -->
+
+                            <div class="form-group">
+                                <label for="numberext">Комментарий (если нужен)</label>
+                                <InputText id="numberext" class="form-control" @bind-Value="repairDTO.Annotation" />
+                                <ValidationMessage For="@(() => repairDTO.Annotation)" />
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-success" id="submit">Вернуть из ремонта</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+        <!--End modal -->
+
         <!-- Modal IMPORT HARDWARE -->
         <div class="modal fade" id="importHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importHardwareTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -322,8 +448,11 @@
                                         <div class="row">
                                             <div class="p-0 m-1 col-auto">
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Переместить</b></button>
-                                                <button type="button" class="btn btn-primary" @onclick="MarkHardware"><b>Маркировать</b></button>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#giveHardware" @onclick="GiveHardwareEvent"><b>Выдать</b></button>
                                                 <button type="button" class="btn btn-secondary" @onclick="ReturnHardware"><b>Вернуть</b></button>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
+                                                <button type="button" class="btn btn-primary" @onclick="MarkHardware"><b>Маркировать</b></button>
                                                 <button type="button" class="btn btn-danger" @onclick="WriteOffHardware"><b>Списать</b></button>
                                                 <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
                                                 <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
@@ -534,6 +663,7 @@
     private HardwareDTO hardwareDTO = new();
     private HardwareMoveDTO hardwareMoveDTO = new();
     private HardwareReturnDTO returnDTO = new();
+    private HardwareRepairDTO repairDTO = new();
     private HardwareUpdateDTO updateDTO = new();
     private HardwareWriteOffDTO writeOffDTO = new();
     private MarkAllHardwareDTO markAllHardwareDTO = new();
@@ -545,9 +675,9 @@
     private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    //private readonly string host = "http://hardware-vm:81";
+    private readonly string host = "http://hardware-vm:81";
     //private readonly string host = "http://apitmk.site";
-    private readonly string host = "https://localhost:7266";
+    //private readonly string host = "https://localhost:7266";
     private List<string> TableHeaders = ["Наименование", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ", ""];
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
@@ -676,6 +806,45 @@
             }
         }
         catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async Task GiveHardware()
+    {
+        try
+        {
+            if (HardwaresId.Count > 0)
+            {
+                await SetUserIdToLocalStorageAsync();
+                string userId = await localStorage.GetItemAsync<string>("userId");
+                if (userId != string.Empty)
+                    hardwareMoveDTO.ResponsibleId = Guid.Parse(userId);
+                hardwareMoveDTO.HardwareIdList = HardwaresId;
+                var response = await HardwareService.GiveToUserAsync(hardwareMoveDTO);
+                if (!response.Flag)
+                {
+                    ResponseMessage = response.Message;
+                    ClassesAlert = "alert-warning";
+                }
+                else
+                {
+                    ResponseMessage = response.Message;
+                    ClassesAlert = "alert-success";
+                    HardwaresId.Clear();
+                    MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+                    foreach (var hardware in MainWarehouse.Hardwares)
+                    {
+                        var category = await CategoryHardwareService.GetByIdAsync(hardware.CategoryHardwareId);
+                        var document = await DocumentExternalSystem.GetByIdAsync(hardware.DocumentExternalSystemId);
+                        hardware.CategoryHardware = category;
+                        hardware.DocumentExternalSystem = document;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
         {
 
         }
@@ -888,15 +1057,51 @@
                         }
                     }
 
-                    if (history.OperationType == "Возврат")
+                    if (history.OperationType == "Выдача")
                     {
-                        if (history.WarehouseId.HasValue)
+                        if (history.SenderId.HasValue)
                         {
-                            history.Annotation = $"Оборудование возвращено на склад ({history.MainWarehouse}).";
+                            history.Annotation = $"Оборудование выдано {history.Sender} → {history.Recipient} ({history.UserWarehouse}).";
                         }
                         else
                         {
-                            history.Annotation = $"Оборудование возвращено на склад.";
+                            history.Annotation = $"Оборудование выдано {history.Recipient} ({history.UserWarehouse}).";
+                        }
+                    }
+
+                    if (history.OperationType == "Ремонт")
+                    {
+                        if (history.Annotation != null)
+                        {
+                            history.Annotation = $"Оборудование передано в ремонт. Комментарий - {history.Annotation}";
+                        }
+                        else
+                        {
+                            history.Annotation = $"Оборудование передано в ремонт.";
+                        }
+                    }
+
+                    if (history.OperationType == "Возврат из ремонта")
+                    {
+                        if (history.Annotation != null)
+                        {
+                            history.Annotation = $"Оборудование возвращено из ремонта. Комментарий - {history.Annotation}";
+                        }
+                        else
+                        {
+                            history.Annotation = $"Оборудование возвращено из ремонта.";
+                        }
+                    }
+
+                    if (history.OperationType == "Возврат")
+                    {
+                        if (history.UserWarehouseId.HasValue & history.SenderId.HasValue)
+                        {
+                            history.Annotation = $"Оборудование возвращено на {history.Sender} ({history.UserWarehouse}).";
+                        }
+                        else
+                        {
+                            history.Annotation = $"Оборудование возвращено на склад ({history.MainWarehouse}).";
                         }
                     }
 
@@ -1237,6 +1442,79 @@
             }
         }
         catch(Exception ex){}
-    
+
+    }
+
+    private async Task GiveHardwareEvent(MouseEventArgs args)
+    {
+        UsersList = await UserService.GetAllAsync();
+    }
+
+    private async Task RepairHardware(EditContext args)
+    {
+        try
+        {
+            if (HardwaresId.Count > 0)
+            {
+                await SetUserIdToLocalStorageAsync();
+                string userId = await localStorage.GetItemAsync<string>("userId");
+                if (userId != string.Empty)
+                    repairDTO.ResponsibleId = Guid.Parse(userId);
+                repairDTO.HardwareIdList = HardwaresId;
+                var result = await HardwareService.RepairAsync(repairDTO);
+                var response = await MainWarehouseService.GetByIdAsync(Id);
+                if (response != null)
+                {
+                    MainWarehouse = response;
+                }
+                ResponseMessage = string.Empty;
+                if (!result.Flag)
+                {
+                    ResponseMessage = result.Message;
+                    ClassesAlert = "alert-warning";
+                }
+                else
+                {
+                    ResponseMessage = result.Message;
+                    ClassesAlert = "alert-success";
+                }
+            }
+            repairDTO = new();
+        }
+        catch (Exception ex) { }
+    }
+
+    private async Task ReturnRepairHardware(EditContext args)
+    {
+        try
+        {
+            if (HardwaresId.Count > 0)
+            {
+                await SetUserIdToLocalStorageAsync();
+                string userId = await localStorage.GetItemAsync<string>("userId");
+                if (userId != string.Empty)
+                    repairDTO.ResponsibleId = Guid.Parse(userId);
+                repairDTO.HardwareIdList = HardwaresId;
+                var result = await HardwareService.ReturnRepairAsync(repairDTO);
+                var response = await MainWarehouseService.GetByIdAsync(Id);
+                if (response != null)
+                {
+                    MainWarehouse = response;
+                }
+                ResponseMessage = string.Empty;
+                if (!result.Flag)
+                {
+                    ResponseMessage = result.Message;
+                    ClassesAlert = "alert-warning";
+                }
+                else
+                {
+                    ResponseMessage = result.Message;
+                    ClassesAlert = "alert-success";
+                }
+            }
+            repairDTO = new();
+        }
+        catch (Exception ex) { }
     }
 }

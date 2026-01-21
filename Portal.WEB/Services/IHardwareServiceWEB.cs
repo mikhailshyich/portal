@@ -9,6 +9,9 @@ namespace Portal.WEB.Services
         Task<CustomGeneralResponses> AddAsync(HardwareDTO request);
         Task<List<Hardware>> GetAllAsync();
         Task<CustomGeneralResponses> MoveToUserAsync(HardwareMoveDTO moveDTO);
+        Task<CustomGeneralResponses> GiveToUserAsync(HardwareMoveDTO giveDTO);
+        Task<CustomGeneralResponses> RepairAsync(HardwareRepairDTO repairDTO);
+        Task<CustomGeneralResponses> ReturnRepairAsync(HardwareRepairDTO repairDTO);
         Task<string> GenerateQR(List<Guid>? idList);
         Task<string> GenerateLabel(List<Guid>? idList);
         Task<List<Hardware>> GetByUserIdAsync(Guid userId);

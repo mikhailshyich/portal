@@ -373,10 +373,10 @@ E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.development.json
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\swae.build.ex.cache
-E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.csproj.Up2Date
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.dll
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\refint\Portal.API.dll
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.pdb
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\Portal.API.genruntimeconfig.cache
 E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\ref\Portal.API.dll
+E:\#Disk D\MyProject\c#\Portal\Portal.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

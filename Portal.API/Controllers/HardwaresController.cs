@@ -71,6 +71,30 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
+        [HttpPatch("give")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Give([FromBody] HardwareMoveDTO moveDTO)
+        {
+            var result = await hardwareInterface.GiveToUserAsync(moveDTO);
+            return Ok(result);
+        }
+
+        [HttpPatch("repair")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Repair([FromBody] HardwareRepairDTO repairDTO)
+        {
+            var result = await hardwareInterface.RepairAsync(repairDTO);
+            return Ok(result);
+        }
+
+        [HttpPatch("repair/return")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> ReturnRepair([FromBody] HardwareRepairDTO repairDTO)
+        {
+            var result = await hardwareInterface.ReturnRepairAsync(repairDTO);
+            return Ok(result);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpGet("users/{userId}")]
         public async Task<IActionResult> GetByUserId(Guid userId)

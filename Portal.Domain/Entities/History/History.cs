@@ -65,5 +65,43 @@ namespace Portal.Domain.Entities.History
             this.OperationType = operationType;
             this.DateTimeChanges = dateTimeChanges;
         }
+
+        /// <summary>
+        /// Передача оборудования в ремонт
+        /// </summary>
+        /// <param name="responsibleId">ID ответственного</param>
+        /// <param name="hardwareId">ID оборудования</param>
+        /// <param name="operationType">Вид операции</param>
+        /// <param name="dateTimeChanges">Дата и время изменений</param>
+        /// <param name="annotation">Комментарий</param>
+        public History(Guid responsibleId, Guid hardwareId, string? annotation, string operationType, DateTime dateTimeChanges)
+        {
+            this.ResponsibleId = responsibleId;
+            this.HardwareId = hardwareId;
+            this.OperationType= operationType;
+            this.DateTimeChanges= dateTimeChanges;
+            this.Annotation = annotation;
+        }
+
+        /// <summary>
+        /// Возврат оборудования
+        /// </summary>
+        /// <param name="responsibleId">ID ответственного</param>
+        /// <param name="hardwareId">ID оборудования</param>
+        /// <param name="warehouseId">ID основного склада</param>
+        /// <param name="senderId">ID отправителя оборудования</param>
+        /// <param name="userWarehouseId">ID склада пользователя</param>
+        /// <param name="operationType">Вид операции</param>
+        /// <param name="dateTimeChanges">Дата и время изменений</param>
+        public History(Guid responsibleId, Guid hardwareId, Guid warehouseId, Guid? senderId, Guid? userWarehouseId, string operationType, DateTime dateTimeChanges)
+        {
+            this.ResponsibleId = responsibleId;
+            this.HardwareId = hardwareId;
+            this.WarehouseId = warehouseId;
+            this.SenderId = senderId;
+            this.UserWarehouseId= userWarehouseId;
+            this.OperationType = operationType;
+            this.DateTimeChanges = dateTimeChanges;
+        }
     }
 }
