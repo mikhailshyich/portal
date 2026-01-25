@@ -470,6 +470,80 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
+    "Method": "AddTest",
+    "RelativePath": "api/KnowledgeTest",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Portal.Domain.DTOs.KnowledgeTestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
+    "Method": "GetTestById",
+    "RelativePath": "api/KnowledgeTest/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
+    "Method": "AddQuestionAnswer",
+    "RelativePath": "api/KnowledgeTest/answer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "System.Collections.Generic.List\u00601[[Portal.Domain.DTOs.QuestionAnswerDTO, Portal.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
+    "Method": "AddQuestion",
+    "RelativePath": "api/KnowledgeTest/question",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "System.Collections.Generic.List\u00601[[Portal.Domain.DTOs.TestQuestionDTO, Portal.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
+    "Method": "GetAllTests",
+    "RelativePath": "api/KnowledgeTest/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Portal.API.Controllers.MainWarehousesController",
     "Method": "Add",
     "RelativePath": "api/MainWarehouses",

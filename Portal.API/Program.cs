@@ -50,7 +50,8 @@ builder.Services.AddScoped<IMarkCodeDomain, MarkCodeRepository>();
 builder.Services.AddScoped<IHistoryService, HistoryService>();
 builder.Services.AddScoped<IHistoryDomain, HistoryRepository>();
 
-
+builder.Services.AddScoped<IKnowledgeTestService, KnowledgeTestService>();
+builder.Services.AddScoped<IKnowledgeTestDomain, KnowledgeTestRepository>();
 
 builder.Services.AddAuthentication(x =>
 {

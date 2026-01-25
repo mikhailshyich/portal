@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Entities.History;
+using Portal.Domain.Entities.KnowledgeTests;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Entities.Warehouses;
 
@@ -25,6 +26,9 @@ namespace Portal.Infrastructure.Data
         public DbSet<UserWarehouse> UserWarehouses { get; set; }
         public DbSet<History> HistoryEntries { get; set; }
         public DbSet<MarkCode> MarkCodes { get; set; }
+        public DbSet<KnowledgeTest> KnowledgeTests { get; set; }
+        public DbSet<TestQuestion> TestQuestions { get; set; }
+        public DbSet<QuestionAnswer> QuestionAnswers{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

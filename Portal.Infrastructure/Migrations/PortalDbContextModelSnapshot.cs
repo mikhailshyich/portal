@@ -40,7 +40,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoriesHardware");
+                    b.ToTable("CategoriesHardware", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.DocumentExternalSystem", b =>
@@ -61,7 +61,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DocumentsExternalSystem");
+                    b.ToTable("DocumentsExternalSystem", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.Hardware", b =>
@@ -146,7 +146,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("UserWarehouseId");
 
-                    b.ToTable("Hardwares");
+                    b.ToTable("Hardwares", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.MarkCode", b =>
@@ -171,7 +171,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("HardwareId");
 
-                    b.ToTable("MarkCodes");
+                    b.ToTable("MarkCodes", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.UserHardware", b =>
@@ -188,7 +188,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsersHardware");
+                    b.ToTable("UsersHardware", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.History.History", b =>
@@ -245,7 +245,80 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HistoryEntries");
+                    b.ToTable("HistoryEntries", (string)null);
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.KnowledgeTest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateTimeCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ResponsibleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TestName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KnowledgeTests", (string)null);
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.QuestionAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AnswerText")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool>("IsRight")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TestQuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestQuestionId");
+
+                    b.ToTable("QuestionAnswers", (string)null);
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.TestQuestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("KnowledgeTestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KnowledgeTestId");
+
+                    b.ToTable("TestQuestions", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
@@ -308,7 +381,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("UserTokenId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -359,7 +432,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserDepartments");
+                    b.ToTable("UserDepartments", (string)null);
 
                     b.HasData(
                         new
@@ -388,7 +461,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
 
                     b.HasData(
                         new
@@ -425,7 +498,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserTokens");
+                    b.ToTable("UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Warehouses.MainWarehouse", b =>
@@ -451,7 +524,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("UserDepartmentId");
 
-                    b.ToTable("MainWarehouses");
+                    b.ToTable("MainWarehouses", (string)null);
 
                     b.HasData(
                         new
@@ -481,7 +554,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserWarehouses");
+                    b.ToTable("UserWarehouses", (string)null);
 
                     b.HasData(
                         new
@@ -544,6 +617,24 @@ namespace Portal.Infrastructure.Migrations
                         .HasForeignKey("HardwareId");
 
                     b.Navigation("Hardware");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.QuestionAnswer", b =>
+                {
+                    b.HasOne("Portal.Domain.Entities.KnowledgeTests.TestQuestion", null)
+                        .WithMany("QuestionAnswers")
+                        .HasForeignKey("TestQuestionId");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.TestQuestion", b =>
+                {
+                    b.HasOne("Portal.Domain.Entities.KnowledgeTests.KnowledgeTest", "KnowledgeTest")
+                        .WithMany("TestQuestions")
+                        .HasForeignKey("KnowledgeTestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KnowledgeTest");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
@@ -610,6 +701,16 @@ namespace Portal.Infrastructure.Migrations
             modelBuilder.Entity("Portal.Domain.Entities.Hardwares.DocumentExternalSystem", b =>
                 {
                     b.Navigation("Hardwares");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.KnowledgeTest", b =>
+                {
+                    b.Navigation("TestQuestions");
+                });
+
+            modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.TestQuestion", b =>
+                {
+                    b.Navigation("QuestionAnswers");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.Users.User", b =>
