@@ -28,14 +28,19 @@ namespace Portal.Application.Services
             return await knowledgeTestDomain.AddTestAsync(request);
         }
 
-        public async Task<CustomGeneralResponses> GetAllTest()
+        public async Task<CustomGeneralResponses> GetAllTestAsync()
         {
-            return await knowledgeTestDomain.GetAllTest();
+            return await knowledgeTestDomain.GetAllTestAsync();
         }
 
-        public async Task<CustomGeneralResponses> GetTestById(Guid id)
+        public async Task<CustomGeneralResponses> GetQuestionsByTestIdAsync(Guid id)
         {
-            return await knowledgeTestDomain.GetTestById(id);
+            return await knowledgeTestDomain.GetQuestionsByTestIdAsync(id);
+        }
+
+        public async Task<CustomGeneralResponses> GetTestByIdAsync(Guid id)
+        {
+            return await knowledgeTestDomain.GetTestByIdAsync(id);
         }
     }
 }

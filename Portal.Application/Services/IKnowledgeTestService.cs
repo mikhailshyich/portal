@@ -8,8 +8,9 @@ namespace Portal.Application.Services
         Task<CustomGeneralResponses> AddTestAsync(KnowledgeTestDTO request);
         Task<CustomGeneralResponses> AddQuestionAsync(List<TestQuestionDTO> request);
         Task<CustomGeneralResponses> AddQuestionAnswerAsync(List<QuestionAnswerDTO> request);
-        Task<CustomGeneralResponses> GetAllTest();
-        Task<CustomGeneralResponses> GetTestById(Guid id);
+        Task<CustomGeneralResponses> GetAllTestAsync();
+        Task<CustomGeneralResponses> GetTestByIdAsync(Guid id);
+        Task<CustomGeneralResponses> GetQuestionsByTestIdAsync(Guid id);
 
 
     }

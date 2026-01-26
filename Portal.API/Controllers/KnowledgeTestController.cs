@@ -49,7 +49,7 @@ namespace Portal.API.Controllers
         [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetAllTests()
         {
-            var result = await _knowledgeTestService.GetAllTest();
+            var result = await _knowledgeTestService.GetAllTestAsync();
             if (result.Flag is false) return BadRequest(result);
             return Ok(result);
         }
@@ -58,7 +58,16 @@ namespace Portal.API.Controllers
         [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> GetTestById(Guid id)
         {
-            var result = await _knowledgeTestService.GetTestById(id);
+            var result = await _knowledgeTestService.GetTestByIdAsync(id);
+            if (result.Flag is false) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/question")]
+        [Authorize(Roles = "admin,user")]
+        public async Task<IActionResult> GetQuestionByTestId(Guid id)
+        {
+            var result = await _knowledgeTestService.GetQuestionsByTestIdAsync(id);
             if (result.Flag is false) return BadRequest(result);
             return Ok(result);
         }

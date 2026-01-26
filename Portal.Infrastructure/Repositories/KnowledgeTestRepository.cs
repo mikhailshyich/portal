@@ -114,14 +114,24 @@ namespace Portal.Infrastructure.Repositories
             return new CustomGeneralResponses(true, $"Тест [{request.TestName}] успешно добавлен!", knowledgeTest);
         }
 
-        public async Task<CustomGeneralResponses> GetAllTest()
+        public async Task<CustomGeneralResponses> GetAllTestAsync()
         {
             var listTests = await context.KnowledgeTests.ToListAsync();
             if (listTests.Count == 0) return new CustomGeneralResponses(false, "Тесты не найдены.");
             return new CustomGeneralResponses(true, "Найдены тесты.", listTests);
         }
 
-        public async Task<CustomGeneralResponses> GetTestById(Guid id)
+        public async Task<CustomGeneralResponses> GetQuestionsByTestIdAsync(Guid id)
+        {
+            if (id == Guid.Empty) return new CustomGeneralResponses(false, "Передаваемый id пустой.");
+            var knowledgeTest = await context.KnowledgeTests.FirstOrDefaultAsync(x => x.Id == id);
+            if (knowledgeTest is null) return new CustomGeneralResponses(false, $"Тест с id [{id}] не найден.");
+            var questions = await context.TestQuestions.Where(q => q.KnowledgeTestId == id).ToListAsync();
+            if (questions.Count == 0) return new CustomGeneralResponses(false, "Вопросов в тесте нет.");
+            return new CustomGeneralResponses(true, $"Вопросы для теста [{knowledgeTest.TestName}] найдены!", questions);
+        }
+
+        public async Task<CustomGeneralResponses> GetTestByIdAsync(Guid id)
         {
             if (id == Guid.Empty) return new CustomGeneralResponses(false, "Передаваемый id теста пустой.");
 
