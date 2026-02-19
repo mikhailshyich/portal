@@ -47,7 +47,7 @@
             if (response != null && response.Token != null)
             {
                 await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(response.Token);
-                navigationManager.NavigateTo("/");
+                navigationManager.NavigateTo("/warehouses/main");
             }
             else
             {

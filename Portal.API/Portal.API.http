@@ -1,6 +1,4 @@
 @Portal.API_HostAddress = http://localhost:5073
 
-GET {{Portal.API_HostAddress}}/weatherforecast/
-Accept: application/json
 
 ###

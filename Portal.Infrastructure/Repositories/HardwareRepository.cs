@@ -5,21 +5,45 @@ using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Entities.History;
-using Portal.Domain.Entities.Warehouses;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
+using Portal.Infrastructure.Migrations;
 
 namespace Portal.Infrastructure.Repositories
 {
+    enum StatusHardware
+    {
+        accepted,       // Добавлено
+        marking,        // Промаркировано
+        moving,         // Перемещено
+        give,           // Выдано
+        return_main,    // Возврат на основной склад
+        repair,         // В ремонте
+        repair_refund,  // Возврат из ремонта
+        write_off,      // Списано
+        import          // Импортировано
+    }
+
     public class HardwareRepository : IHardwareDomain
     {
         private readonly PortalDbContext context;
         private static readonly string prefixMarkCode = "markCode_";
+        private Dictionary<StatusHardware, string> hardwareStatus = new();
+        private string status = string.Empty;
 
         public HardwareRepository(PortalDbContext context)
         {
             this.context = context;
+            hardwareStatus.Add(StatusHardware.accepted, "Добавлено");
+            hardwareStatus.Add(StatusHardware.marking, "Промаркировано");
+            hardwareStatus.Add(StatusHardware.moving, "Перемещено");
+            hardwareStatus.Add(StatusHardware.give, "Выдано");
+            hardwareStatus.Add(StatusHardware.return_main, "Возврат на основной склад");
+            hardwareStatus.Add(StatusHardware.repair, "В ремонте");
+            hardwareStatus.Add(StatusHardware.repair_refund, "Возврат из ремонта");
+            hardwareStatus.Add(StatusHardware.write_off, "Списано");
+            hardwareStatus.Add(StatusHardware.import, "Импортировано");
         }
 
         public async Task<CustomGeneralResponses> AddAsync(HardwareDTO request)
@@ -30,6 +54,7 @@ namespace Portal.Infrastructure.Repositories
             var historyList = new List<History>();
             try
             {
+                status = hardwareStatus[StatusHardware.accepted]; // Получаем статус Добавлено
                 var category = await context.CategoriesHardware.FindAsync(request.CategoryHardwareId);
 
                 for (var i = 0; i < hardwareCount; i++)
@@ -48,17 +73,17 @@ namespace Portal.Infrastructure.Repositories
                         FileNameImage = request.FileNameImage,
                         IsActive = true,
                         NameForLabel = request.Title,
-                        SerialNumber = request.SerialNumber
+                        SerialNumber = request.SerialNumber,
+                        Status = status
                     };
                     context.Hardwares.Add(hardware);
                     await context.SaveChangesAsync();
-                    //hardware.CombinedInvNumber = $"TMK-";
                     History history = new History(
                     request.ResponsibleId,
                     hardware.Id,
                     null,
                     request.MainWarehouseId,
-                    "Добавление",
+                    status,
                     DateTime.Now
                     );
                     historyList.Add(history);
@@ -228,20 +253,22 @@ namespace Portal.Infrastructure.Repositories
                 var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId != userDB.Id);
                 if (hardwareDB != null)
                 {
+                    status = hardwareStatus[StatusHardware.moving]; // Получаем статус Перемещено
                     if (hardwareDB.UserId.HasValue)
                     {
-                        History historySender = new History(moveDTO.ResponsibleId, moveDTO.UserId, hardwareDB.UserId, hardwareDB.Id, userWarehouseDB.Id, "Перемещение", DateTime.Now);
+                        History historySender = new History(moveDTO.ResponsibleId, moveDTO.UserId, hardwareDB.UserId, hardwareDB.Id, userWarehouseDB.Id, status, DateTime.Now);
                         historyList.Add(historySender);
                     }
                     else
                     {
-                        History history = new History(moveDTO.ResponsibleId, moveDTO.UserId, null, hardwareID, userWarehouseDB.Id, "Перемещение", DateTime.Now);
+                        History history = new History(moveDTO.ResponsibleId, moveDTO.UserId, null, hardwareID, userWarehouseDB.Id, status, DateTime.Now);
                         historyList.Add(history);
                     }
                     hardwareDB.UserId = userDB.Id;
                     hardwareDB.User = userDB;
                     hardwareDB.UserWarehouseId = userWarehouseDB.Id;
                     hardwareDB.UserWarehouse = userWarehouseDB;
+                    hardwareDB.Status = status;
 
                     displacedHardware.Add(hardwareDB);
                     var userHardware = new UserHardware()
@@ -298,8 +325,9 @@ namespace Portal.Infrastructure.Repositories
                 }
                 else
                 {
+                    status = hardwareStatus[StatusHardware.return_main]; // Получаем статус Возврат на основной склад
                     returned.Add(hardwareDB.Id);
-                    History history = new History(returnDTO.ResponsibleId, hardwareDB.Id, hardwareDB.MainWarehouseId, hardwareDB.UserId, hardwareDB.UserWarehouseId, "Возврат", DateTime.Now);
+                    History history = new History(returnDTO.ResponsibleId, hardwareDB.Id, hardwareDB.MainWarehouseId, hardwareDB.UserId, hardwareDB.UserWarehouseId, status, DateTime.Now);
                     await context.HistoryEntries.AddAsync(history);
                 }
             }
@@ -318,6 +346,7 @@ namespace Portal.Infrastructure.Repositories
             var historyList = new List<History>();
             try
             {
+                status = hardwareStatus[StatusHardware.import]; // Получаем статус Импортировано
                 foreach (var hardware in hardwareImport)
                 {
                     for (var i = 0; i < hardware.Count; i++)
@@ -333,11 +362,12 @@ namespace Portal.Infrastructure.Repositories
                             TTN = hardware.TTN,
                             DateTimeAdd = DateTime.Now,
                             IsActive = true,
-                            NameForLabel = hardware.Title
+                            NameForLabel = hardware.Title,
+                            Status = status
                         };
                         context.Hardwares.Add(newHardware);
                         await context.SaveChangesAsync();
-                        History history = new History(hardware.ResponsibleId,newHardware.Id,null,newHardware.MainWarehouseId,"Импорт",DateTime.Now);
+                        History history = new History(hardware.ResponsibleId,newHardware.Id,null,newHardware.MainWarehouseId,status,DateTime.Now);
                         historyList.Add(history);
                     }
                 }
@@ -368,13 +398,18 @@ namespace Portal.Infrastructure.Repositories
             var categoryHrdw = await context.CategoriesHardware.FirstOrDefaultAsync(c => c.Id == hardware.CategoryHardwareId);
             if (categoryHrdw is null) return new CustomGeneralResponses(false, $"Оборудование не привязано к категории.");
 
+            status = hardwareStatus[StatusHardware.marking]; // Получаем статус Промаркировано
+
             hardware.MarkCode = markCode.Id;
             hardware.CombinedInvNumber = $"{categoryHrdw.ShortTitle}-{markCode.MarkCodeNumber}";
+            hardware.Status = status;
 
             markCode.HardwareId = hardware.Id;
             markCode.Used = true;
 
-            History history = new History(markHardwareDTO.ResponsibleId, hardware.Id, markCode.Id, null, "Маркировка", DateTime.Now);
+
+
+            History history = new History(markHardwareDTO.ResponsibleId, hardware.Id, markCode.Id, null, status, DateTime.Now);
             await context.HistoryEntries.AddAsync(history);
 
             await context.SaveChangesAsync();
@@ -408,16 +443,19 @@ namespace Portal.Infrastructure.Repositories
                 await context.SaveChangesAsync();
             }
             markCodesList.Clear();
-            
-            foreach(var hardware in hardwareList)
+
+            status = hardwareStatus[StatusHardware.marking]; // Получаем статус Промаркировано
+
+            foreach (var hardware in hardwareList)
             {
                 var categoryHdwr = await context.CategoriesHardware.FirstOrDefaultAsync(c => c.Id == hardware.CategoryHardwareId);
                 var markCode = await context.MarkCodes.FirstOrDefaultAsync(c => c.Used == false);
                 hardware.MarkCode = markCode.Id;
                 hardware.CombinedInvNumber = $"{categoryHdwr.ShortTitle}-{markCode.MarkCodeNumber}";
+                hardware.Status = status;
                 markCode.Used = true;
                 markCode.HardwareId = hardware.Id;
-                History history = new History(hardwareDTO.ResponsibleId, hardware.Id, markCode.Id, null, "Маркировка", DateTime.Now);
+                History history = new History(hardwareDTO.ResponsibleId, hardware.Id, markCode.Id, null, status, DateTime.Now);
                 await context.HistoryEntries.AddAsync(history);
                 await context.SaveChangesAsync();
             }
@@ -471,10 +509,12 @@ namespace Portal.Infrastructure.Repositories
                 
             if (updateDTO.UserWarehouseId.HasValue)
             {
+                status = hardwareStatus[StatusHardware.moving]; // Получаем статус Перемещено
                 hardware.UserWarehouseId = updateDTO.UserWarehouseId.Value;
+                hardware.Status = status;
                 if (updateDTO.ResponsibleId.HasValue)
                     responsibleId = updateDTO.ResponsibleId.Value;
-                History history = new History(responsibleId, userId, null, updateDTO.HardwareId, updateDTO.UserWarehouseId.Value, "Перемещение", DateTime.Now);
+                History history = new History(responsibleId, userId, null, updateDTO.HardwareId, updateDTO.UserWarehouseId.Value, status, DateTime.Now);
                 await context.HistoryEntries.AddAsync(history);
             }
             await context.SaveChangesAsync();
@@ -492,13 +532,16 @@ namespace Portal.Infrastructure.Repositories
 
             var hardwareList = new List<Hardware>();
 
+            status = hardwareStatus[StatusHardware.write_off]; // Получаем статус Списано
+
             foreach (var id in writeOffDTO.HardwareIdList)
             {
                 var hardware = await context.Hardwares.FirstOrDefaultAsync(h =>h.Id == id);
                 if( hardware is null) continue;
                 hardware.IsActive = false;
+                hardware.Status = status;
                 hardwareList.Add(hardware);
-                History history = new History(writeOffDTO.ResponsibleId, hardware.Id, null, hardware.MainWarehouseId, "Списание", DateTime.Now);
+                History history = new History(writeOffDTO.ResponsibleId, hardware.Id, null, hardware.MainWarehouseId, status, DateTime.Now);
                 await context.HistoryEntries.AddAsync(history);
             }
 
@@ -547,19 +590,22 @@ namespace Portal.Infrastructure.Repositories
             List<Hardware> displacedHardware = new();
             var historyList = new List<History>();
 
+            status = hardwareStatus[StatusHardware.give]; // Получаем статус Выдано
+
             foreach (var hardwareID in giveDTO.HardwareIdList)
             {
                 var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID & h.UserId != userDB.Id);
                 if (hardwareDB != null)
                 {
+                    hardwareDB.Status = status;
                     if (hardwareDB.UserId.HasValue)
                     {
-                        History historySender = new History(giveDTO.ResponsibleId, giveDTO.UserId, hardwareDB.UserId, hardwareDB.Id, userWarehouseDB.Id, "Выдача", DateTime.Now);
+                        History historySender = new History(giveDTO.ResponsibleId, giveDTO.UserId, hardwareDB.UserId, hardwareDB.Id, userWarehouseDB.Id, status, DateTime.Now);
                         historyList.Add(historySender);
                     }
                     else
                     {
-                        History history = new History(giveDTO.ResponsibleId, giveDTO.UserId, null, hardwareID, userWarehouseDB.Id, "Выдача", DateTime.Now);
+                        History history = new History(giveDTO.ResponsibleId, giveDTO.UserId, null, hardwareID, userWarehouseDB.Id, status, DateTime.Now);
                         historyList.Add(history);
                     }
 
@@ -578,12 +624,15 @@ namespace Portal.Infrastructure.Repositories
             List<Hardware> displacedHardware = new();
             var historyList = new List<History>();
 
+            status = hardwareStatus[StatusHardware.repair]; // Получаем статус В ремонте
+
             foreach (var hardwareID in repairDTO.HardwareIdList)
             {
                 var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID);
                 if (hardwareDB != null)
                 {
-                    History history = new History(repairDTO.ResponsibleId, hardwareDB.Id, repairDTO.Annotation, "Ремонт", DateTime.Now);
+                    hardwareDB.Status = status;
+                    History history = new History(repairDTO.ResponsibleId, hardwareDB.Id, repairDTO.Annotation, status, DateTime.Now);
                     historyList.Add(history);
 
                     displacedHardware.Add(hardwareDB);
@@ -606,8 +655,13 @@ namespace Portal.Infrastructure.Repositories
                 var hardwareDB = await context.Hardwares.FirstOrDefaultAsync(h => h.Id == hardwareID);
                 if (hardwareDB != null)
                 {
-                    History history = new History(repairDTO.ResponsibleId, hardwareDB.Id, repairDTO.Annotation, "Возврат из ремонта", DateTime.Now);
+                    status = hardwareStatus[StatusHardware.repair_refund]; // Получаем статус Возврат из ремонта
+
+                    History history = new History(repairDTO.ResponsibleId, hardwareDB.Id, repairDTO.Annotation, status, DateTime.Now);
                     historyList.Add(history);
+
+                    status = hardwareStatus[StatusHardware.moving]; // Получаем статус Перемещено
+                    hardwareDB.Status = status;
 
                     displacedHardware.Add(hardwareDB);
                 }

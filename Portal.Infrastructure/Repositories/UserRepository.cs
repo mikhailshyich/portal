@@ -146,7 +146,7 @@ namespace Portal.Infrastructure.Repositories
                 issuer: "Turov Dairy Industrial Complex",
                 audience: "Employees Turov Dairy Industrial Complex",
                 claims: claimsList,
-                expires: DateTime.Now.AddHours(8),
+                expires: DateTime.Now.AddHours(12),
                 signingCredentials: credentials
             );
 
@@ -293,10 +293,11 @@ namespace Portal.Infrastructure.Repositories
                                 LastName = surname,
                                 Patronymic = patronymic,
                                 Username = username,
-                                PasswordHash = "AQAAAAIAAYagAAAAEOVSg/5PKFU0eFXRm9R6j5GvdEhsxlIymU+I51+5Y/+gQX+c7AHCeu/ZT5ByOLFk7w==",
                                 Email = email,
                                 IsActive = true
                             };
+
+                            newUser.PasswordHash = new PasswordHasher<User>().HashPassword(newUser, Guid.NewGuid().ToString());
 
                             users.Add(newUser);
                         }

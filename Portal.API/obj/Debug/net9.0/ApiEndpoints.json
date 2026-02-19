@@ -503,6 +503,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
+    "Method": "GetQuestionByTestId",
+    "RelativePath": "api/KnowledgeTest/{id}/question",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
     "Method": "AddQuestionAnswer",
     "RelativePath": "api/KnowledgeTest/answer",
     "HttpMethod": "POST",
@@ -528,22 +544,6 @@
       {
         "Name": "request",
         "Type": "System.Collections.Generic.List\u00601[[Portal.Domain.DTOs.TestQuestionDTO, Portal.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Portal.API.Controllers.KnowledgeTestController",
-    "Method": "GetQuestionByTestId",
-    "RelativePath": "api/KnowledgeTest/question/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

@@ -26,18 +26,30 @@
                     <Authorized>
                         <div class="row">
                             <div class="p-0 m-1 col-auto">
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHardware" @onmousedown="AddHardwareEvent"><b>+ Добавить</b></button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onmousedown="MoveHardwareEvent"><b>Переместить</b></button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#giveHardware" @onmousedown="GiveHardwareEvent"><b>Выдать</b></button>
-                                <button type="button" class="btn btn-secondary" @onmousedown="ReturnHardware"><b>Вернуть</b></button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт Excel</b></button>
-                                <button type="button" class="btn btn-warning" @onmousedown="ExportHardwareEvent"><b>Экспорт Excel</b></button>
-                                <button type="button" class="btn btn-primary" @onmousedown="MarkHardware"><b>Маркировать</b></button>
-                                <button type="button" class="btn btn-danger" @onmousedown="WriteOffHardware"><b>Списать</b></button>
-                                <button type="button" class="btn btn-info" @onmousedown="GenerateQR"><b>QR</b></button>
-                                <button type="button" class="btn btn-info" @onmousedown="GenerateLabel"><b>Label</b></button>
+                                @if (HardwaresId.Count == 0)
+                                {
+                                    <button type="button" class="btn btn-success mb-1" data-bs-toggle="modal" data-bs-target="#addHardware" @onmousedown="AddHardwareEvent"><b>+ Добавить</b></button>
+                                    <button type="button" class="btn btn-warning mb-1" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт Excel</b></button>
+                                    <button type="button" class="btn btn-warning mb-1" @onmousedown="ExportHardwareEvent"><b>Экспорт Excel</b></button>
+                                }
+                                else                                
+                                {
+                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#moveHardware" @onmousedown="MoveHardwareEvent"><b>Перемещение</b></button>
+                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#giveHardware" @onmousedown="GiveHardwareEvent"><b>Выдача</b></button>
+                                    <button type="button" class="btn btn-secondary mb-1" @onmousedown="ReturnHardware"><b>Возврат</b></button>
+                                    <button type="button" class="btn btn-danger mb-1" @onmousedown="WriteOffHardware"><b>Списание</b></button>
+                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
+                                    <button type="button" class="btn btn-primary mb-1" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
+                                    @if (Hardware.MarkCode.HasValue == false)
+                                    {
+                                        <button type="button" class="btn btn-primary mb-1" @onclick="MarkHardware"><b>Маркировка</b></button>
+                                    }
+                                    @if (Hardware.MarkCode.HasValue && Hardware.CombinedInvNumber != string.Empty)
+                                    {
+                                        <button type="button" class="btn btn-info mb-1" @onclick="GenerateQR"><b>QR</b></button>
+                                        <button type="button" class="btn btn-info mb-1" @onclick="GenerateLabel"><b>Label</b></button>
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="p-0 m-1 col-auto">
@@ -81,6 +93,41 @@
                                 <tr>
                                     <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
                                     <td>@hardware.Title</td>
+                                    <td>
+                                        @if (hardware.Status == accepted)
+                                        {
+                                            statusClass = "bg-primary";
+                                        }
+                                        else if (hardware.Status == marking)
+                                        {
+                                            statusClass = "bg-secondary";
+                                        }
+                                        else if (hardware.Status == moving)
+                                        {
+                                            statusClass = "bg-success";
+                                        }
+                                        else if (hardware.Status == give)
+                                        {
+                                            statusClass = "bg-primary";
+                                        }
+                                        else if (hardware.Status == repair)
+                                        {
+                                            statusClass = "bg-warning text-dark";
+                                        }
+                                        else if (hardware.Status == import)
+                                        {
+                                            statusClass = "bg-info text-dark";
+                                        }
+                                        else if (hardware.Status == write_off)
+                                        {
+                                            statusClass = "bg-danger";
+                                        }
+                                        else
+                                        {
+                                            statusClass = "bg-light text-dark";
+                                        }
+                                        <span class="badge @statusClass">@hardware.Status</span>
+                                    </td>
                                     <td>@hardware.CombinedInvNumber</td>
                                     <td>@hardware.InventoryNumberExternalSystem</td>
                                     <td>@hardware.DateTimeAdd</td>
@@ -447,15 +494,24 @@
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="p-0 m-1 col-auto">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Переместить</b></button>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#giveHardware" @onclick="GiveHardwareEvent"><b>Выдать</b></button>
-                                                <button type="button" class="btn btn-secondary" @onclick="ReturnHardware"><b>Вернуть</b></button>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
-                                                <button type="button" class="btn btn-primary" @onclick="MarkHardware"><b>Маркировать</b></button>
-                                                <button type="button" class="btn btn-danger" @onclick="WriteOffHardware"><b>Списать</b></button>
-                                                <button type="button" class="btn btn-info" @onclick="GenerateQR"><b>QR</b></button>
-                                                <button type="button" class="btn btn-info" @onclick="GenerateLabel"><b>Label</b></button>
+                                                @if(Hardware.MarkCode.HasValue)
+                                                {
+                                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Перемещение</b></button>
+                                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#giveHardware" @onclick="GiveHardwareEvent"><b>Выдача</b></button>
+                                                    <button type="button" class="btn btn-secondary mb-1" @onclick="ReturnHardware"><b>Возврат</b></button>
+                                                    <button type="button" class="btn btn-danger mb-1" @onclick="WriteOffHardware"><b>Списание</b></button>
+                                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
+                                                    <button type="button" class="btn btn-primary mb-1" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-primary mb-1" @onclick="MarkHardware"><b>Маркировка</b></button>
+                                                }
+                                                @if(Hardware.MarkCode.HasValue && Hardware.CombinedInvNumber != string.Empty)
+                                                {
+                                                    <button type="button" class="btn btn-info mb-1" @onclick="GenerateQR"><b>QR</b></button>
+                                                    <button type="button" class="btn btn-info mb-1" @onclick="GenerateLabel"><b>Label</b></button>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -655,7 +711,6 @@
     public UserView userView = new();
     public string username = string.Empty;
 
-    PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
     private MainWarehouse MainWarehouse = new();
     private List<Hardware> FilteredHardwares = new();
     private List<Hardware> Hardwares = new();
@@ -675,10 +730,10 @@
     private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
-    //private readonly string host = "http://hardware-vm:81";
+    private readonly string host = "http://hardware-vm:81";
     //private readonly string host = "http://apitmk.site";
-    private readonly string host = "https://localhost:7266";
-    private List<string> TableHeaders = ["Наименование", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ", ""];
+    //private readonly string host = "https://localhost:7266";
+    private List<string> TableHeaders = ["Наименование", "Статус", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ", ""];
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
     private int StringCount;
@@ -699,6 +754,30 @@
     private string PrevClasses = "page-item disabled";
     private string NextClasses = "page-item";
 
+    private Dictionary<StatusHardware, string> hardwareStatus = new();
+    private string statusClass = "bg-light text-dark";
+    private string accepted = string.Empty;
+    private string marking = string.Empty;
+    private string moving = string.Empty;
+    private string give = string.Empty;
+    private string return_main = string.Empty;
+    private string repair = string.Empty;
+    private string repair_refund = string.Empty;
+    private string write_off = string.Empty;
+    private string import = string.Empty;
+
+    enum StatusHardware
+    {
+        accepted,       // Добавлено
+        marking,        // Промаркировано
+        moving,         // Перемещено
+        give,           // Выдано
+        return_main,    // Возврат на основной склад
+        repair,         // В ремонте
+        repair_refund,  // Возврат из ремонта
+        write_off,      // Списано
+        import          // Импортировано
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -716,6 +795,25 @@
                 FilteredHardwares = Hardwares.Take(ItemPerPage).ToList();
                 CalculateQuantity(ItemPerPage, PageNumber, null);
                 ShowAllHistoryTextButton = $"Показать всю историю ({HideHistoryList.Count}) ↓";
+                hardwareStatus.Add(StatusHardware.accepted, "Добавлено");
+                hardwareStatus.Add(StatusHardware.marking, "Промаркировано");
+                hardwareStatus.Add(StatusHardware.moving, "Перемещено");
+                hardwareStatus.Add(StatusHardware.give, "Выдано");
+                hardwareStatus.Add(StatusHardware.return_main, "Возврат на основной склад");
+                hardwareStatus.Add(StatusHardware.repair, "В ремонте");
+                hardwareStatus.Add(StatusHardware.repair_refund, "Возврат из ремонта");
+                hardwareStatus.Add(StatusHardware.write_off, "Списано");
+                hardwareStatus.Add(StatusHardware.import, "Импортировано");
+
+                accepted = hardwareStatus[StatusHardware.accepted];
+                marking = hardwareStatus[StatusHardware.marking];
+                moving = hardwareStatus[StatusHardware.moving];
+                give = hardwareStatus[StatusHardware.give];
+                return_main = hardwareStatus[StatusHardware.return_main];
+                repair = hardwareStatus[StatusHardware.repair];
+                repair_refund = hardwareStatus[StatusHardware.repair_refund];
+                write_off = hardwareStatus[StatusHardware.write_off];
+                import = hardwareStatus[StatusHardware.import];
             }
         }
         catch (Exception ex) { }
@@ -1045,7 +1143,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Перемещение")
+                    if (history.OperationType == hardwareStatus[StatusHardware.moving])
                     {
                         if (history.SenderId.HasValue)
                         {
@@ -1057,7 +1155,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Выдача")
+                    if (history.OperationType == hardwareStatus[StatusHardware.give])
                     {
                         if (history.SenderId.HasValue)
                         {
@@ -1069,7 +1167,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Ремонт")
+                    if (history.OperationType == hardwareStatus[StatusHardware.repair])
                     {
                         if (history.Annotation != null)
                         {
@@ -1081,7 +1179,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Возврат из ремонта")
+                    if (history.OperationType == hardwareStatus[StatusHardware.repair_refund])
                     {
                         if (history.Annotation != null)
                         {
@@ -1093,7 +1191,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Возврат")
+                    if (history.OperationType == hardwareStatus[StatusHardware.return_main])
                     {
                         if (history.UserWarehouseId.HasValue & history.SenderId.HasValue)
                         {
@@ -1105,7 +1203,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Импорт")
+                    if (history.OperationType == hardwareStatus[StatusHardware.import])
                     {
                         if (history.WarehouseId.HasValue)
                         {
@@ -1117,7 +1215,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Добавление")
+                    if (history.OperationType == hardwareStatus[StatusHardware.accepted])
                     {
                         if (history.WarehouseId.HasValue)
                         {
@@ -1129,7 +1227,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Маркировка")
+                    if (history.OperationType == hardwareStatus[StatusHardware.marking])
                     {
                         if (history.HardwareMarkCode.HasValue)
                         {
@@ -1141,7 +1239,7 @@
                         }
                     }
 
-                    if (history.OperationType == "Списание")
+                    if (history.OperationType == hardwareStatus[StatusHardware.write_off])
                     {
                         if (history.WarehouseId.HasValue)
                         {
