@@ -126,6 +126,7 @@
                                         {
                                             statusClass = "bg-light text-dark";
                                         }
+
                                         <span class="badge @statusClass">@hardware.Status</span>
                                     </td>
                                     <td>@hardware.CombinedInvNumber</td>
@@ -766,18 +767,7 @@
     private string write_off = string.Empty;
     private string import = string.Empty;
 
-    enum StatusHardware
-    {
-        accepted,       // Добавлено
-        marking,        // Промаркировано
-        moving,         // Перемещено
-        give,           // Выдано
-        return_main,    // Возврат на основной склад
-        repair,         // В ремонте
-        repair_refund,  // Возврат из ремонта
-        write_off,      // Списано
-        import          // Импортировано
-    }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -792,6 +782,9 @@
                 StringCount = response.Hardwares.Count;
                 Categories = await CategoryHardwareService.GetAllAsync();
                 FilteredHardwares.Clear();
+                int itemLS = await localStorage.GetItemAsync<int>("itemPerPage");
+                if (itemLS > 0)
+                    ItemPerPage = itemLS;
                 FilteredHardwares = Hardwares.Take(ItemPerPage).ToList();
                 CalculateQuantity(ItemPerPage, PageNumber, null);
                 ShowAllHistoryTextButton = $"Показать всю историю ({HideHistoryList.Count}) ↓";
@@ -1352,7 +1345,8 @@
                                                                    d.Description.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
                                                                    d.InventoryNumberExternalSystem.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
                                                                    d.TTN.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
-                                                                   d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList().Where(h => h.CategoryHardwareId == CategoryHardware.Id).ToList();
+                                                                   d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.Status.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList().Where(h => h.CategoryHardwareId == CategoryHardware.Id).ToList();
                 StringCount = FilteredHardwares.Count;
             }
             else
@@ -1361,7 +1355,8 @@
                                                                    d.Description.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
                                                                    d.InventoryNumberExternalSystem.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
                                                                    d.TTN.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
-                                                                   d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
+                                                                   d.CombinedInvNumber.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                                   d.Status.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
                 CategoryHardware = new();
                 StringCount = FilteredHardwares.Count;
                 CalculateQuantity(ItemPerPage, PageNumber, FilteredHardwares);
@@ -1423,9 +1418,10 @@
 
     }
 
-    private void selectChange(ChangeEventArgs args)
+    private async Task selectChange(ChangeEventArgs args)
     {
         int itemPerPage = int.Parse(args.Value.ToString());
+        await localStorage.SetItemAsync("itemPerPage", itemPerPage);
         PageNumber = 1;
         CalculateQuantity(itemPerPage, PageNumber, null);
     }

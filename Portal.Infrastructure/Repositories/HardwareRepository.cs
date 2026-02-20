@@ -5,25 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Entities.History;
+using Portal.Domain.Enums;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;
-using Portal.Infrastructure.Migrations;
 
 namespace Portal.Infrastructure.Repositories
 {
-    enum StatusHardware
-    {
-        accepted,       // Добавлено
-        marking,        // Промаркировано
-        moving,         // Перемещено
-        give,           // Выдано
-        return_main,    // Возврат на основной склад
-        repair,         // В ремонте
-        repair_refund,  // Возврат из ремонта
-        write_off,      // Списано
-        import          // Импортировано
-    }
 
     public class HardwareRepository : IHardwareDomain
     {
