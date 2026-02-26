@@ -314,9 +314,9 @@ namespace Portal.Infrastructure.Repositories
                 else
                 {
                     status = hardwareStatus[StatusHardware.return_main]; // Получаем статус Возврат на основной склад
-                    hardwareDB.UserId = null;
-                    hardwareDB.UserWarehouseId = null;
-                    hardwareDB.Status = status;
+                    //hardwareDB.UserId = null;
+                    //hardwareDB.UserWarehouseId = null;
+                    hardwareDB.Status = hardwareStatus[StatusHardware.moving]; // Получаем статус Перемещено
                     returned.Add(hardwareDB.Id);
                     History history = new History(returnDTO.ResponsibleId, hardwareDB.Id, hardwareDB.MainWarehouseId, hardwareDB.UserId, hardwareDB.UserWarehouseId, status, DateTime.Now);
                     await context.HistoryEntries.AddAsync(history);
