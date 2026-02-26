@@ -15,8 +15,8 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-sm">
-                    <h3 class="m-0">Сотрудники</h3>
-                    <p class="m-0">Таблица добавленных сотрудников.</p>
+                    <h3 class="m-0">Пользователи</h3>
+                    <p class="m-0">Таблица добавленных пользователей.</p>
                 </div>
                 <div class="col-sm d-flex align-items-center justify-content-end">
                     <div class="row">
@@ -26,21 +26,21 @@
                                     <span>Всего: <span class="fw-bold">@UsersList.Count()</span></span>
                                 </div>
                                 <div class="col">
-                                    <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                    <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
                                 </div>                                      
                             </div>
                         </div>
                         <AuthorizeView Roles="admin">
                             <Authorized>
                                 <div class="p-0 m-1 col-auto">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
+                                    <button type="button" class="btn btn-success" title="Добавить пользователя" data-bs-toggle="modal" data-bs-target="#addUser"><b>+ Добавить</b></button>
                                 </div>
                             </Authorized>
                         </AuthorizeView>
                         <AuthorizeView Roles="admin,employee_it">
                             <Authorized>
                                 <div class="p-0 m-1 col-auto">
-                                    <button type="button" class="btn btn-primary" id="liveAlertBtn" @onclick="SyncUsers"><b>@TitleSyncButton</b></button>
+                                    <button type="button" class="btn btn-primary" title="Синхронизировать пользователей" id="liveAlertBtn" @onclick="SyncUsers"><b>@TitleSyncButton</b></button>
                                 </div>
                             </Authorized>
                         </AuthorizeView>

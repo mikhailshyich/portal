@@ -17,8 +17,11 @@
                     <AuthorizeView Roles="admin">
                         <Authorized>
                             <div class="row">
+                                <div class="p-0 m-1 col">
+                                    <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                </div>
                                 <div class="p-0 m-1 col-auto">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategory"><b>+ Добавить</b></button>
+                                    <button type="button" class="btn btn-success" title="Добавить новую категорию" data-bs-toggle="modal" data-bs-target="#addCategory"><b>+ Добавить</b></button>
                                 </div>
                             </div>
                         </Authorized>
@@ -27,7 +30,7 @@
             </div>
         </div>
         <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-            <TableView CategoriesHardware="CategoriesHardware" TableHeader="TableHeaders" />
+            <TableView CategoriesHardware="FilteredCategoriesHardware" TableHeader="TableHeaders" />
         </div>
         <div class="card-footer">
         </div>
@@ -66,8 +69,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                                <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                                <button type="button" class="btn btn-danger" title="Отменить добавление категории" data-bs-dismiss="modal">Отмена</button>
+                                <button type="submit" class="btn btn-success" title="Добавить категорию" id="submit">Добавить</button>
                             </div>
                         </EditForm>
                     </div>
@@ -78,8 +81,10 @@
 @code {
     private CategoryHardwareDTO categoryHardwareDTO = new();
     private List<CategoryHardware> CategoriesHardware = new();
+    private List<CategoryHardware> FilteredCategoriesHardware = new();
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = string.Empty;
+    private string SearchString { get; set; } = string.Empty;
     private List<string> TableHeaders = ["Полное наименование", "Краткое наименование", ""];
 
     protected override async Task OnInitializedAsync()
@@ -87,6 +92,7 @@
         try
         {
             CategoriesHardware = await CategoryHardwareService.GetAllAsync();
+            FilteredCategoriesHardware = CategoriesHardware;
         }
         catch (Exception ex) { }
     }
@@ -105,6 +111,19 @@
             ClassesAlert = "alert-success";
             categoryHardwareDTO = new();
             CategoriesHardware = await CategoryHardwareService.GetAllAsync();
+        }
+    }
+    private async Task SearchEvent(ChangeEventArgs args)
+    {
+        SearchString = args.Value.ToString();
+        if (string.IsNullOrWhiteSpace(SearchString))
+        {
+            FilteredCategoriesHardware = CategoriesHardware;
+        }
+        else
+        {
+            FilteredCategoriesHardware = CategoriesHardware.Where(u => u.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
+                                                     u.ShortTitle.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
         }
     }
 }

@@ -20,7 +20,7 @@
                     <td>@warehouse.Title</td>
                     <td>@warehouse.UserDepartment?.Title</td>
                     <td>@warehouse.Description</td>
-                    <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToMainWarehouse(warehouse.Id)">Перейти</button></td>
+                    <td><button class="btn btn-secondary btn-sm mx-1" title="Перейти к складу" @onclick="() => GoToMainWarehouse(warehouse.Id)">Перейти</button></td>
                 </tr>
             }
         }
@@ -35,7 +35,7 @@
                     <td>@hardware.CombinedInvNumber</td>
                     <td>@hardware.InventoryNumberExternalSystem</td>
                     <td>@hardware.DateTimeAdd</td>
-                    <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToMainWarehouse(hardware.Id)">Перейти</button></td>
+                    <td><button class="btn btn-secondary btn-sm mx-1" title="" @onclick="() => GoToMainWarehouse(hardware.Id)">Перейти</button></td>
                 </tr>
             }
         }
@@ -47,7 +47,7 @@
                     @* <td><input class="form-check-input" type="checkbox" @bind-value="@warehouse.Id" /></td> *@
                     <td><a href="/users/@warehouse.User?.Id">@warehouse.User?.LastName @warehouse.User?.FirstName</a></td>
                     <td>@warehouse.Title</td>
-                    <td><button class="btn btn-secondary btn-sm mx-1" @onclick="() => GoToUserWarehouse(warehouse.Id)">Перейти</button></td>
+                    <td><button class="btn btn-secondary btn-sm mx-1" title="Перейти к складу" @onclick="() => GoToUserWarehouse(warehouse.Id)">Перейти</button></td>
                 </tr>
             }
         }
@@ -59,7 +59,7 @@
                     @* <td><input class="form-check-input" type="checkbox" @bind-value="@category.Id" /></td> *@
                     <td>@category.Title</td>
                     <td>@category.ShortTitle</td>
-                    <td><button class="btn btn-secondary btn-sm mx-1">Редактировать</button></td>
+                    <td><button class="btn btn-secondary btn-sm mx-1" title="Редактировать категорию">Редактировать</button></td>
                 </tr>
             }
         }
@@ -71,7 +71,7 @@
                     @* <td><input class="form-check-input" type="checkbox" @bind-value="@department.Id" /></td> *@
                     <td>@department.Title</td>
                     <td>@department.ShortTitle</td>
-                    <td><button class="btn btn-secondary btn-sm mx-1">Перейти</button></td>
+                    <td><button class="btn btn-secondary btn-sm mx-1" title="Перейти к отделу">Перейти</button></td>
                 </tr>
             }
         }
@@ -84,10 +84,10 @@
                     <td>@user.LastName</td>
                     <td>@user.FirstName</td>
                     <td>
-                        <button class="btn btn-secondary btn-sm mx-1" @onclick="() => ShowUser(user.Id)">Перейти</button>
+                        <button class="btn btn-secondary btn-sm mx-1" title="Перейти к профилю пользователя" @onclick="() => ShowUser(user.Id)">Перейти</button>
                         <AuthorizeView Roles="admin">
                             <Authorized>
-                                <button class="btn btn-primary btn-sm mx-1" @onclick="() => EditUser(user.Id)">Редактировать</button>
+                                <button class="btn btn-primary btn-sm mx-1" title="Редактировать пользователя" @onclick="() => EditUser(user.Id)">Редактировать</button>
                             </Authorized>
                         </AuthorizeView>
                     </td>
@@ -105,7 +105,7 @@
                     <td>
                         <AuthorizeView Roles="admin">
                             <Authorized>
-                                <button class="btn btn-primary btn-sm mx-1" @onclick="() => EditDocument(document.Id)">Редактировать</button>
+                                <button class="btn btn-primary btn-sm mx-1" title="Редактировать документ" @onclick="() => EditDocument(document.Id)">Редактировать</button>
                             </Authorized>
                         </AuthorizeView>
                     </td>

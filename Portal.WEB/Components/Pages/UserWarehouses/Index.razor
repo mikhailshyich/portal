@@ -6,22 +6,22 @@
 @inject UserServiceWEB userService
 @inject UserDepartmentServiceWEB userDepartmentService
 
-<title>Склады сотрудников</title>
+<title>Склады пользователей</title>
 
 <div class="container">
     <div class="card mt-3 mb-3">
         <div class="card-header">
             <div class="row">
                 <div class="col-sm">
-                    <h3 class="m-0">Склады сотрудников</h3>
-                    <p class="m-0">Таблица личных складов сотрудников.</p>
+                    <h3 class="m-0">Склады пользователей</h3>
+                    <p class="m-0">Таблица личных складов пользователей.</p>
                 </div>
                 <div class="col-sm d-flex align-items-center justify-content-end">
                     <AuthorizeView Roles="admin">
                         <Authorized>
                             <div class="row">
                                 <div class="p-0 m-1 col-auto">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserWarehouse"><b>+ Добавить</b></button>
+                                    <button type="button" title="Добавить новый склад для пользователя" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserWarehouse"><b>+ Добавить</b></button>
                                 </div>
                             </div>
                         </Authorized>
@@ -42,7 +42,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addUserWarehouseTitle">Новый склад для подразделения</h5>
+                <h5 class="modal-title" id="addUserWarehouseTitle">Новый склад для пользователя</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <EditForm Model="userWarehouseDTO" FormName="AddUserWarehouse" Context="AddUserWarehouse" OnValidSubmit="AddUserWarehouse">
@@ -56,9 +56,9 @@
                     <!-- End alert -->
 
                     <div class="form-group">
-                        <label for="userdepartment">Сотрудник</label>
-                        <InputSelect id="userdepartment" class="form-control" @oninput="SelectedUser" @bind-Value="userWarehouseDTO.UserId">
-                            <option value="x">Выберите сотрудника</option>
+                        <label for="userdepartment">Пользователь</label>
+                        <InputSelect title="Список активных пользователей" id="userdepartment" class="form-control" @oninput="SelectedUser" @bind-Value="userWarehouseDTO.UserId">
+                            <option value="x">Выберите пользователя</option>
                             @foreach (UserView user in UsersList)
                             {
                                 <option value="@user.Id">@user.LastName @user.FirstName</option>
@@ -68,20 +68,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="title">Отдел сотрудника</label>
-                        <InputText id="title" class="form-control" @bind-Value="userDepartment.Title" disabled readonly />
+                        <label for="title">Текущий отдел пользователя</label>
+                        <InputText title="Отдел пользователя" id="title" class="form-control" @bind-Value="userDepartment.Title" disabled readonly />
                     </div>
 
                     <div class="form-group">
-                        <label for="title">Наименование</label>
-                        <InputText id="title" class="form-control" @bind-Value="userWarehouseDTO.Title" />
+                        <label for="title">Наименование склада</label>
+                        <InputText title="Наименование нового склада для пользователя" id="title" class="form-control" @bind-Value="userWarehouseDTO.Title" />
                         <ValidationMessage For="@(() => userWarehouseDTO.Title)" />
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                    <button type="button" title="Отменить добавление склада для пользователя" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" title="Добавить новый склад для пользователя" class="btn btn-success" id="submit">Добавить</button>
                 </div>
             </EditForm>
         </div>

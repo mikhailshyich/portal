@@ -26,28 +26,28 @@
                     <Authorized>
                         <div class="row">
                             <div class="p-0 m-1 col-auto">
-                                @if (HardwaresId.Count == 0)
+                                @if (HardwaresId.Count == 0 || HardwaresId.Count == 1)
                                 {
-                                    <button type="button" class="btn btn-success mb-1" data-bs-toggle="modal" data-bs-target="#addHardware" @onmousedown="AddHardwareEvent"><b>+ Добавить</b></button>
-                                    <button type="button" class="btn btn-warning mb-1" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт Excel</b></button>
-                                    <button type="button" class="btn btn-warning mb-1" @onmousedown="ExportHardwareEvent"><b>Экспорт Excel</b></button>
+                                    <button type="button" class="btn btn-success mb-1" title="Добавить новое оборудование" data-bs-toggle="modal" data-bs-target="#addHardware" @onmousedown="AddHardwareEvent"><b>+ Добавить</b></button>
+                                    <button type="button" class="btn btn-warning mb-1" title="Импортировать из файла Excel" data-bs-toggle="modal" data-bs-target="#importHardware"><b>Импорт Excel</b></button>
+                                    <button type="button" class="btn btn-warning mb-1" title="Экспортировать в Excel" @onmousedown="ExportHardwareEvent"><b>Экспорт Excel</b></button>
                                 }
                                 else                                
                                 {
-                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#moveHardware" @onmousedown="MoveHardwareEvent"><b>Перемещение</b></button>
-                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#giveHardware" @onmousedown="GiveHardwareEvent"><b>Выдача</b></button>
-                                    <button type="button" class="btn btn-secondary mb-1" @onmousedown="ReturnHardware"><b>Возврат</b></button>
-                                    <button type="button" class="btn btn-danger mb-1" @onmousedown="WriteOffHardware"><b>Списание</b></button>
-                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
-                                    <button type="button" class="btn btn-primary mb-1" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
+                                    <button type="button" class="btn btn-primary mb-1" title="Переместить оборудование на пользователя" data-bs-toggle="modal" data-bs-target="#moveHardware" @onmousedown="MoveHardwareEvent"><b>Перемещение</b></button>
+                                    <button type="button" class="btn btn-primary mb-1" title="Временно выдать оборудование пользователю" data-bs-toggle="modal" data-bs-target="#giveHardware" @onmousedown="GiveHardwareEvent"><b>Выдача</b></button>
+                                    <button type="button" class="btn btn-secondary mb-1" title="Вернуть оборудование на основной склад" @onmousedown="ReturnHardware"><b>Возврат</b></button>
+                                    <button type="button" class="btn btn-danger mb-1" title="Списать оборудование со склада" @onmousedown="WriteOffHardware"><b>Списание</b></button>
+                                    <button type="button" class="btn btn-primary mb-1" title="Передать оборудование в ремонт" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
+                                    <button type="button" class="btn btn-primary mb-1" title="Вернуть оборудование из ремонта" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
                                     @if (Hardware.MarkCode.HasValue == false)
                                     {
-                                        <button type="button" class="btn btn-primary mb-1" @onclick="MarkHardware"><b>Маркировка</b></button>
+                                        <button type="button" class="btn btn-primary mb-1" title="Промаркировать оборудование" @onclick="MarkHardware"><b>Маркировка</b></button>
                                     }
                                     @if (Hardware.MarkCode.HasValue && Hardware.CombinedInvNumber != string.Empty)
                                     {
-                                        <button type="button" class="btn btn-info mb-1" @onclick="GenerateQR"><b>QR</b></button>
-                                        <button type="button" class="btn btn-info mb-1" @onclick="GenerateLabel"><b>Label</b></button>
+                                        <button type="button" class="btn btn-info mb-1" title="Сформировать QR-код" @onclick="GenerateQR"><b>QR</b></button>
+                                        <button type="button" class="btn btn-info mb-1" title="Сформировать этикетку" @onclick="GenerateLabel"><b>Label</b></button>
                                     }
                                 }
                             </div>
@@ -55,7 +55,7 @@
                         <div class="p-0 m-1 col-auto">
                             <div class="row justify-content-center">
                                 <div class="col-sm-5">
-                                    <InputSelect class="form-select" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
+                                    <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
                                         <option value="1" selected>Все категории</option>
                                         @foreach (CategoryHardware category in Categories)
                                         {
@@ -64,10 +64,10 @@
                                     </InputSelect>
                                 </div>
                                 <div class="col-sm-6">
-                                    <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                    <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
                                 </div>
                                 <div class="col-sm-1">
-                                    <span>Всего: <span class="fw-bold">@StringCount</span></span>
+                                    <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
                                 </div>
                             </div>
                         </div>
@@ -92,54 +92,47 @@
                             {
                                 <tr>
                                     <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
-                                    <td>@hardware.Title</td>
+                                    <td title="Посмотреть детально" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#viewHardware" @onclick="() => ViewHardware(hardware.Id)">@hardware.Title</td>
                                     <td>
-                                        @if (hardware.Status == accepted)
-                                        {
-                                            statusClass = "bg-primary";
-                                        }
-                                        else if (hardware.Status == marking)
-                                        {
-                                            statusClass = "bg-secondary";
-                                        }
-                                        else if (hardware.Status == moving)
-                                        {
-                                            statusClass = "bg-success";
-                                        }
-                                        else if (hardware.Status == give)
-                                        {
-                                            statusClass = "bg-primary";
-                                        }
-                                        else if (hardware.Status == repair)
-                                        {
-                                            statusClass = "bg-warning text-dark";
-                                        }
-                                        else if (hardware.Status == import)
-                                        {
-                                            statusClass = "bg-info text-dark";
-                                        }
-                                        else if (hardware.Status == write_off)
-                                        {
-                                            statusClass = "bg-danger";
-                                        }
-                                        else
-                                        {
-                                            statusClass = "bg-light text-dark";
-                                        }
+                                            @if (hardware.Status == accepted)
+                                            {
+                                                statusClass = "bg-primary";
+                                            }
+                                            else if (hardware.Status == marking)
+                                            {
+                                                statusClass = "bg-secondary";
+                                            }
+                                            else if (hardware.Status == moving)
+                                            {
+                                                statusClass = "bg-success";
+                                            }
+                                            else if (hardware.Status == give)
+                                            {
+                                                statusClass = "bg-primary";
+                                            }
+                                            else if (hardware.Status == repair)
+                                            {
+                                                statusClass = "bg-warning text-dark";
+                                            }
+                                            else if (hardware.Status == import)
+                                            {
+                                                statusClass = "bg-info text-dark";
+                                            }
+                                            else if (hardware.Status == write_off)
+                                            {
+                                                statusClass = "bg-danger";
+                                            }
+                                            else
+                                            {
+                                                statusClass = "bg-light text-dark";
+                                            }
 
-                                        <span class="badge @statusClass">@hardware.Status</span>
-                                    </td>
+                                            <span class="badge @statusClass">@hardware.Status</span>
+                                        </td>
                                     <td>@hardware.CombinedInvNumber</td>
                                     <td>@hardware.InventoryNumberExternalSystem</td>
                                     <td>@hardware.DateTimeAdd</td>
                                     <td><a href="/users/@hardware.UserId?">@hardware.User?.LastName @hardware.User?.FirstName</a></td>
-                                    <td><button class="btn btn-secondary btn-sm mx-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#viewHardware"
-                                                @onclick="() => ViewHardware(hardware.Id)">
-                                            Подробнее
-                                        </button>
-                                    </td>
                                 </tr>
                             }
                         }
@@ -152,7 +145,7 @@
                 {
                     <div class="row">
                         <div class="col-1">
-                            <InputSelect class="form-select" style="cursor: pointer;" @bind-Value="ItemPerPage" @oninput="selectChange">
+                            <InputSelect class="form-select" title="Количество элементов на странице" style="cursor: pointer;" @bind-Value="ItemPerPage" @oninput="selectChange">
                                 <option value="10" selected>10</option>
                                 <option value="20">20</option>
                                 <option value="30">30</option>
@@ -265,8 +258,8 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                                    <button type="submit" class="btn btn-success" id="submit">Добавить</button>
+                                    <button type="button" title="Отменить добавление оборудования" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                                    <button type="submit" title="Добавить новое оборудование" class="btn btn-success" id="submit">Добавить</button>
                                 </div>
                             </EditForm>
                         </div>
@@ -279,7 +272,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="moveHardwareTitle">Переместить оборудование на сотрудника</h5>
+                                <h5 class="modal-title" id="moveHardwareTitle">Переместить оборудование на пользователя</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <EditForm Model="hardwareMoveDTO" FormName="MoveHardware" Context="MoveHardware" OnValidSubmit="MoveHardware">
@@ -293,9 +286,9 @@
                                     <!-- End alert -->
 
                                     <div class="form-group">
-                                        <label for="user">Сотрудник</label>
-                                        <InputSelect id="user" class="form-control" @oninput="SelectedUserEvent" @bind-Value="hardwareMoveDTO.UserId">
-                                            <option value="">Выберите нужного сотрудника</option>
+                                        <label for="user">Пользователь</label>
+                                        <InputSelect title="Список активных пользователей" id="user" class="form-control" @oninput="SelectedUserEvent" @bind-Value="hardwareMoveDTO.UserId">
+                                            <option value="">Выберите нужного пользователя</option>
                                             @foreach (UserView user in UsersList.OrderBy(u=>u.LastName))
                                             {
                                                 <option value="@user.Id">@user.LastName @user.FirstName</option>
@@ -305,8 +298,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="user">Склад сотрудника</label>
-                                        <InputSelect id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
+                                        <label for="user">Склад пользователя</label>
+                                        <InputSelect title="Склады пользователя" id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
                                             <option selected value="">Выберите нужный склад</option>
                                             @foreach (UserWarehouse warehouse in UserWarehousesList)
                                             {
@@ -318,8 +311,8 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                                    <button type="submit" class="btn btn-success" id="submit">Переместить</button>
+                                    <button type="button" title="Отменить перемещение оборудования на пользователя" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                                    <button type="submit" title="Переместить оборудование на пользователя" class="btn btn-success" id="submit">Переместить</button>
                                 </div>
                             </EditForm>
                         </div>
@@ -332,7 +325,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="giveHardwareTitle">Выдать оборудование сотруднику</h5>
+                        <h5 class="modal-title" id="giveHardwareTitle">Выдать оборудование пользователю</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <EditForm Model="hardwareMoveDTO" FormName="GiveHardware" Context="GiveHardware" OnValidSubmit="GiveHardware">
@@ -346,9 +339,9 @@
                             <!-- End alert -->
 
                             <div class="form-group">
-                                <label for="user">Сотрудник</label>
-                                <InputSelect id="user" class="form-control" @oninput="SelectedUserEvent" @bind-Value="hardwareMoveDTO.UserId">
-                                    <option value="">Выберите нужного сотрудника</option>
+                                <label for="user">Пользователь</label>
+                                <InputSelect title="Список активных пользователей" id="user" class="form-control" @oninput="SelectedUserEvent" @bind-Value="hardwareMoveDTO.UserId">
+                                    <option value="">Выберите нужного пользователя</option>
                                     @foreach (UserView user in UsersList.OrderBy(u => u.LastName))
                                     {
                                         <option value="@user.Id">@user.LastName @user.FirstName</option>
@@ -358,8 +351,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="user">Склад сотрудника</label>
-                                <InputSelect id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
+                                <label for="user">Склад пользователя</label>
+                                <InputSelect title="Склады пользователя" id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
                                     <option selected value="">Выберите нужный склад</option>
                                     @foreach (UserWarehouse warehouse in UserWarehousesList)
                                     {
@@ -371,8 +364,8 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                            <button type="submit" class="btn btn-success" id="submit">Выдать</button>
+                            <button type="button" title="Отменить выдачу оборудования пользователю" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" title="Временно выдать оборудование пользователю" class="btn btn-success" id="submit">Выдать</button>
                         </div>
                     </EditForm>
                 </div>
@@ -386,7 +379,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="repairHardwareTitle">Передача оборудования на ремонт</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button title="Закрыть окно" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <EditForm Model="repairDTO" FormName="RepairHardware" Context="RepairHardware" OnValidSubmit="RepairHardware">
                         <div class="modal-body">
@@ -400,14 +393,14 @@
 
                             <div class="form-group">
                                 <label for="numberext">Комментарий (если нужен)</label>
-                                <InputText id="numberext" class="form-control" @bind-Value="repairDTO.Annotation" />
+                                <InputText title="Комментарий" id="numberext" class="form-control" @bind-Value="repairDTO.Annotation" />
                                 <ValidationMessage For="@(() => repairDTO.Annotation)" />
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                            <button type="submit" class="btn btn-success" id="submit">Передать в ремонт</button>
+                            <button type="button" title="Отменить передачу оборудования в ремонт" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" title="Передать оборудование в ремонт" class="btn btn-success" id="submit">Передать в ремонт</button>
                         </div>
                     </EditForm>
                 </div>
@@ -421,7 +414,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="returnRepairHardwareTitle">Возврат оборудования из ремонта</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" title="Закрыть окно" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <EditForm Model="repairDTO" FormName="ReturnRepairHardware" Context="ReturnRepairHardware" OnValidSubmit="ReturnRepairHardware">
                         <div class="modal-body">
@@ -435,14 +428,14 @@
 
                             <div class="form-group">
                                 <label for="numberext">Комментарий (если нужен)</label>
-                                <InputText id="numberext" class="form-control" @bind-Value="repairDTO.Annotation" />
+                                <InputText title="Комментарий" id="numberext" class="form-control" @bind-Value="repairDTO.Annotation" />
                                 <ValidationMessage For="@(() => repairDTO.Annotation)" />
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                            <button type="submit" class="btn btn-success" id="submit">Вернуть из ремонта</button>
+                            <button type="button" title="Отменить возврат из ремонта" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" title="Вернуть оборудование из ремонта" class="btn btn-success" id="submit">Вернуть из ремонта</button>
                         </div>
                     </EditForm>
                 </div>
@@ -456,7 +449,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="importHardwareTitle">Импорт оборудования из файла Excel</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" title="Закрыть окно" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
 
@@ -468,7 +461,7 @@
 
                         <div class="form-group">
                             <label>Файл Excel</label>
-                            <InputFile class="form-control" id="file" OnChange="UploadFile" accept=".xls,.xlsx" />
+                            <InputFile title="Выберите загружаемый файл Excel" class="form-control" id="file" OnChange="UploadFile" accept=".xls,.xlsx" />
                         </div>
 
                         <div class="form-group">
@@ -486,7 +479,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="viewHardwareTitle">@Hardware.Title</h5>
-                        <button type="button" @onclick="closeModalView" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" title="Закрыть окно" @onclick="closeModalView" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -497,21 +490,21 @@
                                             <div class="p-0 m-1 col-auto">
                                                 @if(Hardware.MarkCode.HasValue)
                                                 {
-                                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Перемещение</b></button>
-                                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#giveHardware" @onclick="GiveHardwareEvent"><b>Выдача</b></button>
-                                                    <button type="button" class="btn btn-secondary mb-1" @onclick="ReturnHardware"><b>Возврат</b></button>
-                                                    <button type="button" class="btn btn-danger mb-1" @onclick="WriteOffHardware"><b>Списание</b></button>
-                                                    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
-                                                    <button type="button" class="btn btn-primary mb-1" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
+                                                    <button type="button" title="Перместить оборудование на пользователя" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Перемещение</b></button>
+                                                    <button type="button" title="Временно выдать оборудование пользователю" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#giveHardware" @onclick="GiveHardwareEvent"><b>Выдача</b></button>
+                                                    <button type="button" title="Вернуть оборудование на основной склад" class="btn btn-secondary mb-1" @onclick="ReturnHardware"><b>Возврат</b></button>
+                                                    <button type="button" title="Списать оборудование со склада" class="btn btn-danger mb-1" @onclick="WriteOffHardware"><b>Списание</b></button>
+                                                    <button type="button" title="Передать оборудование в ремонт" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
+                                                    <button type="button" title="Вернуть оборудование из ремонта" class="btn btn-primary mb-1" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
                                                 }
                                                 else
                                                 {
-                                                    <button type="button" class="btn btn-primary mb-1" @onclick="MarkHardware"><b>Маркировка</b></button>
+                                                    <button type="button" title="Промаркировать оборудование" class="btn btn-primary mb-1" @onclick="MarkHardware"><b>Маркировка</b></button>
                                                 }
                                                 @if(Hardware.MarkCode.HasValue && Hardware.CombinedInvNumber != string.Empty)
                                                 {
-                                                    <button type="button" class="btn btn-info mb-1" @onclick="GenerateQR"><b>QR</b></button>
-                                                    <button type="button" class="btn btn-info mb-1" @onclick="GenerateLabel"><b>Label</b></button>
+                                                    <button type="button" title="Сформировать QR-код оборудования" class="btn btn-info mb-1" @onclick="GenerateQR"><b>QR</b></button>
+                                                    <button type="button" title="Сформировать этикетку" class="btn btn-info mb-1" @onclick="GenerateLabel"><b>Label</b></button>
                                                 }
                                             </div>
                                         </div>
@@ -534,14 +527,14 @@
                                         </div>
                                         <hr />
                                         <div class="row">
-                                            <div class="col"><h6>Сотрудник</h6></div>
+                                            <div class="col"><h6>Пользователь</h6></div>
                                             <div class="col-9 d-flex justify-content-end">@Hardware.User?.LastName @Hardware.User?.FirstName</div>
                                         </div>
                                         <hr />
                                         <div class="row">
-                                            <div class="col"><h6>Склад сотрудника</h6></div>
+                                            <div class="col"><h6>Склад пользователя</h6></div>
                                             <div class="col-9 d-flex justify-content-end">
-                                                <InputSelect id="user" class="form-select" @bind-Value="Hardware.UserWarehouseId" @oninput="SelectedUserWarehouseEvent">
+                                                <InputSelect title="Склады пользователя на которого перемещено оборудование" id="user" class="form-select" @bind-Value="Hardware.UserWarehouseId" @oninput="SelectedUserWarehouseEvent">
                                                     @foreach (UserWarehouse warehouse in UserWarehousesList)
                                                     {
                                                         <option value="@warehouse.Id">@warehouse.Title</option>
@@ -616,24 +609,24 @@
 
                                         <div class="form-group">
                                             <label for="title">Наименование (для этикетки) новое</label>
-                                            <InputText id="title" class="form-control" @bind-Value="updateDTO.NameForLabel" />
+                                            <InputText title="Новое наименование оборудования (для этикетки)" id="title" class="form-control" @bind-Value="updateDTO.NameForLabel" />
                                             <ValidationMessage For="@(() => updateDTO.NameForLabel)" />
                                         </div>
 
                                         <div class="form-group">
                                             <label for="numberext">Номер 1С (новый)</label>
-                                            <InputText id="numberext" class="form-control" @bind-Value="updateDTO.InventoryNumberExternalSystem" />
+                                            <InputText title="Новый номер оборудования во внешней учётной системе" id="numberext" class="form-control" @bind-Value="updateDTO.InventoryNumberExternalSystem" />
                                             <ValidationMessage For="@(() => updateDTO.InventoryNumberExternalSystem)" />
                                         </div>
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-success" id="submit">Сохранить изменения</button>
+                                        <button type="submit" title="Сохранить изменения для оборудования" class="btn btn-success" id="submit">Сохранить изменения</button>
                                     </div>
                                 </EditForm>
                                 <div class="row">
                                     <div class="col-12">
-                                        <a class="btn btn-secondary" @onclick="showHistoryEvent" data-bs-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
+                                        <a title="Показать историю оборудования" class="btn btn-secondary" @onclick="showHistoryEvent" data-bs-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
                                             @ShowAllHistoryTextButton
                                         </a>
                                     </div>
@@ -734,7 +727,7 @@
     private readonly string host = "http://hardware-vm:81";
     //private readonly string host = "http://apitmk.site";
     //private readonly string host = "https://localhost:7266";
-    private List<string> TableHeaders = ["Наименование", "Статус", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ", ""];
+    private List<string> TableHeaders = ["Наименование", "Статус", "Инвентарный", "Номер 1С", "Дата добавления", "МОЛ"];
     private List<UserView> UsersList = new();
     private List<UserWarehouse> UserWarehousesList = new();
     private int StringCount;
@@ -852,8 +845,10 @@
                 ClassesAlert = "alert-success";
                 hardwareDTO = new();
                 MainWarehouse = await MainWarehouseService.GetByIdAsync(Id);
+                StringCount = MainWarehouse.Hardwares.Count;
                 FilteredHardwares.Clear();
                 FilteredHardwares = MainWarehouse.Hardwares.Take(ItemPerPage).ToList();
+                CalculateQuantity(ItemPerPage, PageNumber, MainWarehouse.Hardwares);
             }
         }
         catch(Exception ex)
@@ -882,6 +877,8 @@
                 }
                 else
                 {
+                    if (HardwaresId.Count == 1)
+                        await UpdateViewHardware(HardwaresId[0]);
                     ResponseMessage = response.Message;
                     ClassesAlert = "alert-success";
                     HardwaresId.Clear();
@@ -893,6 +890,7 @@
                         hardware.CategoryHardware = category;
                         hardware.DocumentExternalSystem = document;
                     }
+                    await UpdateMainWarehouseHardware();
                 }
             }
         }
@@ -1050,6 +1048,7 @@
                 ResponseMessage = result.Message;
                 ClassesAlert = "alert-success";
             }
+            await UpdateMainWarehouseHardware();
         }
         catch(Exception ex){}
     }
@@ -1065,6 +1064,201 @@
         UsersList = await UserService.GetAllAsync();
     }
 
+    private async Task UpdateViewHardware(Guid hardwareId)
+    {
+        Hardware = await HardwareService.GetByIdAsync(hardwareId);
+        if (Hardware.UserId.HasValue)
+        {
+            UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(Hardware.UserId.Value);
+        }
+        HideHistoryList.Clear();
+        ShowHistoryList.Clear();
+        HideHistoryList = await HistoryService.GetByHardwareIdAsync(hardwareId);
+        if (HideHistoryList.Count > 0)
+        {
+            foreach (History history in HideHistoryList)
+            {
+                if (history.ResponsibleId.HasValue)
+                {
+                    var resposibleId = history.ResponsibleId ?? Guid.Empty;
+                    var responsible = await UserService.GetByIdAsync(resposibleId);
+                    if (responsible != null)
+                    {
+                        history.Responsible = $"{responsible.LastName} {responsible.FirstName}";
+                    }
+                }
+
+                if (history.SenderId.HasValue)
+                {
+                    var senderId = history.SenderId ?? Guid.Empty;
+                    var sender = await UserService.GetByIdAsync(senderId);
+                    if (sender != null)
+                    {
+                        history.Sender = $"{sender.LastName} {sender.FirstName}";
+                    }
+                }
+
+                if (history.RecipientId.HasValue)
+                {
+                    var recipientId = history.RecipientId ?? Guid.Empty;
+                    var recipient = await UserService.GetByIdAsync(recipientId);
+                    if (recipient != null)
+                    {
+                        history.Recipient = $"{recipient.LastName} {recipient.FirstName}";
+                    }
+                }
+
+                if (history.WarehouseId.HasValue)
+                {
+                    var warehouseId = history.WarehouseId ?? Guid.Empty;
+                    var mainWarehouse = await MainWarehouseService.GetByIdAsync(warehouseId);
+                    if (mainWarehouse != null)
+                    {
+                        history.MainWarehouse = mainWarehouse.Title;
+                    }
+                }
+
+                if (history.UserWarehouseId.HasValue)
+                {
+                    var userWarehouseId = history.UserWarehouseId ?? Guid.Empty;
+                    var userWarehouse = await UserWarehouseService.GetByIdAsync(userWarehouseId);
+                    if (userWarehouse != null)
+                    {
+                        history.UserWarehouse = userWarehouse.Title;
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.moving])
+                {
+                    if (history.SenderId.HasValue)
+                    {
+                        history.Annotation = $"Оборудование перемещено {history.Sender} → {history.Recipient} ({history.UserWarehouse}).";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование перемещено на {history.Recipient} ({history.UserWarehouse}).";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.give])
+                {
+                    if (history.SenderId.HasValue)
+                    {
+                        history.Annotation = $"Оборудование выдано {history.Sender} → {history.Recipient} ({history.UserWarehouse}).";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование выдано {history.Recipient} ({history.UserWarehouse}).";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.repair])
+                {
+                    if (history.Annotation != null)
+                    {
+                        history.Annotation = $"Оборудование передано в ремонт. Комментарий - {history.Annotation}";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование передано в ремонт.";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.repair_refund])
+                {
+                    if (history.Annotation != null)
+                    {
+                        history.Annotation = $"Оборудование возвращено из ремонта. Комментарий - {history.Annotation}";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование возвращено из ремонта.";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.return_main])
+                {
+                    if (history.UserWarehouseId.HasValue & history.SenderId.HasValue)
+                    {
+                        history.Annotation = $"Оборудование возвращено на {history.Sender} ({history.UserWarehouse}).";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование возвращено на склад ({history.MainWarehouse}).";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.import])
+                {
+                    if (history.WarehouseId.HasValue)
+                    {
+                        history.Annotation = $"Оборудование импортировано из Excel ({history.MainWarehouse}).";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование импортировано из Excel.";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.accepted])
+                {
+                    if (history.WarehouseId.HasValue)
+                    {
+                        history.Annotation = $"Оборудование добавлено вручную ({history.MainWarehouse}).";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование добавлено вручную.";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.marking])
+                {
+                    if (history.HardwareMarkCode.HasValue)
+                    {
+                        history.Annotation = $"Оборудование промаркировано {history.HardwareMarkCode}";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование промаркировано.";
+                    }
+                }
+
+                if (history.OperationType == hardwareStatus[StatusHardware.write_off])
+                {
+                    if (history.WarehouseId.HasValue)
+                    {
+                        history.Annotation = $"Оборудование списано ({history.MainWarehouse}).";
+                    }
+                    else
+                    {
+                        history.Annotation = $"Оборудование списано.";
+                    }
+                }
+            }
+
+            int quantity = 0;
+
+            if (HideHistoryList.Count >= 3)
+            {
+                quantity = 3;
+            }
+            else
+            {
+                quantity = HideHistoryList.Count;
+            }
+
+            for (int i = 0; i < quantity; i++)
+            {
+                if (HideHistoryList[i] != null)
+                    ShowHistoryList.Add(HideHistoryList[i]);
+            }
+
+            HideHistoryList.RemoveRange(0, quantity);
+            ShowAllHistoryTextButton = $"Показать всю историю ({HideHistoryList.Count}) ↓";
+        }
+    }
+
     private async Task ViewHardware(Guid hardwareId)
     {
         ViewModalShow = true;
@@ -1076,206 +1270,7 @@
         {
             HideHistoryList.Clear();
             ShowHistoryList.Clear();
-            Hardware = await HardwareService.GetByIdAsync(hardwareId);
-            if (Hardware.UserId.HasValue)
-            {
-                UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(Hardware.UserId.Value);
-            }
-            HideHistoryList = await HistoryService.GetByHardwareIdAsync(hardwareId);
-            if(HideHistoryList.Count > 0)
-            {
-                foreach(History history in HideHistoryList)
-                {
-                    if (history.ResponsibleId.HasValue)
-                    {
-                        var resposibleId = history.ResponsibleId ?? Guid.Empty;
-                        var responsible = await UserService.GetByIdAsync(resposibleId);
-                        if(responsible != null)
-                        {
-                            history.Responsible = $"{responsible.LastName} {responsible.FirstName}";
-                        }
-                    }
-
-                    if (history.SenderId.HasValue)
-                    {
-                        var senderId = history.SenderId ?? Guid.Empty;
-                        var sender = await UserService.GetByIdAsync(senderId);
-                        if (sender != null)
-                        {
-                            history.Sender = $"{sender.LastName} {sender.FirstName}";
-                        }
-                    }
-
-                    if (history.RecipientId.HasValue)
-                    {
-                        var recipientId = history.RecipientId ?? Guid.Empty;
-                        var recipient = await UserService.GetByIdAsync(recipientId);
-                        if (recipient != null)
-                        {
-                            history.Recipient = $"{recipient.LastName} {recipient.FirstName}";
-                        }
-                    }
-
-                    if (history.WarehouseId.HasValue)
-                    {
-                        var warehouseId = history.WarehouseId ?? Guid.Empty;
-                        var mainWarehouse = await MainWarehouseService.GetByIdAsync(warehouseId);
-                        if (mainWarehouse != null)
-                        {
-                            history.MainWarehouse = mainWarehouse.Title;
-                        }
-                    }
-
-                    if (history.UserWarehouseId.HasValue)
-                    {
-                        var userWarehouseId = history.UserWarehouseId ?? Guid.Empty;
-                        var userWarehouse = await UserWarehouseService.GetByIdAsync(userWarehouseId);
-                        if (userWarehouse != null)
-                        {
-                            history.UserWarehouse = userWarehouse.Title;
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.moving])
-                    {
-                        if (history.SenderId.HasValue)
-                        {
-                            history.Annotation = $"Оборудование перемещено {history.Sender} → {history.Recipient} ({history.UserWarehouse}).";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование перемещено на {history.Recipient} ({history.UserWarehouse}).";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.give])
-                    {
-                        if (history.SenderId.HasValue)
-                        {
-                            history.Annotation = $"Оборудование выдано {history.Sender} → {history.Recipient} ({history.UserWarehouse}).";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование выдано {history.Recipient} ({history.UserWarehouse}).";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.repair])
-                    {
-                        if (history.Annotation != null)
-                        {
-                            history.Annotation = $"Оборудование передано в ремонт. Комментарий - {history.Annotation}";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование передано в ремонт.";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.repair_refund])
-                    {
-                        if (history.Annotation != null)
-                        {
-                            history.Annotation = $"Оборудование возвращено из ремонта. Комментарий - {history.Annotation}";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование возвращено из ремонта.";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.return_main])
-                    {
-                        if (history.UserWarehouseId.HasValue & history.SenderId.HasValue)
-                        {
-                            history.Annotation = $"Оборудование возвращено на {history.Sender} ({history.UserWarehouse}).";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование возвращено на склад ({history.MainWarehouse}).";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.import])
-                    {
-                        if (history.WarehouseId.HasValue)
-                        {
-                            history.Annotation = $"Оборудование импортировано из Excel ({history.MainWarehouse}).";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование импортировано из Excel.";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.accepted])
-                    {
-                        if (history.WarehouseId.HasValue)
-                        {
-                            history.Annotation = $"Оборудование добавлено вручную ({history.MainWarehouse}).";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование добавлено вручную.";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.marking])
-                    {
-                        if (history.HardwareMarkCode.HasValue)
-                        {
-                            history.Annotation = $"Оборудование промаркировано {history.HardwareMarkCode}";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование промаркировано.";
-                        }
-                    }
-
-                    if (history.OperationType == hardwareStatus[StatusHardware.write_off])
-                    {
-                        if (history.WarehouseId.HasValue)
-                        {
-                            history.Annotation = $"Оборудование списано ({history.MainWarehouse}).";
-                        }
-                        else
-                        {
-                            history.Annotation = $"Оборудование списано.";
-                        }
-                    }
-                }
-
-                int quantity = 0;
-
-                if(HideHistoryList.Count >= 3)
-                {
-                    quantity = 3;
-                }
-                else
-                {
-                    quantity = HideHistoryList.Count;
-                }
-
-                for (int i = 0; i < quantity; i++)
-                {
-                    if (HideHistoryList[i] != null)
-                        ShowHistoryList.Add(HideHistoryList[i]);
-                }
-
-                HideHistoryList.RemoveRange(0, quantity);
-                ShowAllHistoryTextButton = $"Показать всю историю ({HideHistoryList.Count}) ↓";
-
-                // if (HideHistoryList[0] != null)
-                //     ShowHistoryList.Add(HideHistoryList[0]);
-                // if (HideHistoryList[1] != null)
-                //     ShowHistoryList.Add(HideHistoryList[1]);
-                // if (HideHistoryList[2] != null)
-                //     ShowHistoryList.Add(HideHistoryList[2]);
-
-                // HideHistoryList.RemoveAt(0);
-                // HideHistoryList.RemoveAt(1);
-                // HideHistoryList.RemoveAt(2);
-            }
+            await UpdateViewHardware(hardwareId);
         }
         catch(Exception ex) {}
     }
@@ -1293,6 +1288,7 @@
             var response = await MainWarehouseService.GetByIdAsync(Id);
             if (response != null)
             {
+                await UpdateViewHardware(HardwaresId[0]);
                 MainWarehouse = response;
             }
         }
@@ -1306,10 +1302,21 @@
             markAllHardwareDTO.ResponsibleId = Guid.Parse(userId);
         markAllHardwareDTO.HardwareIdList = HardwaresId;
         var result = await HardwareService.MarkAllHardware(markAllHardwareDTO);
+        await UpdateMainWarehouseHardware();
+        if (HardwaresId.Count == 1)
+        {
+            await UpdateViewHardware(HardwaresId[0]);
+        }
+    }
+
+    private async Task UpdateMainWarehouseHardware()
+    {
         var response = await MainWarehouseService.GetByIdAsync(Id);
         if (response != null)
         {
             MainWarehouse = response;
+            FilteredHardwares.Clear();
+            FilteredHardwares = response.Hardwares.Take(ItemPerPage).ToList();
         }
     }
 
@@ -1569,6 +1576,7 @@
                 }
                 else
                 {
+                    await UpdateMainWarehouseHardware();
                     ResponseMessage = result.Message;
                     ClassesAlert = "alert-success";
                 }
@@ -1603,6 +1611,7 @@
                 }
                 else
                 {
+                    await UpdateMainWarehouseHardware();
                     ResponseMessage = result.Message;
                     ClassesAlert = "alert-success";
                 }

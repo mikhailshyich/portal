@@ -31,7 +31,7 @@ namespace Portal.Domain.Entities.Hardwares
         public string CombinedInvNumber { get; set; } = string.Empty;
         [MaxLength(30)]
         public string SerialNumber { get; set; } = string.Empty;
-        [MaxLength(20)]
+        [MaxLength(50)]
         public string Status {  get; set; } = string.Empty;
         public bool IsActive { get; set; }
 

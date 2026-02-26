@@ -31,7 +31,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <InputSelect class="form-select" id="warehouseSelect" @oninput="selectedChange" @bind-Value="UserWarehouse.Id">
+                        <InputSelect title="Склады пользователя" class="form-select" id="warehouseSelect" @oninput="selectedChange" @bind-Value="UserWarehouse.Id">
                             <option value="" selected>Все склады</option>
                             @foreach (UserWarehouse warehouse in UserWarehouses)
                             {
@@ -40,7 +40,7 @@
                         </InputSelect>
                     </div>
                     <div class="col">
-                        <InputText class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                        <InputText title="Поле для поиска" class="form-control" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
                     </div>
                     <div class="col-1">
                         <span>Всего: <span class="fw-bold">@FilteredHardwareCount</span></span>
@@ -153,7 +153,7 @@
     }
     else
     {
-        <h4 class="text-center">У сотрудника нет закреплённого оборудования.</h4>
+        <h4 class="text-center">У пользователя нет закреплённого оборудования.</h4>
     }
 </div>
 
