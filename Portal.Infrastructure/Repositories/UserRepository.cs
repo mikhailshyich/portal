@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Entities.Warehouses;
+using Portal.Domain.Enums;
 using Portal.Domain.Interfaces;
 using Portal.Domain.Responses;
 using Portal.Infrastructure.Data;

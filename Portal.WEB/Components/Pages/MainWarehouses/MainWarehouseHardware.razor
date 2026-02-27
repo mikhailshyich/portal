@@ -53,8 +53,8 @@
                             </div>
                         </div>
                         <div class="p-0 m-1 col-auto">
-                            <div class="row justify-content-center">
-                                <div class="col-sm-5">
+                            <div class="row mb-1">
+                                <div class="col-sm-6">
                                     <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
                                         <option value="1" selected>Все категории</option>
                                         @foreach (CategoryHardware category in Categories)
@@ -64,9 +64,20 @@
                                     </InputSelect>
                                 </div>
                                 <div class="col-sm-6">
+                                    <InputSelect class="form-select" title="Статусы оборудования" id="warehouseSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
+                                        <option value="1" selected>Все статусы</option>
+                                        @foreach (var status in HardwareStatuses)
+                                        {
+                                            <option value="@status">@status</option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            <div class="row justify-content-end">
+                                <div class="col-sm-6">
                                     <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-6">
                                     <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
                                 </div>
                             </div>
@@ -94,31 +105,31 @@
                                     <td><input class="form-check-input" type="checkbox" checked="@IsChecked" @oninput="e => { CheckboxChanged(hardware.Id, e.Value); }" /></td>
                                     <td title="Посмотреть детально" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#viewHardware" @onclick="() => ViewHardware(hardware.Id)">@hardware.Title</td>
                                     <td>
-                                            @if (hardware.Status == accepted)
+                                            @if (hardware.Status == hrdwStatuses[HrdwStatuses.accepted].ToString())
                                             {
                                                 statusClass = "bg-primary";
                                             }
-                                            else if (hardware.Status == marking)
+                                            else if (hardware.Status == hrdwStatuses[HrdwStatuses.marking].ToString())
                                             {
                                                 statusClass = "bg-secondary";
                                             }
-                                            else if (hardware.Status == moving)
+                                            else if (hardware.Status == hrdwStatuses[HrdwStatuses.moving].ToString())
                                             {
                                                 statusClass = "bg-success";
                                             }
-                                            else if (hardware.Status == give)
+                                            else if (hardware.Status == hrdwStatuses[HrdwStatuses.give].ToString())
                                             {
                                                 statusClass = "bg-primary";
                                             }
-                                            else if (hardware.Status == repair)
+                                            else if (hardware.Status == hrdwStatuses[HrdwStatuses.repair].ToString())
                                             {
                                                 statusClass = "bg-warning text-dark";
                                             }
-                                            else if (hardware.Status == import)
+                                            else if (hardware.Status == hrdwStatuses[HrdwStatuses.import].ToString())
                                             {
                                                 statusClass = "bg-info text-dark";
                                             }
-                                            else if (hardware.Status == write_off)
+                                            else if (hardware.Status == hrdwStatuses[HrdwStatuses.write_off].ToString())
                                             {
                                                 statusClass = "bg-danger";
                                             }
@@ -273,7 +284,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="moveHardwareTitle">Переместить оборудование на пользователя</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" @onclick="CloseModal" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <EditForm Model="hardwareMoveDTO" FormName="MoveHardware" Context="MoveHardware" OnValidSubmit="MoveHardware">
                                 <div class="modal-body">
@@ -299,7 +310,7 @@
 
                                     <div class="form-group">
                                         <label for="user">Склад пользователя</label>
-                                        <InputSelect title="Склады пользователя" id="user" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
+                                        <InputSelect title="Склады пользователя" id="user_warehouse" class="form-control" @bind-Value="hardwareMoveDTO.UserWarehouseId">
                                             <option selected value="">Выберите нужный склад</option>
                                             @foreach (UserWarehouse warehouse in UserWarehousesList)
                                             {
@@ -723,7 +734,7 @@
     private bool IsChecked = false;
     private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
-    private string ClassesAlert = string.Empty;
+    private string ClassesAlert = "d-none";
     private readonly string host = "http://hardware-vm:81";
     //private readonly string host = "http://apitmk.site";
     //private readonly string host = "https://localhost:7266";
@@ -748,17 +759,11 @@
     private string PrevClasses = "page-item disabled";
     private string NextClasses = "page-item";
 
-    private Dictionary<StatusHardware, string> hardwareStatus = new();
+    private Dictionary<HrdwStatuses, string> hrdwStatuses = new();
+    private List<string> HardwareStatuses = new();
+    private PortalEnums status = new();
+    private string StatusHardware = string.Empty;
     private string statusClass = "bg-light text-dark";
-    private string accepted = string.Empty;
-    private string marking = string.Empty;
-    private string moving = string.Empty;
-    private string give = string.Empty;
-    private string return_main = string.Empty;
-    private string repair = string.Empty;
-    private string repair_refund = string.Empty;
-    private string write_off = string.Empty;
-    private string import = string.Empty;
 
 
 
@@ -781,28 +786,24 @@
                 FilteredHardwares = Hardwares.Take(ItemPerPage).ToList();
                 CalculateQuantity(ItemPerPage, PageNumber, null);
                 ShowAllHistoryTextButton = $"Показать всю историю ({HideHistoryList.Count}) ↓";
-                hardwareStatus.Add(StatusHardware.accepted, "Добавлено");
-                hardwareStatus.Add(StatusHardware.marking, "Промаркировано");
-                hardwareStatus.Add(StatusHardware.moving, "Перемещено");
-                hardwareStatus.Add(StatusHardware.give, "Выдано");
-                hardwareStatus.Add(StatusHardware.return_main, "Возврат на основной склад");
-                hardwareStatus.Add(StatusHardware.repair, "В ремонте");
-                hardwareStatus.Add(StatusHardware.repair_refund, "Возврат из ремонта");
-                hardwareStatus.Add(StatusHardware.write_off, "Списано");
-                hardwareStatus.Add(StatusHardware.import, "Импортировано");
-
-                accepted = hardwareStatus[StatusHardware.accepted];
-                marking = hardwareStatus[StatusHardware.marking];
-                moving = hardwareStatus[StatusHardware.moving];
-                give = hardwareStatus[StatusHardware.give];
-                return_main = hardwareStatus[StatusHardware.return_main];
-                repair = hardwareStatus[StatusHardware.repair];
-                repair_refund = hardwareStatus[StatusHardware.repair_refund];
-                write_off = hardwareStatus[StatusHardware.write_off];
-                import = hardwareStatus[StatusHardware.import];
+                hrdwStatuses = status.ReturnHardwareStatus();
+                await AddStatusesToList();
             }
         }
         catch (Exception ex) { }
+    }
+
+    private async Task AddStatusesToList()
+    {
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.accepted].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.give].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.import].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.marking].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.moving].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.repair].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.repair_refund].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.return_main].ToString());
+        HardwareStatuses.Add(hrdwStatuses[HrdwStatuses.write_off].ToString());
     }
 
     private async Task SetUserIdToLocalStorageAsync()
@@ -893,6 +894,7 @@
                     await UpdateMainWarehouseHardware();
                 }
             }
+            hardwareMoveDTO = new();
         }
         catch(Exception ex)
         {
@@ -930,8 +932,10 @@
                         hardware.CategoryHardware = category;
                         hardware.DocumentExternalSystem = document;
                     }
+                    await UpdateMainWarehouseHardware();
                 }
             }
+            hardwareMoveDTO = new();
         }
         catch (Exception ex)
         {
@@ -1128,7 +1132,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.moving])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.moving])
                 {
                     if (history.SenderId.HasValue)
                     {
@@ -1140,7 +1144,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.give])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.give])
                 {
                     if (history.SenderId.HasValue)
                     {
@@ -1152,7 +1156,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.repair])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.repair])
                 {
                     if (history.Annotation != null)
                     {
@@ -1164,7 +1168,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.repair_refund])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.repair_refund])
                 {
                     if (history.Annotation != null)
                     {
@@ -1176,7 +1180,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.return_main])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.return_main])
                 {
                     if (history.UserWarehouseId.HasValue & history.SenderId.HasValue)
                     {
@@ -1188,7 +1192,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.import])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.import])
                 {
                     if (history.WarehouseId.HasValue)
                     {
@@ -1200,7 +1204,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.accepted])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.accepted])
                 {
                     if (history.WarehouseId.HasValue)
                     {
@@ -1212,7 +1216,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.marking])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.marking])
                 {
                     if (history.HardwareMarkCode.HasValue)
                     {
@@ -1224,7 +1228,7 @@
                     }
                 }
 
-                if (history.OperationType == hardwareStatus[StatusHardware.write_off])
+                if (history.OperationType == hrdwStatuses[HrdwStatuses.write_off])
                 {
                     if (history.WarehouseId.HasValue)
                     {
@@ -1291,6 +1295,7 @@
                 await UpdateViewHardware(HardwaresId[0]);
                 MainWarehouse = response;
             }
+            await UpdateMainWarehouseHardware();
         }
     }
 
@@ -1619,5 +1624,27 @@
             repairDTO = new();
         }
         catch (Exception ex) { }
+    }
+    private void CloseModal(MouseEventArgs args)
+    {
+        ClassesAlert = "d-none";
+        ResponseMessage = string.Empty;
+        UserWarehousesList = new();
+        UsersList.Clear();
+    }
+    private async Task selectedStatusEvent(ChangeEventArgs args)
+    {
+        var status = args.Value.ToString();
+        if (status != "1")
+        {
+            FilteredHardwares = MainWarehouse.Hardwares.Where(d => d.Status == status).ToList();
+            CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
+        }
+        else
+        {
+            FilteredHardwares = MainWarehouse.Hardwares;
+            CategoryHardware = new();
+            CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
+        }
     }
 }
