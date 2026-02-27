@@ -54,7 +54,7 @@
                         </div>
                         <div class="p-0 m-1 col-auto">
                             <div class="row mb-1">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 mb-1">
                                     <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
                                         <option value="1" selected>Все категории</option>
                                         @foreach (CategoryHardware category in Categories)
@@ -63,7 +63,7 @@
                                         }
                                     </InputSelect>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 mb-1">
                                     <InputSelect class="form-select" title="Статусы оборудования" id="warehouseSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
                                         <option value="1" selected>Все статусы</option>
                                         @foreach (var status in HardwareStatuses)
@@ -74,10 +74,10 @@
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 mb-1">
                                     <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 mb-1">
                                     <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
                                 </div>
                             </div>

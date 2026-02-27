@@ -102,6 +102,8 @@
         if(username != string.Empty)
         {
             userView = await userService.GetByUsernameAsync(username);
+            if(userView.IsActive is false)
+                navigationManager.NavigateTo($"/logout");
         }
     }
     private async Task profileEvent(MouseEventArgs args)
