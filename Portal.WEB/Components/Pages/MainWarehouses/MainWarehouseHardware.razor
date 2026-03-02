@@ -64,7 +64,7 @@
                                     </InputSelect>
                                 </div>
                                 <div class="col-sm-6 mb-1">
-                                    <InputSelect class="form-select" title="Статусы оборудования" id="warehouseSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
+                                    <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
                                         <option value="1" selected>Все статусы</option>
                                         @foreach (var status in HardwareStatuses)
                                         {
@@ -191,91 +191,130 @@
 
         <!-- Modal ADD HARDWARE -->
         <div class="modal fade" id="addHardware" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addHardwareTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addHardwareTitle">Новое оборудование</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addHardwareTitle">Новое оборудование</h5>
+                        <button type="button" @onclick="CloseModalAddHardware" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <EditForm Model="hardwareDTO" FormName="AddHardware" Context="AddHardware" OnValidSubmit="AddHardware">
+                        <div class="modal-body">
+                            <DataAnnotationsValidator />
+            
+                            <!-- Alert -->
+                            <div class="alert @ClassesAlert" role="alert">
+                                @ResponseMessage
                             </div>
-                            <EditForm Model="hardwareDTO" FormName="AddHardware" Context="AddHardware" OnValidSubmit="AddHardware">
-                                <div class="modal-body">
-                                    <DataAnnotationsValidator />
-
-                                    <!-- Alert -->
-                                    <div class="alert @ClassesAlert" role="alert">
-                                        @ResponseMessage
+                            <!-- End alert -->
+            
+                            @* <div class="form-group">
+                                <label for="category">Категория</label>
+                                <InputText type="text" class="form-control" @bind-Value="SearchCategoryString" @oninput="SearchCategoryEvent" placeholder="Поиск категории" />
+                                <InputSelect id="category" class="form-select" @bind-Value="hardwareDTO.CategoryHardwareId">
+                                    <option value="">Выберите категорию оборудования</option>
+                                    @foreach (CategoryHardware category in FilteredCategories)
+                                    {
+                                        <option value="@category.Id">@category.Title</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage class="text-danger" For="@(() => hardwareDTO.CategoryHardwareId)" />
+                            </div> *@
+            
+                            <div class="form-group">
+                                @if(hardwareDTO.CategoryHardwareId != Guid.Empty)
+                                {
+                                    <p>Выбрана категория <b>@CategoryHardwareAdd.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
+                                }
+                                else
+                                {
+                                    <label for="category">Категория</label>
+                                    <InputText type="text" class="form-control mb-1" @bind-Value="SearchCategoryString" @oninput="SearchCategoryEvent" placeholder="Поиск категории" />
+                                    <div class="list-group" style="height:85px; overflow-y:scroll;">
+                                        @foreach (CategoryHardware category in FilteredCategories)
+                                        {
+                                            <li @onclick="()=>selectedCategoryEventAdd(category)" class="list-group-item list-group-item-action" style="cursor:pointer;">@category.Title</li>
+                                        }
                                     </div>
-                                    <!-- End alert -->
-
-                                    <div class="form-group">
-                                        <label for="category">Категория</label>
-                                        <InputSelect id="category" class="form-select" @bind-Value="hardwareDTO.CategoryHardwareId">
-                                            <option value="">Выберите категорию оборудования</option>
-                                            @foreach (CategoryHardware category in Categories)
-                                            {
-                                                <option value="@category.Id">@category.Title</option>
-                                            }
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => hardwareDTO.CategoryHardwareId)" />
+                                }
+                                <ValidationMessage class="text-danger" For="@(() => hardwareDTO.CategoryHardwareId)" />
+                            </div>
+            
+                            @* <div class="form-group">
+                                <label for="document">Документ</label>
+                                <InputSelect id="document" class="form-select" @bind-Value="hardwareDTO.DocumentExternalSystemId">
+                                    <option value="">Выберите документ внешней системы</option>
+                                    @foreach (DocumentExternalSystem document in Documents)
+                                    {
+                                        <option value="@document.Id">@document.Title</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage class="text-danger" For="@(() => hardwareDTO.DocumentExternalSystemId)" />
+                            </div> *@
+            
+                            <div class="form-group">
+                                        @if(hardwareDTO.DocumentExternalSystemId != Guid.Empty)
+                                        {
+                                            <p>Выбран вид документа <b>@DocumentHardwareAdd.ShortTitle</b><span @onclick="RemoveDocument" class="ms-1 text-primary" style="cursor:pointer;">(другой)</span></p>
+                                        }
+                                        else
+                                        {
+                                            <label for="document">Документ</label>
+                                            <InputText type="text" class="form-control mb-1" @bind-Value="SearchDocumentString" @oninput="SearchDocumentEvent" placeholder="Поиск документа" />
+                                            <div class="list-group" style="height:85px; overflow-y:scroll;">
+                                                @foreach (DocumentExternalSystem document in FilteredDocuments)
+                                                {
+                                                    <li @onclick="()=>selectedDocumentEventAdd(document)" class="list-group-item list-group-item-action" style="cursor:pointer;">@document.Title</li>
+                                                }
+                                            </div>
+                                        }
+                                        <ValidationMessage class="text-danger" For="@(() => hardwareDTO.DocumentExternalSystemId)" />
                                     </div>
-
-                                    <div class="form-group">
-                                        <label for="document">Документ</label>
-                                        <InputSelect id="document" class="form-select" @bind-Value="hardwareDTO.DocumentExternalSystemId">
-                                            <option value="">Выберите документ внешней системы</option>
-                                            @foreach (DocumentExternalSystem document in Documents)
-                                            {
-                                                <option value="@document.Id">@document.Title</option>
-                                            }
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => hardwareDTO.DocumentExternalSystemId)" />
-                                    </div>
-
-                                    <div class="form-group">
+            
+                            <div class="form-group">
                                         <label for="title">Наименование</label>
                                         <InputText id="title" class="form-control" @bind-Value="hardwareDTO.Title" />
-                                        <ValidationMessage For="@(() => hardwareDTO.Title)" />
+                                        <ValidationMessage class="text-danger" For="@(() => hardwareDTO.Title)" />
                                     </div>
-
-                                    <div class="form-group">
+            
+                            <div class="form-group">
                                         <label for="description">Описание</label>
                                         <InputText id="description" class="form-control" @bind-Value="hardwareDTO.Description" />
-                                        <ValidationMessage For="@(() => hardwareDTO.Description)" />
+                                        <ValidationMessage class="text-danger" For="@(() => hardwareDTO.Description)" />
                                     </div>
-
-                                    <div class="form-group">
+            
+                            <div class="form-group">
                                         <label for="count">Количество</label>
                                         <InputNumber id="count" class="form-control" @bind-Value="hardwareDTO.Count" />
-                                        <ValidationMessage For="@(() => hardwareDTO.Count)" />
+                                        <ValidationMessage class="text-danger" For="@(() => hardwareDTO.Count)" />
                                     </div>
-
-                                    <div class="form-group">
+            
+                            <div class="form-group">
                                         <label for="numberext">Номер внешней системы</label>
                                         <InputText id="numberext" class="form-control" @bind-Value="hardwareDTO.InventoryNumberExternalSystem" />
-                                        <ValidationMessage For="@(() => hardwareDTO.InventoryNumberExternalSystem)" />
+                                        <ValidationMessage class="text-danger" For="@(() => hardwareDTO.InventoryNumberExternalSystem)" />
                                     </div>
-
-                                    <div class="form-group">
+            
+                            <div class="form-group">
                                         <label for="numberext">Серийный номер</label>
                                         <InputText id="numberext" class="form-control" @bind-Value="hardwareDTO.SerialNumber" />
-                                        <ValidationMessage For="@(() => hardwareDTO.SerialNumber)" />
+                                        <ValidationMessage class="text-danger" For="@(() => hardwareDTO.SerialNumber)" />
                                     </div>
-
-                                    <div class="form-group">
+            
+                            <div class="form-group">
                                         <label for="ttn">ТТН</label>
                                         <InputText id="ttn" class="form-control" @bind-Value="hardwareDTO.TTN" />
-                                        <ValidationMessage For="@(() => hardwareDTO.TTN)" />
+                                        <ValidationMessage class="text-danger" For="@(() => hardwareDTO.TTN)" />
                                     </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" title="Отменить добавление оборудования" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
-                                    <button type="submit" title="Добавить новое оборудование" class="btn btn-success" id="submit">Добавить</button>
-                                </div>
-                            </EditForm>
+            
                         </div>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" title="Отменить добавление оборудования" @onclick="CloseModalAddHardware" class="btn btn-danger" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" title="Добавить новое оборудование" class="btn btn-success" id="submit">Добавить</button>
+                        </div>
+                    </EditForm>
                 </div>
+            </div>
+        </div>
         <!-- End modal -->
 
         <!-- Modal MOVE HARDWARE -->
@@ -726,11 +765,17 @@
     private HardwareRepairDTO repairDTO = new();
     private HardwareUpdateDTO updateDTO = new();
     private HardwareWriteOffDTO writeOffDTO = new();
+    private CategoryHardware CategoryHardwareAdd = new();
+    private DocumentExternalSystem DocumentHardwareAdd = new();
     private MarkAllHardwareDTO markAllHardwareDTO = new();
     private List<CategoryHardware> Categories = new();
+    private List<CategoryHardware> FilteredCategories = new();
+    private List<DocumentExternalSystem> FilteredDocuments = new();
     private List<DocumentExternalSystem> Documents = new();
     private List<Guid> HardwaresId = new();
     private string SearchString { get; set; } = string.Empty;
+    private string SearchCategoryString { get; set; } = string.Empty;
+    private string SearchDocumentString { get; set; } = string.Empty;
     private bool IsChecked = false;
     private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
@@ -1060,7 +1105,9 @@
     private async Task AddHardwareEvent(MouseEventArgs args)
     {
         Categories = await CategoryHardwareService.GetAllAsync();
+        FilteredCategories = Categories;
         Documents = await DocumentExternalSystem.GetAllAsync();
+        FilteredDocuments = Documents;
     }
 
     private async Task MoveHardwareEvent(MouseEventArgs args)
@@ -1646,5 +1693,67 @@
             CategoryHardware = new();
             CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
         }
+    }
+    private async Task SearchCategoryEvent(ChangeEventArgs args)
+    {
+        SearchCategoryString = args.Value.ToString();
+        if (SearchCategoryString != string.Empty)
+        {
+            FilteredCategories = Categories.Where(c => c.Title.Contains(SearchCategoryString.ToLower(), StringComparison.OrdinalIgnoreCase) || 
+                                                       c.ShortTitle.Contains(SearchCategoryString.ToLower(), StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        else
+        {
+            FilteredCategories = Categories;
+        }
+    }
+
+    private async Task selectedCategoryEventAdd(CategoryHardware category)
+    {
+        CategoryHardwareAdd = category;
+        hardwareDTO.CategoryHardwareId = category.Id;
+    }
+
+    private async Task RemoveCategory(MouseEventArgs args)
+    {
+        CategoryHardwareAdd = new();
+        hardwareDTO.CategoryHardwareId = Guid.Empty;
+        SearchCategoryString = string.Empty;
+        FilteredCategories = Categories;
+    }
+
+    private async Task selectedDocumentEventAdd(DocumentExternalSystem document)
+    {
+        DocumentHardwareAdd = document;
+        hardwareDTO.DocumentExternalSystemId = document.Id;
+    }
+
+    private async Task RemoveDocument(MouseEventArgs args)
+    {
+        DocumentHardwareAdd = new();
+        hardwareDTO.DocumentExternalSystemId = Guid.Empty;
+        SearchDocumentString = string.Empty;
+        FilteredDocuments = Documents;
+    }
+    private async Task SearchDocumentEvent(ChangeEventArgs args)
+    {
+        SearchDocumentString = args.Value.ToString();
+        if (SearchDocumentString != string.Empty)
+        {
+            FilteredDocuments = Documents.Where(c => c.Title.Contains(SearchDocumentString.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                                                       c.ShortTitle.Contains(SearchDocumentString.ToLower(), StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        else
+        {
+            FilteredDocuments = Documents;
+        }
+    }
+    private async Task CloseModalAddHardware(MouseEventArgs args)
+    {
+        ClassesAlert = "d-none";
+        DocumentHardwareAdd = new();
+        hardwareDTO.DocumentExternalSystemId = Guid.Empty;
+        CategoryHardwareAdd = new();
+        hardwareDTO.CategoryHardwareId = Guid.Empty;
     }
 }
