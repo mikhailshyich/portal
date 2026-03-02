@@ -167,7 +167,18 @@
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-end">
                                     <li class="@PrevClasses" style="cursor: pointer;"><a class="page-link" alt="prev" @onclick="prevEvent">&laquo;</a></li>
-                                    @for (int i = 1; PageCount >= i; i++)
+                                    @foreach (var i in Enumerable.Range(1, PageCount))
+                                    {
+                                        if (i == 1 || i == PageCount || (i >= PageNumber - 2 && i <= PageNumber + 2))
+                                        {
+                                            <li class="page-item" style="cursor: pointer;"><a class="page-link @(i == PageNumber ? "active" : "")" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, i, null); }">@i</a></li>
+                                        }
+                                        else if (i == PageNumber - 3 || i == PageNumber + 3)
+                                        {
+                                            <span class="ms-1 me-1">...</span>
+                                        }
+                                    }
+                                    @* @for (int i = 1; PageCount >= i; i++)
                                     {
                                         int j = i;
                                         @if (i == PageNumber)
@@ -178,7 +189,7 @@
                                         {
                                             <li class="page-item" style="cursor: pointer;"><a class="page-link" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j, null); }">@i</a></li>
                                         }
-                                    }
+                                    } *@
                                     <li class="@NextClasses" style="cursor: pointer;"><a class="page-link" @onclick="nextEvent">&raquo;</a></li>
                                 </ul>
                             </nav>
