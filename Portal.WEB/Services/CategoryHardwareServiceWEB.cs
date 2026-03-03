@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2016.Excel;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Excel;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
@@ -60,9 +61,16 @@ namespace Portal.WEB.Services
             return null!;
         }
 
-        public Task<CustomGeneralResponses> UpdateAsync(CategoryHardware request)
+        public async Task<CustomGeneralResponses> UpdateAsync(CategoryHardware request)
         {
-            throw new NotImplementedException();
+            bool status = await GetAddToken();
+            if (status)
+            {
+                var categorie = await httpClient.PutAsJsonAsync($"{BaseURI}", request);
+                var response = await categorie.Content.ReadFromJsonAsync<CustomGeneralResponses>();
+                return response!;
+            }
+            return null!;
         }
 
         private async Task<bool> GetAddToken()

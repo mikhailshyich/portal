@@ -34,7 +34,7 @@ namespace Portal.Infrastructure.Repositories
 
             context.CategoriesHardware.Add(category);
             await context.SaveChangesAsync();
-            return new CustomGeneralResponses(true, "Категория успешно создана.", category);
+            return new CustomGeneralResponses(true, "Категория успешно добавлена.", category);
         }
 
         public async Task<CustomGeneralResponses> DeleteAsync(Guid id)
@@ -46,7 +46,7 @@ namespace Portal.Infrastructure.Repositories
 
             context.Remove(category);
             await context.SaveChangesAsync();
-            return new CustomGeneralResponses(true, $"Категория {category.Title} успешно удалёна.");
+            return new CustomGeneralResponses(true, $"Категория {category.Title} успешно удалена.");
         }
 
         public async Task<List<CategoryHardware>> GetAllAsync()
@@ -74,7 +74,7 @@ namespace Portal.Infrastructure.Repositories
             category.Title = request.Title;
             category.ShortTitle = request.ShortTitle;
             await context.SaveChangesAsync();
-            return new CustomGeneralResponses(true, "Категория успешно обновлёна.", category);
+            return new CustomGeneralResponses(true, "Категория успешно обновлена.", category);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
+using Portal.Domain.Entities.Hardwares;
 
 namespace Portal.API.Controllers
 {
@@ -43,6 +44,17 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await categoryHardware.GetByIdAsync(id);
+            if (result is null)
+                return NotFound();
+            else
+                return Ok(result);
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "admin,user,employee_it")]
+        public async Task<IActionResult> Update(CategoryHardware category)
+        {
+            var result = await categoryHardware.UpdateAsync(category);
             if (result is null)
                 return NotFound();
             else

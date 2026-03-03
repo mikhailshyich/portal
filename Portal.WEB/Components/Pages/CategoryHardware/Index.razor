@@ -21,7 +21,7 @@
                                     <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
                                 </div>
                                 <div class="p-0 m-1 col-auto">
-                                    <button type="button" class="btn btn-success" title="Добавить новую категорию" data-bs-toggle="modal" data-bs-target="#addCategory"><b>+ Добавить</b></button>
+                                    <button type="button" class="btn btn-success" title="Добавить новую категорию" data-bs-toggle="modal" @onclick="AddCategoryEvent" data-bs-target="#addCategory"><b>+ Добавить</b></button>
                                 </div>
                             </div>
                         </Authorized>
@@ -30,7 +30,42 @@
             </div>
         </div>
         <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
-            <TableView CategoriesHardware="FilteredCategoriesHardware" TableHeader="TableHeaders" />
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        @* <th><input class="form-check-input" type="checkbox" /></th> *@
+                        @foreach (var header in TableHeaders)
+                        {
+                            <th scope="col">@header</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (CategoriesHardware?.Count > 0)
+                    {
+                        @foreach (CategoryHardware category in CategoriesHardware)
+                        {
+                            <tr>
+                                <td>@category.Title</td>
+                                <td>@category.ShortTitle</td>
+                                <td><button class="btn btn-secondary btn-sm mx-1" title="Редактировать категорию" @onclick="() => EditCategoryEvent(category)" data-bs-toggle="modal" data-bs-target="#addCategory">Редактировать</button></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10">
+                                <div class="text-center">
+                                    <div class="spinner-border text-success" role="status">
+                                        <span class="visually-hidden">Загрузка...</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
         <div class="card-footer">
         </div>
@@ -42,8 +77,8 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addCategoryTitle">Новая категория</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="addCategoryTitle">@ModalTitleText</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" @onclick="CloseAddModalEvent" aria-label="Close"></button>
                         </div>
                         <EditForm Model="categoryHardwareDTO" FormName="AddCategory" Context="AddCategory" OnValidSubmit="AddCategory">
                             <div class="modal-body">
@@ -69,8 +104,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" title="Отменить добавление категории" data-bs-dismiss="modal">Отмена</button>
-                                <button type="submit" class="btn btn-success" title="Добавить категорию" id="submit">Добавить</button>
+                                <button type="button" class="btn btn-danger" title="Отменить действие" @onclick="CloseAddModalEvent" data-bs-dismiss="modal">Отмена</button>
+                                <button type="submit" class="btn btn-success" title="@SubmitBtnText категорию" id="submit">@SubmitBtnText</button>
                             </div>
                         </EditForm>
                     </div>
@@ -80,10 +115,13 @@
 
 @code {
     private CategoryHardwareDTO categoryHardwareDTO = new();
+    private CategoryHardware updateCategoryHardware = new();
     private List<CategoryHardware> CategoriesHardware = new();
     private List<CategoryHardware> FilteredCategoriesHardware = new();
     private string ResponseMessage = string.Empty;
-    private string ClassesAlert = string.Empty;
+    private string SubmitBtnText = string.Empty;
+    private string ModalTitleText = string.Empty;
+    private string ClassesAlert = "d-none";
     private string SearchString { get; set; } = string.Empty;
     private List<string> TableHeaders = ["Полное наименование", "Краткое наименование", ""];
 
@@ -99,7 +137,18 @@
 
     private async Task AddCategory()
     {
-        var response = await CategoryHardwareService.AddAsync(categoryHardwareDTO);
+        var response = new CustomGeneralResponses();
+        if (updateCategoryHardware.Id != Guid.Empty)
+        {
+            updateCategoryHardware.Title = categoryHardwareDTO.Title;
+            updateCategoryHardware.ShortTitle = categoryHardwareDTO.ShortTitle;
+            response = await CategoryHardwareService.UpdateAsync(updateCategoryHardware);
+        }
+        else
+        {
+            response = await CategoryHardwareService.AddAsync(categoryHardwareDTO);
+        }
+
         if (!response.Flag)
         {
             ResponseMessage = response.Message;
@@ -111,8 +160,10 @@
             ClassesAlert = "alert-success";
             categoryHardwareDTO = new();
             CategoriesHardware = await CategoryHardwareService.GetAllAsync();
+            FilteredCategoriesHardware = CategoriesHardware;
         }
     }
+
     private async Task SearchEvent(ChangeEventArgs args)
     {
         SearchString = args.Value.ToString();
@@ -125,5 +176,30 @@
             FilteredCategoriesHardware = CategoriesHardware.Where(u => u.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
                                                      u.ShortTitle.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).ToList();
         }
+    }
+
+    private async Task EditCategoryEvent(CategoryHardware category)
+    {
+        if(category != null)
+            updateCategoryHardware = category;
+        categoryHardwareDTO.Title = updateCategoryHardware.Title;
+        categoryHardwareDTO.ShortTitle = updateCategoryHardware.ShortTitle;
+        SubmitBtnText = "Обновить";
+        ModalTitleText = "Обновление категории";
+    }
+
+    private async Task AddCategoryEvent(MouseEventArgs args)
+    {
+        SubmitBtnText = "Добавить";
+        ModalTitleText = "Добавление новой категории";
+        categoryHardwareDTO = new();
+        updateCategoryHardware = new();
+    }
+
+    private async Task CloseAddModalEvent(MouseEventArgs args)
+    {
+        ClassesAlert = "d-none";
+        categoryHardwareDTO = new();
+        updateCategoryHardware = new();
     }
 }

@@ -155,7 +155,7 @@
                 @if (PageCount > 0)
                 {
                     <div class="row">
-                        <div class="col-1">
+                        <div class="col-sm-1 col-3">
                             <InputSelect class="form-select" title="Количество элементов на странице" style="cursor: pointer;" @bind-Value="ItemPerPage" @oninput="selectChange">
                                 <option value="10" selected>10</option>
                                 <option value="20">20</option>
@@ -163,20 +163,20 @@
                                 <option value="50">50</option>
                             </InputSelect>
                         </div>
-                        <div class="col">
+                        <div class="col-sm-11 col-9">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-end">
                                     <li class="@PrevClasses" style="cursor: pointer;"><a class="page-link" alt="prev" @onclick="prevEvent">&laquo;</a></li>
                                     @foreach (var i in Enumerable.Range(1, PageCount))
                                     {
-                                        if (i == 1 || i == PageCount || (i >= PageNumber - 2 && i <= PageNumber + 2))
+                                        if (i >= PageNumber - 2 && i <= PageNumber + 2)
                                         {
                                             <li class="page-item" style="cursor: pointer;"><a class="page-link @(i == PageNumber ? "active" : "")" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, i, null); }">@i</a></li>
                                         }
-                                        else if (i == PageNumber - 3 || i == PageNumber + 3)
+                                        @* else if (i == PageNumber - 3 || i == PageNumber + 3)
                                         {
                                             <span class="ms-1 me-1">...</span>
-                                        }
+                                        } *@
                                     }
                                     @* @for (int i = 1; PageCount >= i; i++)
                                     {
@@ -1500,7 +1500,7 @@
     {
         if (PageNumber > 1)
         {
-            PageNumber--;
+            PageNumber = 1;
             CalculateQuantity(ItemPerPage, PageNumber, null);
             PrevClasses = "page-item";
         }
@@ -1514,7 +1514,7 @@
     {
         if (PageNumber < PageCount)
         {
-            PageNumber++;
+            PageNumber = PageCount;
             CalculateQuantity(ItemPerPage, PageNumber, null);
             PrevClasses = "page-item";
         }

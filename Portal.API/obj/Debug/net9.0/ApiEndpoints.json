@@ -27,6 +27,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.CategoriesController",
+    "Method": "Update",
+    "RelativePath": "api/Categories",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "category",
+        "Type": "Portal.Domain.Entities.Hardwares.CategoryHardware",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.CategoriesController",
     "Method": "GetById",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "GET",
