@@ -25,7 +25,7 @@
                 <AuthorizeView Roles="admin">
                     <Authorized>
                         <div class="row">
-                            <div class="p-0 m-1 col-auto">
+                            <div class="col-auto mb-1">
                                 @if (HardwaresId.Count == 0 || HardwaresId.Count == 1)
                                 {
                                     <button type="button" class="btn btn-success mb-1" title="Добавить новое оборудование" data-bs-toggle="modal" data-bs-target="#addHardware" @onmousedown="AddHardwareEvent"><b>+ Добавить</b></button>
@@ -51,37 +51,43 @@
                                     }
                                 }
                             </div>
-                        </div>
-                        <div class="p-0 m-1 col-auto">
-                            <div class="row mb-1">
-                                <div class="col-sm-6 mb-1">
-                                    <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
-                                        <option value="1" selected>Все категории</option>
-                                        @foreach (CategoryHardware category in Categories)
-                                        {
-                                            <option value="@category.Id">@category.Title</option>
-                                        }
-                                    </InputSelect>
+                            <div class="col-12">
+                                <button class="btn btn-outline-secondary mb-1" type="button" data-bs-toggle="collapse" @onclick="FilterBtnClickEvent" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">
+                                    @FilterBtnText
+                                </button>
+                                <div class="collapse" id="filters">
+                                    <div class="row mb-1">
+                                        <div class="col-sm-6 mb-1">
+                                            <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
+                                                <option value="1" selected>Все категории</option>
+                                                @foreach (CategoryHardware category in Categories)
+                                                {
+                                                    <option value="@category.Id">@category.Title</option>
+                                                }
+                                            </InputSelect>
+                                        </div>
+                                        <div class="col-sm-6 mb-1">
+                                            <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
+                                                <option value="1" selected>Все статусы</option>
+                                                @foreach (var status in HardwareStatuses)
+                                                {
+                                                    <option value="@status">@status</option>
+                                                }
+                                            </InputSelect>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6 mb-1">
-                                    <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
-                                        <option value="1" selected>Все статусы</option>
-                                        @foreach (var status in HardwareStatuses)
-                                        {
-                                            <option value="@status">@status</option>
-                                        }
-                                    </InputSelect>
+                                <div class="row justify-content-end">
+                                    <div class="col-sm-6 mb-1">
+                                        <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                    </div>
+                                    <div class="col-sm-6 mb-1">
+                                        <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row justify-content-end">
-                                <div class="col-sm-6 mb-1">
-                                    <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
-                                </div>
-                                <div class="col-sm-6 mb-1">
-                                    <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
-                                </div>
-                            </div>
                         </div>
+                        
                     </Authorized>
                 </AuthorizeView>
             </div>
@@ -173,23 +179,7 @@
                                         {
                                             <li class="page-item" style="cursor: pointer;"><a class="page-link @(i == PageNumber ? "active" : "")" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, i, null); }">@i</a></li>
                                         }
-                                        @* else if (i == PageNumber - 3 || i == PageNumber + 3)
-                                        {
-                                            <span class="ms-1 me-1">...</span>
-                                        } *@
                                     }
-                                    @* @for (int i = 1; PageCount >= i; i++)
-                                    {
-                                        int j = i;
-                                        @if (i == PageNumber)
-                                        {
-                                            <li class="page-item" style="cursor: pointer;"><a class="page-link active" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j, null); }">@i</a></li>
-                                        }
-                                        else
-                                        {
-                                            <li class="page-item" style="cursor: pointer;"><a class="page-link" alt="@i" @onclick="e => { CalculateQuantity(ItemPerPage, j, null); }">@i</a></li>
-                                        }
-                                    } *@
                                     <li class="@NextClasses" style="cursor: pointer;"><a class="page-link" @onclick="nextEvent">&raquo;</a></li>
                                 </ul>
                             </nav>
@@ -787,6 +777,8 @@
     private string SearchString { get; set; } = string.Empty;
     private string SearchCategoryString { get; set; } = string.Empty;
     private string SearchDocumentString { get; set; } = string.Empty;
+    private string FilterBtnText { get; set; } = "Фильтры";
+    private bool FilterBtnStatus = false;
     private bool IsChecked = false;
     private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
@@ -1576,6 +1568,7 @@
             CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
         }
     }
+
     private async Task ExportHardwareEvent(MouseEventArgs args)
     {
         try
@@ -1587,6 +1580,7 @@
         }
         catch(Exception ex){}
     }
+
     private async Task SelectedUserWarehouseEvent(ChangeEventArgs args)
     {
         try
@@ -1766,5 +1760,18 @@
         hardwareDTO.DocumentExternalSystemId = Guid.Empty;
         CategoryHardwareAdd = new();
         hardwareDTO.CategoryHardwareId = Guid.Empty;
+    }
+    private async Task FilterBtnClickEvent(MouseEventArgs args)
+    {
+        if (FilterBtnStatus is false)
+        {
+            FilterBtnText = "Скрыть фильтры";
+            FilterBtnStatus = true;
+        }
+        else
+        {
+            FilterBtnText = "Фильтры";
+            FilterBtnStatus = false;
+        }
     }
 }
