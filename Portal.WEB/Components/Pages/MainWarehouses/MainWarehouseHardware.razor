@@ -79,7 +79,10 @@
                                 </div>
                                 <div class="row justify-content-end">
                                     <div class="col-sm-6 mb-1">
-                                        <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                        <div class="input-group">
+                                            <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                            <button class="btn btn-outline-secondary @ClassesClearBtn" @onclick="ClearSearchStringEvent" title="Очистить поиск">X</button>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6 mb-1">
                                         <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
@@ -783,6 +786,7 @@
     private bool ViewModalShow = false;
     private string ResponseMessage = string.Empty;
     private string ClassesAlert = "d-none";
+    private string ClassesClearBtn = "d-none";
     private readonly string host = "http://hardware-vm:81";
     //private readonly string host = "http://apitmk.site";
     //private readonly string host = "https://localhost:7266";
@@ -898,6 +902,10 @@
                 FilteredHardwares.Clear();
                 FilteredHardwares = MainWarehouse.Hardwares.Take(ItemPerPage).ToList();
                 CalculateQuantity(ItemPerPage, PageNumber, MainWarehouse.Hardwares);
+                SearchCategoryString = string.Empty;
+                SearchDocumentString = string.Empty;
+                FilteredCategories = Categories;
+                FilteredDocuments = Documents;
             }
         }
         catch(Exception ex)
@@ -1389,6 +1397,7 @@
         SearchString = args.Value.ToString();
         if (string.IsNullOrWhiteSpace(SearchString))
         {
+            ClassesClearBtn = "d-none";
             CalculateQuantity(ItemPerPage, PageNumber, null);
             if (CategoryHardware.Id != Guid.Empty)
             {
@@ -1401,6 +1410,7 @@
         }
         else
         {
+            ClassesClearBtn = string.Empty;
             if(CategoryHardware.Id != Guid.Empty)
             {
                 FilteredHardwares = MainWarehouse.Hardwares.Where(d => d.Title.Contains(SearchString, StringComparison.OrdinalIgnoreCase) ||
@@ -1772,6 +1782,20 @@
         {
             FilterBtnText = "Фильтры";
             FilterBtnStatus = false;
+        }
+    }
+    private async Task ClearSearchStringEvent(MouseEventArgs args)
+    {
+        SearchString = string.Empty;
+        ClassesClearBtn = "d-none";
+        CalculateQuantity(ItemPerPage, PageNumber, null);
+        if (CategoryHardware.Id != Guid.Empty)
+        {
+            StringCount = FilteredHardwares.Count;
+        }
+        else
+        {
+            StringCount = Hardwares.Count;
         }
     }
 }
