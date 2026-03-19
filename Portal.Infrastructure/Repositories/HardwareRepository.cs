@@ -480,17 +480,27 @@ namespace Portal.Infrastructure.Repositories
             Guid responsibleId = new Guid();
             Guid userId = new Guid();
 
+            if(updateDTO.DocumentExternalSystemId.HasValue)
+                hardware.DocumentExternalSystemId = updateDTO.DocumentExternalSystemId.Value;
+            if (updateDTO.Title != string.Empty)
+                hardware.Title = updateDTO.Title;
+            if (updateDTO.Description != string.Empty)
+                hardware.Description = updateDTO.Description;
             if (updateDTO.NameForLabel != string.Empty)
                 hardware.NameForLabel = updateDTO.NameForLabel;
             if(updateDTO.InventoryNumberExternalSystem != string.Empty)
                 hardware.InventoryNumberExternalSystem = updateDTO.InventoryNumberExternalSystem;
+            if (updateDTO.TTN != string.Empty)
+                hardware.TTN = updateDTO.TTN;
+            if (updateDTO.SerialNumber != string.Empty)
+                hardware.SerialNumber = updateDTO.SerialNumber;
             if (updateDTO.UserId.HasValue)
             {
                 userId = updateDTO.UserId.Value;
                 hardware.UserId = userId;
             }
                 
-            if (updateDTO.UserWarehouseId.HasValue)
+            if (updateDTO.UserWarehouseId.HasValue & updateDTO.UserWarehouseId != hardware.UserWarehouseId)
             {
                 string status = hrdwStatuses[HrdwStatuses.moving].ToString(); // Получаем статус Перемещено
                 hardware.UserWarehouseId = updateDTO.UserWarehouseId.Value;

@@ -19,11 +19,11 @@
 <div class="container">
     @if (MainWarehouse != null)
     {
-        <h3>@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
+        <h3 class="mb-3 mt-3">@MainWarehouse.UserDepartment?.Title - @MainWarehouse.Title</h3>
         <div class="card mb-3">
-            <div class="card-header">
-                <AuthorizeView Roles="admin">
-                    <Authorized>
+            <AuthorizeView Roles="admin">
+                <Authorized>
+                    <div class="card-header">
                         <div class="row">
                             <div class="col-auto mb-1">
                                 @if (HardwaresId.Count == 0 || HardwaresId.Count == 1)
@@ -52,48 +52,47 @@
                                 }
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-outline-secondary mb-1" type="button" data-bs-toggle="collapse" @onclick="FilterBtnClickEvent" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">
-                                    @FilterBtnText
-                                </button>
-                                <div class="collapse" id="filters">
-                                    <div class="row mb-1">
-                                        <div class="col-sm-6 mb-1">
-                                            <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
-                                                <option value="1" selected>Все категории</option>
-                                                @foreach (CategoryHardware category in Categories)
-                                                {
-                                                    <option value="@category.Id">@category.Title</option>
-                                                }
-                                            </InputSelect>
+                                        <button class="btn btn-outline-secondary mb-1" type="button" data-bs-toggle="collapse" @onclick="FilterBtnClickEvent" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">
+                                            @FilterBtnText
+                                        </button>
+                                        <div class="collapse" id="filters">
+                                            <div class="row mb-1">
+                                                <div class="col-sm-6 mb-1">
+                                                    <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
+                                                        <option value="1" selected>Все категории</option>
+                                                        @foreach (CategoryHardware category in Categories)
+                                                        {
+                                                            <option value="@category.Id">@category.Title</option>
+                                                        }
+                                                    </InputSelect>
+                                                </div>
+                                                <div class="col-sm-6 mb-1">
+                                                    <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
+                                                        <option value="1" selected>Все статусы</option>
+                                                        @foreach (var status in HardwareStatuses)
+                                                        {
+                                                            <option value="@status">@status</option>
+                                                        }
+                                                    </InputSelect>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-6 mb-1">
-                                            <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
-                                                <option value="1" selected>Все статусы</option>
-                                                @foreach (var status in HardwareStatuses)
-                                                {
-                                                    <option value="@status">@status</option>
-                                                }
-                                            </InputSelect>
+                                        <div class="row justify-content-end">
+                                            <div class="col-sm-6 mb-1">
+                                                <div class="input-group">
+                                                    <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                                    <button class="btn btn-outline-secondary @ClassesClearBtn" @onclick="ClearSearchStringEvent" title="Очистить поиск">X</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 mb-1">
+                                                <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row justify-content-end">
-                                    <div class="col-sm-6 mb-1">
-                                        <div class="input-group">
-                                            <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
-                                            <button class="btn btn-outline-secondary @ClassesClearBtn" @onclick="ClearSearchStringEvent" title="Очистить поиск">X</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 mb-1">
-                                        <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        
-                    </Authorized>
-                </AuthorizeView>
-            </div>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
             <div class="card-body pb-2 px-0 mb-0" style="overflow: scroll;">
                 <table class="table table-hover text-center">
                     <thead>
@@ -211,23 +210,10 @@
                             </div>
                             <!-- End alert -->
             
-                            @* <div class="form-group">
-                                <label for="category">Категория</label>
-                                <InputText type="text" class="form-control" @bind-Value="SearchCategoryString" @oninput="SearchCategoryEvent" placeholder="Поиск категории" />
-                                <InputSelect id="category" class="form-select" @bind-Value="hardwareDTO.CategoryHardwareId">
-                                    <option value="">Выберите категорию оборудования</option>
-                                    @foreach (CategoryHardware category in FilteredCategories)
-                                    {
-                                        <option value="@category.Id">@category.Title</option>
-                                    }
-                                </InputSelect>
-                                <ValidationMessage class="text-danger" For="@(() => hardwareDTO.CategoryHardwareId)" />
-                            </div> *@
-            
                             <div class="form-group">
                                 @if(hardwareDTO.CategoryHardwareId != Guid.Empty)
                                 {
-                                    <p>Выбрана категория <b>@CategoryHardwareAdd.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
+                                    <p>Выбрана категория <b>@CategoryHardware.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
                                 }
                                 else
                                 {
@@ -243,22 +229,10 @@
                                 <ValidationMessage class="text-danger" For="@(() => hardwareDTO.CategoryHardwareId)" />
                             </div>
             
-                            @* <div class="form-group">
-                                <label for="document">Документ</label>
-                                <InputSelect id="document" class="form-select" @bind-Value="hardwareDTO.DocumentExternalSystemId">
-                                    <option value="">Выберите документ внешней системы</option>
-                                    @foreach (DocumentExternalSystem document in Documents)
-                                    {
-                                        <option value="@document.Id">@document.Title</option>
-                                    }
-                                </InputSelect>
-                                <ValidationMessage class="text-danger" For="@(() => hardwareDTO.DocumentExternalSystemId)" />
-                            </div> *@
-            
                             <div class="form-group">
                                         @if(hardwareDTO.DocumentExternalSystemId != Guid.Empty)
                                         {
-                                            <p>Выбран вид документа <b>@DocumentHardwareAdd.ShortTitle</b><span @onclick="RemoveDocument" class="ms-1 text-primary" style="cursor:pointer;">(другой)</span></p>
+                                            <p>Выбран вид документа <b>@DocumentHardware.ShortTitle</b><span @onclick="RemoveDocument" class="ms-1 text-primary" style="cursor:pointer;">(другой)</span></p>
                                         }
                                         else
                                         {
@@ -532,133 +506,246 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="viewHardwareTitle">@Hardware.Title</h5>
+                        <h5 class="modal-title" id="viewHardwareTitle">@EditMessageString@Hardware.Title</h5>
                         <button type="button" title="Закрыть окно" @onclick="closeModalView" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-7">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <div class="p-0 m-1 col-auto">
-                                                @if(Hardware.MarkCode.HasValue)
-                                                {
-                                                    <button type="button" title="Перместить оборудование на пользователя" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Перемещение</b></button>
-                                                    <button type="button" title="Временно выдать оборудование пользователю" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#giveHardware" @onclick="GiveHardwareEvent"><b>Выдача</b></button>
-                                                    <button type="button" title="Вернуть оборудование на основной склад" class="btn btn-secondary mb-1" @onclick="ReturnHardware"><b>Возврат</b></button>
-                                                    <button type="button" title="Списать оборудование со склада" class="btn btn-danger mb-1" @onclick="WriteOffHardware"><b>Списание</b></button>
-                                                    <button type="button" title="Передать оборудование в ремонт" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
-                                                    <button type="button" title="Вернуть оборудование из ремонта" class="btn btn-primary mb-1" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
-                                                }
-                                                else
-                                                {
-                                                    <button type="button" title="Промаркировать оборудование" class="btn btn-primary mb-1" @onclick="MarkHardware"><b>Маркировка</b></button>
-                                                }
-                                                @if(Hardware.MarkCode.HasValue && Hardware.CombinedInvNumber != string.Empty)
-                                                {
-                                                    <button type="button" title="Сформировать QR-код оборудования" class="btn btn-info mb-1" @onclick="GenerateQR"><b>QR</b></button>
-                                                    <button type="button" title="Сформировать этикетку" class="btn btn-info mb-1" @onclick="GenerateLabel"><b>Label</b></button>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col"><h6>ID</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.Id</div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>Склад</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.MainWarehouse?.Title</div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>Категория</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.CategoryHardware?.Title
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>Пользователь</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.User?.LastName @Hardware.User?.FirstName</div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>Склад пользователя</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">
-                                                <InputSelect title="Склады пользователя на которого перемещено оборудование" id="user" class="form-select" @bind-Value="Hardware.UserWarehouseId" @oninput="SelectedUserWarehouseEvent">
-                                                    @foreach (UserWarehouse warehouse in UserWarehousesList)
-                                                    {
-                                                        <option value="@warehouse.Id">@warehouse.Title</option>
-                                                    }
-                                                </InputSelect>
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>Для этикетки</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.NameForLabel</div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>Код марк.</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.MarkCode</div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <h6>№ 1С</h6>
+                                    <AuthorizeView Roles="admin">
+                                        <Authorized>
+                                            <div class="card-header">
+                                                <div class="row @HardwareInfoClasses">
+                                                    <div class="p-0 m-1 col-auto">
+                                                        @if(Hardware.MarkCode.HasValue)
+                                                        {
+                                                            <button type="button" title="Перместить оборудование на пользователя" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#moveHardware" @onclick="MoveHardwareEvent"><b>Перемещение</b></button>
+                                                            <button type="button" title="Временно выдать оборудование пользователю" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#giveHardware" @onclick="GiveHardwareEvent"><b>Выдача</b></button>
+                                                            <button type="button" title="Вернуть оборудование на основной склад" class="btn btn-secondary mb-1" @onclick="ReturnHardware"><b>Возврат</b></button>
+                                                            <button type="button" title="Списать оборудование со склада" class="btn btn-danger mb-1" @onclick="WriteOffHardware"><b>Списание</b></button>
+                                                            <button type="button" title="Передать оборудование в ремонт" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#repairHardware"><b>Ремонт</b></button>
+                                                            <button type="button" title="Вернуть оборудование из ремонта" class="btn btn-primary mb-1" style="margin-right: .25rem;" data-bs-toggle="modal" data-bs-target="#returnRepairHardware"><b>Возврат из ремонта</b></button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="button" title="Промаркировать оборудование" class="btn btn-primary mb-1" @onclick="MarkHardware"><b>Маркировка</b></button>
+                                                        }
+                                                        @if(Hardware.MarkCode.HasValue && Hardware.CombinedInvNumber != string.Empty)
+                                                        {
+                                                            <button type="button" title="Сформировать QR-код оборудования" class="btn btn-info mb-1" @onclick="GenerateQR"><b>QR</b></button>
+                                                            <button type="button" title="Сформировать этикетку" class="btn btn-info mb-1" @onclick="GenerateLabel"><b>Label</b></button>
+                                                        }
                                                     </div>
-                                                    <div class="col d-flex justify-content-end">@Hardware.InventoryNumberExternalSystem</div>
+                                                </div>
+                                                <div class="row">
+                                                    <span class="form-text mb-1 d-flex justify-content-end" style="cursor: pointer;" @onclick="EditHardwareEvent">
+                                                        @EditHardwareBtnText
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div class="col">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <h6>Док. 1С</h6>
+                                        </Authorized>
+                                    </AuthorizeView>
+                                    <div class="card-body" style="overflow-y: auto; height: @CardBodyHeight;">
+                                        <div class="@HardwareEditClasses">
+                                            <EditForm Model="updateDTO" FormName="EditHardware" Context="EditHardware" OnValidSubmit="EditHardware">
+                                                <div class="modal-body">
+                                                    <DataAnnotationsValidator />
+            
+                                                    <!-- Alert -->
+                                                    <div class="alert @ClassesAlert" role="alert">
+                                                        @ResponseMessage
                                                     </div>
-                                                    <div class="col d-flex justify-content-end">@Hardware.DocumentExternalSystem?.ShortTitle</div>
+                                                    <!-- End alert -->
+
+                                                    <div class="form-group">
+                                                        <label for="title">ID оборудования</label>
+                                                        <label><b>@updateDTO.HardwareId</b></label>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        @if (updateDTO.CategoryHardwareId != Guid.Empty)
+                                                        {
+                                                            <p>Выбрана категория <b>@CategoryHrdw.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label for="category">Категория</label>
+                                                            <InputText type="text" class="form-control mb-1" @bind-Value="SearchCategoryString" @oninput="SearchCategoryEvent" placeholder="Поиск категории" />
+                                                            <div class="list-group" style="height:85px; overflow-y:scroll;">
+                                                                @foreach (CategoryHardware category in FilteredCategories)
+                                                                {
+                                                                    <li @onclick="() => selectedCategoryEventAdd(category)" class="list-group-item list-group-item-action" style="cursor:pointer;">@category.Title</li>
+                                                                }
+                                                            </div>
+                                                        }
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.CategoryHardwareId)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        @if (updateDTO.DocumentExternalSystemId != Guid.Empty)
+                                                        {
+                                                            <p>Выбран вид документа <b>@DocumentHardware.ShortTitle</b><span @onclick="RemoveDocument" class="ms-1 text-primary" style="cursor:pointer;">(другой)</span></p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label for="document">Документ</label>
+                                                            <InputText type="text" class="form-control mb-1" @bind-Value="SearchDocumentString" @oninput="SearchDocumentEvent" placeholder="Поиск документа" />
+                                                            <div class="list-group" style="height:85px; overflow-y:scroll;">
+                                                                @foreach (DocumentExternalSystem document in FilteredDocuments)
+                                                                {
+                                                                    <li @onclick="() => selectedDocumentEventAdd(document)" class="list-group-item list-group-item-action" style="cursor:pointer;">@document.Title</li>
+                                                                }
+                                                            </div>
+                                                        }
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.DocumentExternalSystemId)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        <label for="document">Склады пользователя (@Hardware.User?.LastName @Hardware.User?.FirstName)</label>
+                                                        <InputSelect title="Склады пользователя на которого перемещено оборудование" id="user" class="form-select" @bind-Value="updateDTO.UserWarehouseId">
+                                                            @foreach (UserWarehouse warehouse in UserWarehousesList)
+                                                            {
+                                                                <option value="@warehouse.Id">@warehouse.Title</option>
+                                                            }
+                                                        </InputSelect>
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.UserWarehouseId)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        <label for="title">Наименование</label>
+                                                        <InputText id="title" class="form-control" @bind-Value="updateDTO.Title" />
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.Title)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        <label for="title">Для этикетки</label>
+                                                        <InputText id="title" class="form-control" @bind-Value="updateDTO.Title" />
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.Title)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        <label for="numberext">Номер внешней системы</label>
+                                                        <InputText id="numberext" class="form-control" @bind-Value="updateDTO.InventoryNumberExternalSystem" />
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.InventoryNumberExternalSystem)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        <label for="numberext">Серийный номер</label>
+                                                        <InputText id="numberext" class="form-control" @bind-Value="updateDTO.SerialNumber" />
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.SerialNumber)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        <label for="ttn">ТТН</label>
+                                                        <InputText id="ttn" class="form-control" @bind-Value="updateDTO.TTN" />
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.TTN)" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        <label for="description">Описание</label>
+                                                        <InputTextArea id="description" class="form-control" @bind-Value="updateDTO.Description" />
+                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.Description)" />
+                                                    </div>
+            
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" title="Сохранить внесённые изменения" class="btn btn-success" id="submit">Сохранить изменения</button>
+                                                </div>
+                                            </EditForm>
+                                        </div>
+                                        <div class="@HardwareInfoClasses">
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>ID</h6></div>
+                                                <div class="col-sm">@Hardware.Id</div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>Склад</h6></div>
+                                                <div class="col-sm">@Hardware.MainWarehouse?.Title</div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>Категория</h6></div>
+                                                <div class="col-sm">
+                                                    @Hardware.CategoryHardware?.Title
                                                 </div>
                                             </div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <h6>Инв.№</h6>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>Пользователь</h6></div>
+                                                <div class="col-sm">@Hardware.User?.LastName @Hardware.User?.FirstName</div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>Склад пользователя</h6></div>
+                                                <div class="col-sm">@userWarehouse.Title</div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>Для этикетки</h6></div>
+                                                <div class="col-sm">@Hardware.NameForLabel</div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>Код марк.</h6></div>
+                                                <div class="col-sm">@Hardware.MarkCode</div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <h6>№ 1С</h6>
+                                                        </div>
+                                                        <div class="col-sm">@Hardware.InventoryNumberExternalSystem</div>
                                                     </div>
-                                                    <div class="col d-flex justify-content-end">@Hardware.CombinedInvNumber</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <h6>Док. 1С</h6>
+                                                        </div>
+                                                        <div class="col-sm">@Hardware.DocumentExternalSystem?.ShortTitle</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col">
-                                                <div class="row">
-                                                    <div class="col-3">
-                                                        <h6>SN</h6>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <h6>Инв.№</h6>
+                                                        </div>
+                                                        <div class="col-sm">@Hardware.CombinedInvNumber</div>
                                                     </div>
-                                                    <div class="col d-flex justify-content-end">@Hardware.SerialNumber</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <h6>SN</h6>
+                                                        </div>
+                                                        <div class="col-sm">@Hardware.SerialNumber</div>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>ТТН</h6></div>
+                                                <div class="col-sm">@Hardware.TTN</div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6>Описание</h6></div>
+                                                <div class="col-sm">@Hardware.Description</div>
+                                            </div>
                                         </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>ТТН</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.TTN</div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col"><h6>Описание</h6></div>
-                                            <div class="col-9 d-flex justify-content-end">@Hardware.Description</div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <EditForm Model="updateDTO" FormName="ViewHardware" Context="ViewHardware" OnValidSubmit="EditHardware">
+                            <div class="col-sm-5">
+                                @* <EditForm Model="updateDTO" FormName="ViewHardware" Context="ViewHardware" OnValidSubmit="EditHardware">
                                     <div class="modal-body">
 
                                         <div class="form-group">
@@ -666,7 +753,7 @@
                                             <InputText title="Новое наименование оборудования (для этикетки)" id="title" class="form-control" @bind-Value="updateDTO.NameForLabel" />
                                             <ValidationMessage For="@(() => updateDTO.NameForLabel)" />
                                         </div>
-
+                                        
                                         <div class="form-group">
                                             <label for="numberext">Номер 1С (новый)</label>
                                             <InputText title="Новый номер оборудования во внешней учётной системе" id="numberext" class="form-control" @bind-Value="updateDTO.InventoryNumberExternalSystem" />
@@ -677,14 +764,14 @@
                                     <div class="modal-footer">
                                         <button type="submit" title="Сохранить изменения для оборудования" class="btn btn-success" id="submit">Сохранить изменения</button>
                                     </div>
-                                </EditForm>
+                                </EditForm> *@
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-sm">
                                         <a title="Показать историю оборудования" class="btn btn-secondary" @onclick="showHistoryEvent" data-bs-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
                                             @ShowAllHistoryTextButton
                                         </a>
                                     </div>
-                                    <div class="col-12" style="height: 410px; overflow-y: auto;">
+                                    <div class="col-sm-12" style="height: 700px; overflow-y: auto;">
                                         @foreach (History history in ShowHistoryList)
                                         {
                                             <hr />
@@ -768,9 +855,10 @@
     private HardwareReturnDTO returnDTO = new();
     private HardwareRepairDTO repairDTO = new();
     private HardwareUpdateDTO updateDTO = new();
+    private UserWarehouse userWarehouse = new();
     private HardwareWriteOffDTO writeOffDTO = new();
-    private CategoryHardware CategoryHardwareAdd = new();
-    private DocumentExternalSystem DocumentHardwareAdd = new();
+    private CategoryHardware CategoryHrdw = new();
+    private DocumentExternalSystem DocumentHardware = new();
     private MarkAllHardwareDTO markAllHardwareDTO = new();
     private List<CategoryHardware> Categories = new();
     private List<CategoryHardware> FilteredCategories = new();
@@ -816,6 +904,13 @@
     private PortalEnums status = new();
     private string StatusHardware = string.Empty;
     private string statusClass = "bg-light text-dark";
+
+    private string EditHardwareBtnText { get; set; } = "изменить";
+    private bool EditHardwareCheck { get; set; } = false;
+    private string HardwareInfoClasses { get; set; } = string.Empty;
+    private string HardwareEditClasses { get; set; } = "d-none";
+    private string EditMessageString { get; set; } = string.Empty;
+    private string CardBodyHeight = "600px";
 
 
 
@@ -1131,6 +1226,7 @@
         Hardware = await HardwareService.GetByIdAsync(hardwareId);
         if (Hardware.UserId.HasValue)
         {
+            userWarehouse = await UserWarehouseService.GetByIdAsync(Hardware.UserWarehouseId.Value);
             UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(Hardware.UserId.Value);
         }
         HideHistoryList.Clear();
@@ -1301,9 +1397,9 @@
 
             int quantity = 0;
 
-            if (HideHistoryList.Count >= 3)
+            if (HideHistoryList.Count >= 4)
             {
-                quantity = 3;
+                quantity = 4;
             }
             else
             {
@@ -1385,11 +1481,20 @@
 
     private async Task EditHardware()
     {
-        updateDTO.HardwareId = Hardware.Id;
+        await SetUserIdToLocalStorageAsync();
+        string userId = await localStorage.GetItemAsync<string>("userId");
+        if (userId != string.Empty)
+            updateDTO.ResponsibleId = Guid.Parse(userId);
         var result = await HardwareService.UpdateAsync(updateDTO);
         updateDTO = new();
         Hardware = new();
         Hardware = result;
+        updateDTO = new();
+        EditHardwareBtnText = "изменить";
+        EditHardwareCheck = false;
+        HardwareInfoClasses = string.Empty;
+        HardwareEditClasses = "d-none";
+        await UpdateViewHardware(result.Id);
     }
 
     private async Task SearchEvent(ChangeEventArgs args)
@@ -1559,6 +1664,13 @@
     {
         HardwaresId.Clear();
         ViewModalShow = false;
+        EditHardwareBtnText = "изменить";
+        EditHardwareCheck = false;
+        HardwareInfoClasses = string.Empty;
+        HardwareEditClasses = "d-none";
+        updateDTO = new();
+        userWarehouse = new();
+        CardBodyHeight = "600px";
     }
 
     private async Task selectedCategoryEvent(ChangeEventArgs args)
@@ -1725,31 +1837,39 @@
 
     private async Task selectedCategoryEventAdd(CategoryHardware category)
     {
-        CategoryHardwareAdd = category;
+        CategoryHrdw = category;
         hardwareDTO.CategoryHardwareId = category.Id;
+        if(updateDTO is not null)
+            updateDTO.CategoryHardwareId = category.Id;
     }
 
     private async Task RemoveCategory(MouseEventArgs args)
     {
-        CategoryHardwareAdd = new();
+        CategoryHrdw = new();
         hardwareDTO.CategoryHardwareId = Guid.Empty;
         SearchCategoryString = string.Empty;
         FilteredCategories = Categories;
+        if (updateDTO is not null)
+            updateDTO.CategoryHardwareId = Guid.Empty;
     }
 
     private async Task selectedDocumentEventAdd(DocumentExternalSystem document)
     {
-        DocumentHardwareAdd = document;
+        DocumentHardware = document;
         hardwareDTO.DocumentExternalSystemId = document.Id;
+        if(updateDTO is not null)
+            updateDTO.DocumentExternalSystemId = document.Id;
     }
 
     private async Task RemoveDocument(MouseEventArgs args)
     {
-        DocumentHardwareAdd = new();
+        DocumentHardware = new();
         hardwareDTO.DocumentExternalSystemId = Guid.Empty;
+        updateDTO.DocumentExternalSystemId = Guid.Empty;
         SearchDocumentString = string.Empty;
         FilteredDocuments = Documents;
     }
+
     private async Task SearchDocumentEvent(ChangeEventArgs args)
     {
         SearchDocumentString = args.Value.ToString();
@@ -1763,14 +1883,16 @@
             FilteredDocuments = Documents;
         }
     }
+
     private async Task CloseModalAddHardware(MouseEventArgs args)
     {
         ClassesAlert = "d-none";
-        DocumentHardwareAdd = new();
+        DocumentHardware = new();
         hardwareDTO.DocumentExternalSystemId = Guid.Empty;
-        CategoryHardwareAdd = new();
+        CategoryHardware = new();
         hardwareDTO.CategoryHardwareId = Guid.Empty;
     }
+
     private async Task FilterBtnClickEvent(MouseEventArgs args)
     {
         if (FilterBtnStatus is false)
@@ -1784,6 +1906,7 @@
             FilterBtnStatus = false;
         }
     }
+
     private async Task ClearSearchStringEvent(MouseEventArgs args)
     {
         SearchString = string.Empty;
@@ -1796,6 +1919,50 @@
         else
         {
             StringCount = Hardwares.Count;
+        }
+    }
+
+    private async Task EditHardwareEvent(MouseEventArgs args)
+    {
+        if (EditHardwareCheck is false)
+        {
+            Categories = await CategoryHardwareService.GetAllAsync();
+            FilteredCategories = Categories;
+            Documents = await DocumentExternalSystem.GetAllAsync();
+            FilteredDocuments = Documents;
+
+            CategoryHrdw = await CategoryHardwareService.GetByIdAsync(Hardware.CategoryHardwareId);
+            DocumentHardware = await DocumentExternalSystem.GetByIdAsync(Hardware.DocumentExternalSystemId);
+
+            updateDTO.HardwareId = Hardware.Id;
+            updateDTO.UserId = Hardware.UserId;
+            updateDTO.UserWarehouseId = Hardware.UserWarehouseId;
+            updateDTO.MainWarehouseId = Hardware.MainWarehouseId;
+            updateDTO.CategoryHardwareId = Hardware.CategoryHardwareId;
+            updateDTO.DocumentExternalSystemId = Hardware.DocumentExternalSystemId;
+            updateDTO.Title = Hardware.Title;
+            updateDTO.Description = Hardware.Description;
+            updateDTO.NameForLabel = Hardware.NameForLabel;
+            updateDTO.InventoryNumberExternalSystem = Hardware.InventoryNumberExternalSystem;
+            updateDTO.TTN = Hardware.TTN;
+            updateDTO.SerialNumber = Hardware.SerialNumber;
+
+            EditHardwareBtnText = "отменить";
+            EditHardwareCheck = true;
+            HardwareInfoClasses = "d-none";
+            HardwareEditClasses = string.Empty;
+            EditMessageString = "Редактирование - ";
+            CardBodyHeight = "680px";
+        }
+        else
+        {
+            updateDTO = new();
+            CardBodyHeight = "600px";
+            EditHardwareBtnText = "изменить";
+            EditHardwareCheck = false;
+            HardwareInfoClasses = string.Empty;
+            HardwareEditClasses = "d-none";
+            EditMessageString = string.Empty;
         }
     }
 }
