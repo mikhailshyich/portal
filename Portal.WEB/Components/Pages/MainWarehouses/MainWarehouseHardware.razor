@@ -511,7 +511,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-sm-7">
+                            <div class="col-sm-7 mb-2">
                                 <div class="card">
                                     <AuthorizeView Roles="admin">
                                         <Authorized>
@@ -546,202 +546,224 @@
                                             </div>
                                         </Authorized>
                                     </AuthorizeView>
-                                    <div class="card-body" style="overflow-y: auto; height: @CardBodyHeight;">
-                                        <div class="@HardwareEditClasses">
-                                            <EditForm Model="updateDTO" FormName="EditHardware" Context="EditHardware" OnValidSubmit="EditHardware">
-                                                <div class="modal-body">
-                                                    <DataAnnotationsValidator />
+                                    <EditForm Model="updateDTO" FormName="EditHardware" Context="EditHardware" OnValidSubmit="EditHardware">
+                                        <div class="card-body" style="overflow-y: auto; height: @CardBodyHeight;">
+                                            <div class="@HardwareEditClasses">
+                                            
+                                                    <div class="modal-body">
+                                                        <DataAnnotationsValidator />
             
-                                                    <!-- Alert -->
-                                                    <div class="alert @ClassesAlert" role="alert">
-                                                        @ResponseMessage
-                                                    </div>
-                                                    <!-- End alert -->
+                                                        <!-- Alert -->
+                                                        <div class="alert @ClassesAlert" role="alert">
+                                                            @ResponseMessage
+                                                        </div>
+                                                        <!-- End alert -->
 
-                                                    <div class="form-group">
-                                                        <label for="title">ID оборудования</label>
-                                                        <label><b>@updateDTO.HardwareId</b></label>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        @if (updateDTO.CategoryHardwareId != Guid.Empty)
-                                                        {
-                                                            <p>Выбрана категория <b>@CategoryHrdw.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <label for="category">Категория</label>
-                                                            <InputText type="text" class="form-control mb-1" @bind-Value="SearchCategoryString" @oninput="SearchCategoryEvent" placeholder="Поиск категории" />
-                                                            <div class="list-group" style="height:85px; overflow-y:scroll;">
-                                                                @foreach (CategoryHardware category in FilteredCategories)
-                                                                {
-                                                                    <li @onclick="() => selectedCategoryEventAdd(category)" class="list-group-item list-group-item-action" style="cursor:pointer;">@category.Title</li>
-                                                                }
-                                                            </div>
-                                                        }
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.CategoryHardwareId)" />
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        @if (updateDTO.DocumentExternalSystemId != Guid.Empty)
-                                                        {
-                                                            <p>Выбран вид документа <b>@DocumentHardware.ShortTitle</b><span @onclick="RemoveDocument" class="ms-1 text-primary" style="cursor:pointer;">(другой)</span></p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <label for="document">Документ</label>
-                                                            <InputText type="text" class="form-control mb-1" @bind-Value="SearchDocumentString" @oninput="SearchDocumentEvent" placeholder="Поиск документа" />
-                                                            <div class="list-group" style="height:85px; overflow-y:scroll;">
-                                                                @foreach (DocumentExternalSystem document in FilteredDocuments)
-                                                                {
-                                                                    <li @onclick="() => selectedDocumentEventAdd(document)" class="list-group-item list-group-item-action" style="cursor:pointer;">@document.Title</li>
-                                                                }
-                                                            </div>
-                                                        }
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.DocumentExternalSystemId)" />
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        <label for="document">Склады пользователя (@Hardware.User?.LastName @Hardware.User?.FirstName)</label>
-                                                        <InputSelect title="Склады пользователя на которого перемещено оборудование" id="user" class="form-select" @bind-Value="updateDTO.UserWarehouseId">
-                                                            @foreach (UserWarehouse warehouse in UserWarehousesList)
+                                                        <div class="form-group">
+                                                            <label for="title">ID оборудования</label>
+                                                            <label><b>@updateDTO.HardwareId</b></label>
+                                                        </div>
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            @if (updateDTO.CategoryHardwareId != Guid.Empty)
                                                             {
-                                                                <option value="@warehouse.Id">@warehouse.Title</option>
+                                                                <p>Категория <b>@CategoryHrdw.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
                                                             }
-                                                        </InputSelect>
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.UserWarehouseId)" />
+                                                            else
+                                                            {
+                                                                <label for="category">Категория</label>
+                                                                <InputText type="text" class="form-control mb-1" @bind-Value="SearchCategoryString" @oninput="SearchCategoryEvent" placeholder="Поиск категории" />
+                                                                <div class="list-group" style="height:85px; overflow-y:scroll;">
+                                                                    @foreach (CategoryHardware category in FilteredCategories)
+                                                                    {
+                                                                        <li @onclick="() => selectedCategoryEventAdd(category)" class="list-group-item list-group-item-action" style="cursor:pointer;">@category.Title</li>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.CategoryHardwareId)" />
+                                                        </div>
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            @if (updateDTO.DocumentExternalSystemId != Guid.Empty)
+                                                            {
+                                                                <p>Вид документа <b>@DocumentHardware.ShortTitle</b><span @onclick="RemoveDocument" class="ms-1 text-primary" style="cursor:pointer;">(другой)</span></p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label for="document">Документ</label>
+                                                                <InputText type="text" class="form-control mb-1" @bind-Value="SearchDocumentString" @oninput="SearchDocumentEvent" placeholder="Поиск документа" />
+                                                                <div class="list-group" style="height:85px; overflow-y:scroll;">
+                                                                    @foreach (DocumentExternalSystem document in FilteredDocuments)
+                                                                    {
+                                                                        <li @onclick="() => selectedDocumentEventAdd(document)" class="list-group-item list-group-item-action" style="cursor:pointer;">@document.Title</li>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.DocumentExternalSystemId)" />
+                                                        </div>
+                                                        @if (updateDTO.UserWarehouseId is null)
+                                                        {
+                                                                                                                                
+                                                        }
+                                                        else
+                                                        {
+                                                            <hr />
+                                                            <div class="form-group">
+                                                        
+                                                            @if (updateDTO.UserWarehouseId != Guid.Empty)
+                                                            {
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        Текущий склад пользователя (@Hardware.User?.LastName @Hardware.User?.FirstName)
+                                                                    </div>
+                                                                    <div class="col-sm">
+                                                                        <b>@EditUserWarehouse.Title</b><span @onclick="RemoveUserWarehouse" class="ms-1 text-primary" style="cursor:pointer;">(другой)</span>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label for="document">Склады пользователя (@Hardware.User?.LastName @Hardware.User?.FirstName)</label>
+                                                                <InputText type="text" class="form-control mb-1" @bind-Value="SearchUserWarehouseString" @oninput="SearchUserWarehouseEvent" placeholder="Поиск склада пользователя" />
+                                                                <div class="list-group" style="height:85px; overflow-y:scroll;">
+                                                                    @foreach (UserWarehouse warehouse in FilteredUserWarehouses)
+                                                                    {
+                                                                        <li @onclick="() => selectedUserWarehouseEventAdd(warehouse)" class="list-group-item list-group-item-action" style="cursor:pointer;">@warehouse.Title</li>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.UserWarehouseId)" />
+                                                            </div>
+                                                        }
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            <label for="title">Наименование</label>
+                                                            <InputText id="title" class="form-control" @bind-Value="updateDTO.Title" />
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.Title)" />
+                                                        </div>
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            <label for="title">Для этикетки</label>
+                                                            <InputText id="title" class="form-control" @bind-Value="updateDTO.Title" />
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.Title)" />
+                                                        </div>
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            <label for="numberext">Номер внешней системы</label>
+                                                            <InputText id="numberext" class="form-control" @bind-Value="updateDTO.InventoryNumberExternalSystem" />
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.InventoryNumberExternalSystem)" />
+                                                        </div>
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            <label for="numberext">Серийный номер</label>
+                                                            <InputText id="numberext" class="form-control" @bind-Value="updateDTO.SerialNumber" />
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.SerialNumber)" />
+                                                        </div>
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            <label for="ttn">ТТН</label>
+                                                            <InputText id="ttn" class="form-control" @bind-Value="updateDTO.TTN" />
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.TTN)" />
+                                                        </div>
+                                                        <hr />
+                                                        <div class="form-group">
+                                                            <label for="description">Описание</label>
+                                                            <InputTextArea id="description" class="form-control" @bind-Value="updateDTO.Description" />
+                                                            <ValidationMessage class="text-danger" For="@(() => updateDTO.Description)" />
+                                                        </div>
                                                     </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        <label for="title">Наименование</label>
-                                                        <InputText id="title" class="form-control" @bind-Value="updateDTO.Title" />
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.Title)" />
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        <label for="title">Для этикетки</label>
-                                                        <InputText id="title" class="form-control" @bind-Value="updateDTO.Title" />
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.Title)" />
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        <label for="numberext">Номер внешней системы</label>
-                                                        <InputText id="numberext" class="form-control" @bind-Value="updateDTO.InventoryNumberExternalSystem" />
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.InventoryNumberExternalSystem)" />
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        <label for="numberext">Серийный номер</label>
-                                                        <InputText id="numberext" class="form-control" @bind-Value="updateDTO.SerialNumber" />
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.SerialNumber)" />
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        <label for="ttn">ТТН</label>
-                                                        <InputText id="ttn" class="form-control" @bind-Value="updateDTO.TTN" />
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.TTN)" />
-                                                    </div>
-                                                    <hr />
-                                                    <div class="form-group">
-                                                        <label for="description">Описание</label>
-                                                        <InputTextArea id="description" class="form-control" @bind-Value="updateDTO.Description" />
-                                                        <ValidationMessage class="text-danger" For="@(() => updateDTO.Description)" />
-                                                    </div>
-            
+                                            </div>
+                                            <div class="@HardwareInfoClasses">
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>ID</h6></div>
+                                                    <div class="col-sm">@Hardware.Id</div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" title="Сохранить внесённые изменения" class="btn btn-success" id="submit">Сохранить изменения</button>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>Склад</h6></div>
+                                                    <div class="col-sm">@Hardware.MainWarehouse?.Title</div>
                                                 </div>
-                                            </EditForm>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>Категория</h6></div>
+                                                    <div class="col-sm">
+                                                        @Hardware.CategoryHardware?.Title
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>Пользователь</h6></div>
+                                                    <div class="col-sm">@Hardware.User?.LastName @Hardware.User?.FirstName</div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>Склад пользователя</h6></div>
+                                                    <div class="col-sm">@userWarehouse.Title</div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>Для этикетки</h6></div>
+                                                    <div class="col-sm">@Hardware.NameForLabel</div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>Код марк.</h6></div>
+                                                    <div class="col-sm">@Hardware.MarkCode</div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <h6>№ 1С</h6>
+                                                            </div>
+                                                            <div class="col-sm">@Hardware.InventoryNumberExternalSystem</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <h6>Док. 1С</h6>
+                                                            </div>
+                                                            <div class="col-sm">@Hardware.DocumentExternalSystem?.ShortTitle</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <h6>Инв.№</h6>
+                                                            </div>
+                                                            <div class="col-sm">@Hardware.CombinedInvNumber</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <h6>SN</h6>
+                                                            </div>
+                                                            <div class="col-sm">@Hardware.SerialNumber</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>ТТН</h6></div>
+                                                    <div class="col-sm">@Hardware.TTN</div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-sm-4"><h6>Описание</h6></div>
+                                                    <div class="col-sm">@Hardware.Description</div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="@HardwareInfoClasses">
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>ID</h6></div>
-                                                <div class="col-sm">@Hardware.Id</div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>Склад</h6></div>
-                                                <div class="col-sm">@Hardware.MainWarehouse?.Title</div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>Категория</h6></div>
-                                                <div class="col-sm">
-                                                    @Hardware.CategoryHardware?.Title
-                                                </div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>Пользователь</h6></div>
-                                                <div class="col-sm">@Hardware.User?.LastName @Hardware.User?.FirstName</div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>Склад пользователя</h6></div>
-                                                <div class="col-sm">@userWarehouse.Title</div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>Для этикетки</h6></div>
-                                                <div class="col-sm">@Hardware.NameForLabel</div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>Код марк.</h6></div>
-                                                <div class="col-sm">@Hardware.MarkCode</div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <h6>№ 1С</h6>
-                                                        </div>
-                                                        <div class="col-sm">@Hardware.InventoryNumberExternalSystem</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <h6>Док. 1С</h6>
-                                                        </div>
-                                                        <div class="col-sm">@Hardware.DocumentExternalSystem?.ShortTitle</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <h6>Инв.№</h6>
-                                                        </div>
-                                                        <div class="col-sm">@Hardware.CombinedInvNumber</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <h6>SN</h6>
-                                                        </div>
-                                                        <div class="col-sm">@Hardware.SerialNumber</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>ТТН</h6></div>
-                                                <div class="col-sm">@Hardware.TTN</div>
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <div class="col-sm-4"><h6>Описание</h6></div>
-                                                <div class="col-sm">@Hardware.Description</div>
-                                            </div>
+                                        <div class="card-header d-flex justify-content-end @HardwareEditClasses">
+                                            <button type="submit" title="Сохранить внесённые изменения" class="btn btn-success" id="submit">Сохранить изменения</button>
                                         </div>
-                                        
-                                    </div>
+                                    </EditForm>
                                 </div>
                             </div>
                             <div class="col-sm-5">
@@ -863,6 +885,7 @@
     private List<CategoryHardware> Categories = new();
     private List<CategoryHardware> FilteredCategories = new();
     private List<DocumentExternalSystem> FilteredDocuments = new();
+    private List<UserWarehouse> FilteredUserWarehouses = new();
     private List<DocumentExternalSystem> Documents = new();
     private List<Guid> HardwaresId = new();
     private string SearchString { get; set; } = string.Empty;
@@ -911,6 +934,8 @@
     private string HardwareEditClasses { get; set; } = "d-none";
     private string EditMessageString { get; set; } = string.Empty;
     private string CardBodyHeight = "600px";
+    private string SearchUserWarehouseString = string.Empty;
+    private UserWarehouse EditUserWarehouse = new();
 
 
 
@@ -1671,6 +1696,8 @@
         updateDTO = new();
         userWarehouse = new();
         CardBodyHeight = "600px";
+        EditMessageString = string.Empty;
+        EditUserWarehouse = new();
     }
 
     private async Task selectedCategoryEvent(ChangeEventArgs args)
@@ -1930,9 +1957,16 @@
             FilteredCategories = Categories;
             Documents = await DocumentExternalSystem.GetAllAsync();
             FilteredDocuments = Documents;
+            if (Hardware.UserId.HasValue)
+            {
+                UserWarehousesList = await UserWarehouseService.GetAllByUserIdAsync(Hardware.UserId.Value);
+                FilteredUserWarehouses = UserWarehousesList;
+            }
 
             CategoryHrdw = await CategoryHardwareService.GetByIdAsync(Hardware.CategoryHardwareId);
             DocumentHardware = await DocumentExternalSystem.GetByIdAsync(Hardware.DocumentExternalSystemId);
+            if (Hardware.UserWarehouseId.HasValue)
+                EditUserWarehouse = await UserWarehouseService.GetByIdAsync(Hardware.UserWarehouseId.Value);
 
             updateDTO.HardwareId = Hardware.Id;
             updateDTO.UserId = Hardware.UserId;
@@ -1952,7 +1986,7 @@
             HardwareInfoClasses = "d-none";
             HardwareEditClasses = string.Empty;
             EditMessageString = "Редактирование - ";
-            CardBodyHeight = "680px";
+            CardBodyHeight = "640px";
         }
         else
         {
@@ -1964,5 +1998,30 @@
             HardwareEditClasses = "d-none";
             EditMessageString = string.Empty;
         }
+    }
+    private async Task SearchUserWarehouseEvent(ChangeEventArgs args)
+    {
+        SearchUserWarehouseString = args.Value.ToString();
+        if (SearchUserWarehouseString != string.Empty)
+        {
+            FilteredUserWarehouses = UserWarehousesList.Where(c => c.Title.Contains(SearchUserWarehouseString.ToLower(), StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        else
+        {
+            FilteredUserWarehouses = UserWarehousesList;
+        }
+    }
+    private async Task selectedUserWarehouseEventAdd(UserWarehouse userWarehouse)
+    {
+        EditUserWarehouse = userWarehouse;
+        if (updateDTO is not null)
+            updateDTO.UserWarehouseId = userWarehouse.Id;
+    }
+    private async Task RemoveUserWarehouse(MouseEventArgs args)
+    {
+        EditUserWarehouse = new();
+        updateDTO.UserWarehouseId = Guid.Empty;
+        SearchUserWarehouseString = string.Empty;
+        FilteredUserWarehouses = UserWarehousesList;
     }
 }
