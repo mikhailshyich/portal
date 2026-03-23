@@ -52,43 +52,63 @@
                                 }
                             </div>
                             <div class="col-12">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-sm-1">
                                         <button class="btn btn-outline-secondary mb-1" type="button" data-bs-toggle="collapse" @onclick="FilterBtnClickEvent" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">
                                             @FilterBtnText
                                         </button>
-                                        <div class="collapse" id="filters">
-                                            <div class="row mb-1">
-                                                <div class="col-sm-6 mb-1">
-                                                    <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
-                                                        <option value="1" selected>Все категории</option>
-                                                        @foreach (CategoryHardware category in Categories)
-                                                        {
-                                                            <option value="@category.Id">@category.Title</option>
-                                                        }
-                                                    </InputSelect>
-                                                </div>
-                                                <div class="col-sm-6 mb-1">
-                                                    <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
-                                                        <option value="1" selected>Все статусы</option>
-                                                        @foreach (var status in HardwareStatuses)
-                                                        {
-                                                            <option value="@status">@status</option>
-                                                        }
-                                                    </InputSelect>
+                                    </div>
+                                    <div class="col-sm d-flex align-items-center">
+                                        @if (StringFiltersDictionary.Count > 0)
+                                        {
+                                            <div class="row">
+                                                <div class="d-flex col-sm">
+                                                    @foreach (var filter in StringFiltersDictionary)
+                                                    {
+                                                        <div class="p-2 me-1 mb-1" style="border: gray 1px solid;border-radius: 20px;">
+                                                            <span>@filter.Value</span>
+                                                            <span style="cursor: pointer;" @onclick="() => RemoveFilterEvent(filter.Key)" title="Убрать фильтр">X</span>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="collapse" id="filters">
+                                    <div class="row mb-1">
+                                        <div class="col-sm-6 mb-1">
+                                            <InputSelect class="form-select" title="Категории оборудования" id="warehouseSelect" @oninput="selectedCategoryEvent" @bind-Value="CategoryHardware.Id">
+                                                <option value="1" selected>Все категории</option>
+                                                @foreach (CategoryHardware category in Categories)
+                                                {
+                                                    <option value="@category.Id">@category.Title</option>
+                                                }
+                                            </InputSelect>
                                         </div>
-                                        <div class="row justify-content-end">
-                                            <div class="col-sm-6 mb-1">
-                                                <div class="input-group">
-                                                    <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
-                                                    <button class="btn btn-outline-secondary @ClassesClearBtn" @onclick="ClearSearchStringEvent" title="Очистить поиск">X</button>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 mb-1">
-                                                <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
-                                            </div>
+                                        <div class="col-sm-6 mb-1">
+                                            <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
+                                                <option value="" selected>Все статусы</option>
+                                                @foreach (var status in HardwareStatuses)
+                                                {
+                                                    <option value="@status">@status</option>
+                                                }
+                                            </InputSelect>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col-sm-6 mb-1">
+                                        <div class="input-group">
+                                            <InputText class="form-control" title="Поле для поиска" @bind-value="SearchString" @oninput="SearchEvent" placeholder="Введите для поиска..." />
+                                            <button class="btn btn-outline-secondary @ClassesClearBtn" @onclick="ClearSearchStringEvent" title="Очистить поиск">X</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-1">
+                                        <span title="Всего оборудования на складе">Всего: <span class="fw-bold">@StringCount</span></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </Authorized>
@@ -761,7 +781,7 @@
                                             </div>
                                         </div>
                                         <div class="card-header d-flex justify-content-end @HardwareEditClasses">
-                                            <button type="submit" title="Сохранить внесённые изменения" class="btn btn-success" id="submit">Сохранить изменения</button>
+                                            <button title="Сохранить внесённые изменения" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Сохранить изменения</button>
                                         </div>
                                     </EditForm>
                                 </div>
@@ -846,6 +866,8 @@
             </div>
         </div>
         <!-- End modal -->
+
+        <GeneralConfirmDialog Message="Привет" OnClose="OnConfirm"/>
     }
     else
     {
@@ -863,6 +885,12 @@
     public Guid Id { get; set; }
 
     [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
+
+    GeneralConfirmDialog dialog;
+
+    private bool ConfirmStatus = false;
+
+    void OnConfirm(bool confirmed) { ConfirmStatus = confirmed; }
 
     private ClaimsPrincipal user = new();
     public UserView userView = new();
@@ -924,7 +952,7 @@
 
     private Dictionary<HrdwStatuses, string> hrdwStatuses = new();
     private List<string> HardwareStatuses = new();
-    private PortalEnums status = new();
+    private PortalEnums enums = new();
     private string StatusHardware = string.Empty;
     private string statusClass = "bg-light text-dark";
 
@@ -937,7 +965,14 @@
     private string SearchUserWarehouseString = string.Empty;
     private UserWarehouse EditUserWarehouse = new();
 
+    private HardwareFilter HardwareFilter = new();
+    private Dictionary<string, string> StringFiltersDictionary = new();
 
+    private enum HardwareFiltersEnum
+    {
+        category,
+        status
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -958,7 +993,7 @@
                 FilteredHardwares = Hardwares.Take(ItemPerPage).ToList();
                 CalculateQuantity(ItemPerPage, PageNumber, null);
                 ShowAllHistoryTextButton = $"Показать всю историю ({HideHistoryList.Count}) ↓";
-                hrdwStatuses = status.ReturnHardwareStatus();
+                hrdwStatuses = enums.ReturnHardwareStatus();
                 await AddStatusesToList();
             }
         }
@@ -1506,20 +1541,23 @@
 
     private async Task EditHardware()
     {
-        await SetUserIdToLocalStorageAsync();
-        string userId = await localStorage.GetItemAsync<string>("userId");
-        if (userId != string.Empty)
-            updateDTO.ResponsibleId = Guid.Parse(userId);
-        var result = await HardwareService.UpdateAsync(updateDTO);
-        updateDTO = new();
-        Hardware = new();
-        Hardware = result;
-        updateDTO = new();
-        EditHardwareBtnText = "изменить";
-        EditHardwareCheck = false;
-        HardwareInfoClasses = string.Empty;
-        HardwareEditClasses = "d-none";
-        await UpdateViewHardware(result.Id);
+        if (ConfirmStatus)
+        {
+            await SetUserIdToLocalStorageAsync();
+            string userId = await localStorage.GetItemAsync<string>("userId");
+            if (userId != string.Empty)
+                updateDTO.ResponsibleId = Guid.Parse(userId);
+            var result = await HardwareService.UpdateAsync(updateDTO);
+            updateDTO = new();
+            Hardware = new();
+            Hardware = result;
+            updateDTO = new();
+            EditHardwareBtnText = "изменить";
+            EditHardwareCheck = false;
+            HardwareInfoClasses = string.Empty;
+            HardwareEditClasses = "d-none";
+            await UpdateViewHardware(result.Id);
+        }
     }
 
     private async Task SearchEvent(ChangeEventArgs args)
@@ -1571,12 +1609,12 @@
         int calculatedValue = 0;
         int itemQuantity = itemPerPage;
         PageNumber = pageNumber;
-        if (CategoryHardware.Id != Guid.Empty)
-        {
-            filteredHdw = MainWarehouse.Hardwares.Where(d => d.CategoryHardwareId == CategoryHardware.Id).ToList();
-            if (itemPerPage > filteredHdw.Count)
-                pageNumber = 1;
-        }
+        // if (CategoryHardware.Id != Guid.Empty)
+        // {
+        //     filteredHdw = MainWarehouse.Hardwares.Where(d => d.CategoryHardwareId == CategoryHardware.Id).ToList();
+        //     if (itemPerPage > filteredHdw.Count)
+        //         pageNumber = 1;
+        // }
         if (pageNumber > 1)
         {
             calculatedValue = (itemPerPage * pageNumber) - itemPerPage;
@@ -1707,15 +1745,33 @@
         if (isGuid)
         {
             CategoryHardware = await CategoryHardwareService.GetByIdAsync(categoryGuid);
-            FilteredHardwares = MainWarehouse.Hardwares.Where(d => d.CategoryHardwareId == categoryGuid).ToList();
-            CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
+            if(CategoryHardware != null)
+            {
+                HardwareFilter.CategoryHardware = CategoryHardware;
+                await HardwareFilterAsync(HardwareFilter);
+            }
         }
-        else
+    }
+
+    private async Task HardwareFilterAsync(HardwareFilter filter)
+    {
+        // if (FilteredHardwares.Count == 0 || (filter.CategoryHardware is null & filter.StatusTitle is null))
+        //     FilteredHardwares = MainWarehouse.Hardwares;
+        var hardwares = MainWarehouse.Hardwares;
+        if (!string.IsNullOrEmpty(filter.StatusTitle))
         {
-            FilteredHardwares = MainWarehouse.Hardwares;
-            CategoryHardware = new();
-            CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
+            StringFiltersDictionary.Remove(HardwareFiltersEnum.status.ToString());
+            hardwares = hardwares.Where(d => d.Status == filter.StatusTitle).ToList();
+            StringFiltersDictionary.Add(HardwareFiltersEnum.status.ToString(), filter.StatusTitle);
         }
+        if(filter.CategoryHardware != null)
+        {
+            StringFiltersDictionary.Remove(HardwareFiltersEnum.category.ToString());
+            hardwares = hardwares.Where(c => c.CategoryHardwareId == filter.CategoryHardware.Id).ToList();
+            StringFiltersDictionary.Add(HardwareFiltersEnum.category.ToString(), filter.CategoryHardware.Title);
+        }
+        FilteredHardwares = hardwares;
+        CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
     }
 
     private async Task ExportHardwareEvent(MouseEventArgs args)
@@ -1730,27 +1786,27 @@
         catch(Exception ex){}
     }
 
-    private async Task SelectedUserWarehouseEvent(ChangeEventArgs args)
-    {
-        try
-        {
-            updateDTO = new();
-            if (Hardware.UserId.HasValue)
-            {
-                await SetUserIdToLocalStorageAsync();
-                string userId = await localStorage.GetItemAsync<string>("userId");
-                if (userId != string.Empty)
-                    updateDTO.ResponsibleId = Guid.Parse(userId);
-                updateDTO.HardwareId = Hardware.Id;
-                updateDTO.UserId = Hardware.UserId.Value;
-                updateDTO.UserWarehouseId = Guid.Parse(args.Value.ToString());
-                await HardwareService.UpdateAsync(updateDTO);
-                await ViewHardware(Hardware.Id);
-            }
-        }
-        catch(Exception ex){}
+    // private async Task SelectedUserWarehouseEvent(ChangeEventArgs args)
+    // {
+    //     try
+    //     {
+    //         updateDTO = new();
+    //         if (Hardware.UserId.HasValue)
+    //         {
+    //             await SetUserIdToLocalStorageAsync();
+    //             string userId = await localStorage.GetItemAsync<string>("userId");
+    //             if (userId != string.Empty)
+    //                 updateDTO.ResponsibleId = Guid.Parse(userId);
+    //             updateDTO.HardwareId = Hardware.Id;
+    //             updateDTO.UserId = Hardware.UserId.Value;
+    //             updateDTO.UserWarehouseId = Guid.Parse(args.Value.ToString());
+    //             await HardwareService.UpdateAsync(updateDTO);
+    //             await ViewHardware(Hardware.Id);
+    //         }
+    //     }
+    //     catch(Exception ex){}
 
-    }
+    // }
 
     private async Task GiveHardwareEvent(MouseEventArgs args)
     {
@@ -1838,14 +1894,8 @@
         var status = args.Value.ToString();
         if (status != "1")
         {
-            FilteredHardwares = MainWarehouse.Hardwares.Where(d => d.Status == status).ToList();
-            CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
-        }
-        else
-        {
-            FilteredHardwares = MainWarehouse.Hardwares;
-            CategoryHardware = new();
-            CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
+            HardwareFilter.StatusTitle = status;
+            await HardwareFilterAsync(HardwareFilter);
         }
     }
     private async Task SearchCategoryEvent(ChangeEventArgs args)
@@ -1924,7 +1974,7 @@
     {
         if (FilterBtnStatus is false)
         {
-            FilterBtnText = "Скрыть фильтры";
+            FilterBtnText = "Скрыть";
             FilterBtnStatus = true;
         }
         else
@@ -2023,5 +2073,20 @@
         updateDTO.UserWarehouseId = Guid.Empty;
         SearchUserWarehouseString = string.Empty;
         FilteredUserWarehouses = UserWarehousesList;
+    }
+    private async Task RemoveFilterEvent(string keyFilter)
+    {
+        if (keyFilter == HardwareFiltersEnum.status.ToString())
+        {
+            HardwareFilter.StatusTitle = null;
+        }
+        if (keyFilter == HardwareFiltersEnum.category.ToString())
+        {
+            HardwareFilter.CategoryHardware = null;
+            Categories.Clear();
+            Categories = await CategoryHardwareService.GetAllAsync();
+        }
+        StringFiltersDictionary.Remove(keyFilter);
+        await HardwareFilterAsync(HardwareFilter);
     }
 }
