@@ -88,10 +88,19 @@
                                         </div>
                                         <div class="col-sm-6 mb-1">
                                             <InputSelect class="form-select" title="Статусы оборудования" id="statusSelect" @oninput="selectedStatusEvent" @bind-Value="StatusHardware">
-                                                <option value="" selected>Все статусы</option>
+                                                <option value="1" selected>Все статусы</option>
                                                 @foreach (var status in HardwareStatuses)
                                                 {
                                                     <option value="@status">@status</option>
+                                                }
+                                            </InputSelect>
+                                        </div>
+                                        <div class="col-sm-6 mb-1">
+                                            <InputSelect class="form-select" title="Пользователи" id="statusSelect" @oninput="selectedUserEvent" @bind-Value="FilteredUser.Id">
+                                                <option value="1" selected>Все пользователи</option>
+                                                @foreach (UserView user in UsersList)
+                                                {
+                                                    <option value="@user.Id">@user.LastName @user.FirstName</option>
                                                 }
                                             </InputSelect>
                                         </div>
@@ -695,55 +704,84 @@
                                             </div>
                                             <div class="@HardwareInfoClasses">
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>ID</h6></div>
-                                                    <div class="col-sm">@Hardware.Id</div>
+                                                    <div class="col-sm-4 d-flex align-items-center"><h6 class="m-0">ID</h6></div>
+                                                    <div class="col-sm d-flex align-items-center">
+                                                        @Hardware.Id
+                                                        <button class="btn" title="Скопировать ID оборудования" @onclick="() => copyValueEvent(Hardware.Id.ToString())">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                                                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                                                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>Склад</h6></div>
+                                                    <div class="col-sm-4"><h6 class="m-0">Склад</h6></div>
                                                     <div class="col-sm">@Hardware.MainWarehouse?.Title</div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>Категория</h6></div>
+                                                    <div class="col-sm-4"><h6 class="m-0">Категория</h6></div>
                                                     <div class="col-sm">
                                                         @Hardware.CategoryHardware?.Title
                                                     </div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>Пользователь</h6></div>
+                                                    <div class="col-sm-4"><h6 class="m-0">Пользователь</h6></div>
                                                     <div class="col-sm">@Hardware.User?.LastName @Hardware.User?.FirstName</div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>Склад пользователя</h6></div>
+                                                    <div class="col-sm-4"><h6 class="m-0">Склад пользователя</h6></div>
                                                     <div class="col-sm">@userWarehouse.Title</div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>Для этикетки</h6></div>
+                                                    <div class="col-sm-4"><h6 class="m-0">Для этикетки</h6></div>
                                                     <div class="col-sm">@Hardware.NameForLabel</div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>Код марк.</h6></div>
-                                                    <div class="col-sm">@Hardware.MarkCode</div>
+                                                    <div class="col-sm-4 d-flex align-items-center"><h6 class="m-0">Код марк.</h6></div>
+                                                    <div class="col-sm d-flex align-items-center">@Hardware.MarkCode
+                                                        @if (Hardware.MarkCode.HasValue)
+                                                        {
+                                                            <button class="btn" title="Скопировать код маркировки" @onclick="() => copyValueEvent(Hardware.MarkCode.ToString())">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                                                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                                                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+                                                                </svg>
+                                                            </button>
+                                                        }
+                                                    </div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="row">
-                                                            <div class="col-sm-4">
-                                                                <h6>№ 1С</h6>
+                                                            <div class="col-sm-4  d-flex align-items-center">
+                                                                <h6 class="m-0">№ 1С</h6>
                                                             </div>
-                                                            <div class="col-sm">@Hardware.InventoryNumberExternalSystem</div>
+                                                            <div class="col-sm  d-flex align-items-center">
+                                                                @Hardware.InventoryNumberExternalSystem
+                                                                @if (!string.IsNullOrEmpty(Hardware.InventoryNumberExternalSystem))
+                                                                {
+                                                                    <button class="btn" title="Скопировать номер внешней системы" @onclick="() => copyValueEvent(Hardware.InventoryNumberExternalSystem)">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                                                                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                                                                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+                                                                        </svg>
+                                                                    </button>
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col">
                                                         <div class="row">
                                                             <div class="col-sm-4">
-                                                                <h6>Док. 1С</h6>
+                                                                <h6 class="m-0">Док. 1С</h6>
                                                             </div>
                                                             <div class="col-sm">@Hardware.DocumentExternalSystem?.ShortTitle</div>
                                                         </div>
@@ -754,7 +792,7 @@
                                                     <div class="col">
                                                         <div class="row">
                                                             <div class="col-sm-4">
-                                                                <h6>Инв.№</h6>
+                                                                <h6 class="m-0">Инв.№</h6>
                                                             </div>
                                                             <div class="col-sm">@Hardware.CombinedInvNumber</div>
                                                         </div>
@@ -762,7 +800,7 @@
                                                     <div class="col">
                                                         <div class="row">
                                                             <div class="col-sm-4">
-                                                                <h6>SN</h6>
+                                                                <h6 class="m-0">SN</h6>
                                                             </div>
                                                             <div class="col-sm">@Hardware.SerialNumber</div>
                                                         </div>
@@ -770,12 +808,12 @@
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>ТТН</h6></div>
+                                                    <div class="col-sm-4"><h6 class="m-0">ТТН</h6></div>
                                                     <div class="col-sm">@Hardware.TTN</div>
                                                 </div>
                                                 <hr />
                                                 <div class="row">
-                                                    <div class="col-sm-4"><h6>Описание</h6></div>
+                                                    <div class="col-sm-4"><h6 class="m-0">Описание</h6></div>
                                                     <div class="col-sm">@Hardware.Description</div>
                                                 </div>
                                             </div>
@@ -940,6 +978,7 @@
     private string HistoryResponsible = string.Empty;
     private UserView HistorySender = new();
     private UserView HistoryRecipient = new();
+    private UserView FilteredUser = new();
     private MainWarehouse HistoryMainWarehouse = new();
     private UserWarehouse HistoryUserWarehouse = new();
     private string ShowAllHistoryTextButton = string.Empty;
@@ -971,7 +1010,8 @@
     private enum HardwareFiltersEnum
     {
         category,
-        status
+        status,
+        user
     }
 
     protected override async Task OnInitializedAsync()
@@ -1770,6 +1810,12 @@
             hardwares = hardwares.Where(c => c.CategoryHardwareId == filter.CategoryHardware.Id).ToList();
             StringFiltersDictionary.Add(HardwareFiltersEnum.category.ToString(), filter.CategoryHardware.Title);
         }
+        if(filter.UserView != null)
+        {
+            StringFiltersDictionary.Remove(HardwareFiltersEnum.user.ToString());
+            hardwares = hardwares.Where(c => c.UserId == filter.UserView.Id).ToList();
+            StringFiltersDictionary.Add(HardwareFiltersEnum.user.ToString(), $"{filter.UserView.LastName} {filter.UserView.FirstName}");
+        }
         FilteredHardwares = hardwares;
         CalculateQuantity(ItemPerPage, 1, FilteredHardwares);
     }
@@ -1895,8 +1941,13 @@
         if (status != "1")
         {
             HardwareFilter.StatusTitle = status;
-            await HardwareFilterAsync(HardwareFilter);
         }
+        else
+        {
+            StringFiltersDictionary.Remove(HardwareFiltersEnum.status.ToString());
+            HardwareFilter.StatusTitle = string.Empty;
+        }
+        await HardwareFilterAsync(HardwareFilter);
     }
     private async Task SearchCategoryEvent(ChangeEventArgs args)
     {
@@ -1976,6 +2027,8 @@
         {
             FilterBtnText = "Скрыть";
             FilterBtnStatus = true;
+            UsersList.Clear();
+            UsersList = await UserService.GetAllAsync();
         }
         else
         {
@@ -2086,7 +2139,32 @@
             Categories.Clear();
             Categories = await CategoryHardwareService.GetAllAsync();
         }
+        if (keyFilter == HardwareFiltersEnum.user.ToString())
+        {
+            HardwareFilter.UserView = null;
+            UsersList.Clear();
+            UsersList = await UserService.GetAllAsync();
+        }
         StringFiltersDictionary.Remove(keyFilter);
         await HardwareFilterAsync(HardwareFilter);
+    }
+
+    private async Task selectedUserEvent(ChangeEventArgs args)
+    {
+        var value = args.Value.ToString();
+        var isGuid = Guid.TryParse(value, out Guid userId);
+        if (isGuid)
+        {
+            FilteredUser = await UserService.GetByIdAsync(userId);
+            if (FilteredUser != null)
+            {
+                HardwareFilter.UserView = FilteredUser;
+                await HardwareFilterAsync(HardwareFilter);
+            }
+        }
+    }
+    private async Task copyValueEvent(string? value)
+    {
+        await js.InvokeVoidAsync("navigator.clipboard.writeText", value.ToString());
     }
 }
