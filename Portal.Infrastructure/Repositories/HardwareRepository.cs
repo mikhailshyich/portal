@@ -2,6 +2,7 @@
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.EntityFrameworkCore;
+using Portal.Application.Services;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Hardwares;
 using Portal.Domain.Entities.History;
@@ -661,6 +662,56 @@ namespace Portal.Infrastructure.Repositories
             context.HistoryEntries.AddRange(historyList);
             await context.SaveChangesAsync();
             return new CustomGeneralResponses(true, $"Оборудование в количестве {displacedHardware.Count} возвращено из ремонта. Комментарий: {repairDTO.Annotation}", displacedHardware);
+        }
+
+        /// <summary>
+        /// Получить оборудование по коду маркировки
+        /// </summary>
+        /// <param name="markCode">Код маркировки</param>
+        /// <returns>Объект класса Hardware</returns>
+        public async Task<Hardware> GetByMarkCodeAsync(Guid markCode)
+        {
+            if (markCode == Guid.Empty) return null!;
+
+            var hardware = await context.Hardwares.FirstOrDefaultAsync(h => h.MarkCode == markCode);
+            if (hardware is null) return null!;
+
+            if (hardware?.MainWarehouseId != null)
+            {
+                var warehouse = await context.MainWarehouses.FirstOrDefaultAsync(w => w.Id == hardware.MainWarehouseId);
+                if(warehouse != null)
+                    hardware.MainWarehouse = warehouse;
+            }
+
+            if (hardware?.CategoryHardwareId != null)
+            {
+                var category = await context.CategoriesHardware.FirstOrDefaultAsync(c => c.Id == hardware.CategoryHardwareId);
+                if (category != null)
+                    hardware.CategoryHardware = category;
+            }
+
+            if (hardware?.DocumentExternalSystemId != null)
+            {
+                var document = await context.DocumentsExternalSystem.FirstOrDefaultAsync(d => d.Id == hardware.DocumentExternalSystemId);
+                if (document != null)
+                    hardware.DocumentExternalSystem = document;
+            }
+
+            if (hardware?.UserId != null)
+            {
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Id == hardware.UserId);
+                if (user != null)
+                    hardware.User = user;
+            }
+
+            if (hardware?.UserWarehouseId != null)
+            {
+                var userWarehouse = await context.UserWarehouses.FirstOrDefaultAsync(uw => uw.Id == hardware.UserWarehouseId);
+                if (userWarehouse != null)
+                    hardware.UserWarehouse = userWarehouse;
+            }
+
+            return hardware!;
         }
     }
 }

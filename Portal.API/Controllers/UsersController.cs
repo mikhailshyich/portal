@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
+using Portal.Domain.Responses;
 
 namespace Portal.API.Controllers
 {
@@ -29,16 +30,16 @@ namespace Portal.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult> Login(LoginDTO request)
+        public async Task<CustomAuthResponses> Login(LoginDTO request)
         {
             if (request is null)
-                return BadRequest("Заполните обязательные поля.");
+                return new CustomAuthResponses(false, "Заполните обязательные поля.");
 
             var user = await userService.LoginAsync(request);
             if (user.Flag is false)
-                return NotFound(user);
+                return user;
 
-            return Ok(user);
+            return user;
         }
 
         [HttpPost("roles")]

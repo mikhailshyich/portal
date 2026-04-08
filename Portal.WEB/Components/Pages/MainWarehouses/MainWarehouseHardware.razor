@@ -242,7 +242,7 @@
                             <div class="form-group">
                                 @if(hardwareDTO.CategoryHardwareId != Guid.Empty)
                                 {
-                                    <p>Выбрана категория <b>@CategoryHardware.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
+                                    <p>Выбрана категория <b>@CategoryHrdw.Title</b><span @onclick="RemoveCategory" class="ms-1 text-primary" style="cursor:pointer;">(другая)</span></p>
                                 }
                                 else
                                 {
@@ -819,7 +819,7 @@
                                             </div>
                                         </div>
                                         <div class="card-header d-flex justify-content-end @HardwareEditClasses">
-                                            <button title="Сохранить внесённые изменения" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Сохранить изменения</button>
+                                            <button title="Сохранить внесённые изменения" class="btn btn-success" type="submit">Сохранить изменения</button>
                                         </div>
                                     </EditForm>
                                 </div>
@@ -1581,8 +1581,6 @@
 
     private async Task EditHardware()
     {
-        if (ConfirmStatus)
-        {
             await SetUserIdToLocalStorageAsync();
             string userId = await localStorage.GetItemAsync<string>("userId");
             if (userId != string.Empty)
@@ -1597,7 +1595,6 @@
             HardwareInfoClasses = string.Empty;
             HardwareEditClasses = "d-none";
             await UpdateViewHardware(result.Id);
-        }
     }
 
     private async Task SearchEvent(ChangeEventArgs args)
@@ -2102,6 +2099,7 @@
             EditMessageString = string.Empty;
         }
     }
+
     private async Task SearchUserWarehouseEvent(ChangeEventArgs args)
     {
         SearchUserWarehouseString = args.Value.ToString();
@@ -2114,12 +2112,14 @@
             FilteredUserWarehouses = UserWarehousesList;
         }
     }
+
     private async Task selectedUserWarehouseEventAdd(UserWarehouse userWarehouse)
     {
         EditUserWarehouse = userWarehouse;
         if (updateDTO is not null)
             updateDTO.UserWarehouseId = userWarehouse.Id;
     }
+
     private async Task RemoveUserWarehouse(MouseEventArgs args)
     {
         EditUserWarehouse = new();
@@ -2127,6 +2127,7 @@
         SearchUserWarehouseString = string.Empty;
         FilteredUserWarehouses = UserWarehousesList;
     }
+
     private async Task RemoveFilterEvent(string keyFilter)
     {
         if (keyFilter == HardwareFiltersEnum.status.ToString())
@@ -2165,6 +2166,14 @@
     }
     private async Task copyValueEvent(string? value)
     {
-        await js.InvokeVoidAsync("navigator.clipboard.writeText", value.ToString());
+        try
+        {
+            if(!string.IsNullOrEmpty(value))
+                await js.InvokeVoidAsync("navigator.clipboard.writeText", value.ToString());
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

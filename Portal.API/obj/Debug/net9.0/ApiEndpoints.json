@@ -349,6 +349,22 @@
   },
   {
     "ContainingType": "Portal.API.Controllers.HardwaresController",
+    "Method": "GetByMarkCode",
+    "RelativePath": "api/Hardwares/marking_codes/{mark_code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mark_code",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Portal.API.Controllers.HardwaresController",
     "Method": "Move",
     "RelativePath": "api/Hardwares/move",
     "HttpMethod": "PATCH",
@@ -689,7 +705,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "Portal.Domain.Responses.CustomAuthResponses",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Portal.API.Controllers.UsersController",

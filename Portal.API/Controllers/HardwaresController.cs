@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Portal.Application.Services;
 using Portal.Domain.DTOs;
+using Portal.Domain.Responses;
 
 namespace Portal.API.Controllers
 {
@@ -169,6 +170,14 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> WriteOff([FromBody] HardwareWriteOffDTO writeOffDTO)
         {
             var result = await hardwareInterface.WriteOff(writeOffDTO);
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "admin,user")]
+        [HttpGet("marking_codes/{mark_code}")]
+        public async Task<IActionResult> GetByMarkCode(Guid mark_code)
+        {
+            var result = await hardwareInterface.GetByMarkCodeAsync(mark_code);
             return Ok(result);
         }
     }

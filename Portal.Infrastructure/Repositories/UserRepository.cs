@@ -39,6 +39,19 @@ namespace Portal.Infrastructure.Repositories
             if (userDB is null || userDB.IsActive == false)
                 return new CustomAuthResponses(false, $"Проверьте введённые данные.");
 
+            UserView user = new()
+            {
+                Id = userDB.Id,
+                UserRoleId = userDB.UserRoleId,
+                UserDepartmentId = userDB.UserDepartmentId,
+                FirstName = userDB.FirstName,
+                LastName = userDB.LastName,
+                Patronymic = userDB.Patronymic,
+                Specialization = userDB.Specialization,
+                Email = userDB.Email,
+                IsActive = userDB.IsActive
+            };
+
             if (new PasswordHasher<User>().VerifyHashedPassword(userDB, userDB.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
                 return new CustomAuthResponses(false, "Проверьте введённые данные.");
 
@@ -50,7 +63,7 @@ namespace Portal.Infrastructure.Repositories
 
             await GenerateAndSaveTokensAsync(userDB, jwtToken);
 
-            return new CustomAuthResponses(true, $"Пользователь {userDB.Username} успешно авторизован.", jwtToken);
+            return new CustomAuthResponses(true, $"Пользователь {userDB.Username} успешно авторизован.", jwtToken, user);
         }
 
         /// <summary>

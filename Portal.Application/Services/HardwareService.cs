@@ -45,6 +45,11 @@ namespace Portal.Application.Services
             return await hardwareDomain.GetByIdAsync(id);
         }
 
+        public async Task<Hardware> GetByMarkCodeAsync(Guid markCode)
+        {
+            return await hardwareDomain.GetByMarkCodeAsync(markCode);
+        }
+
         public async Task<List<Hardware>> GetByUserIdAsync(Guid userId)
         {
             return await hardwareDomain.GetByUserIdAsync(userId);
