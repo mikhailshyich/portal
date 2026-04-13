@@ -12,7 +12,7 @@ namespace Portal.Domain.Entities.Users
         [MaxLength(50)]
         public string ShortTitle { get; set; } = string.Empty;
 
-        public List<User> Users { get; set; } = [];
-        public List<MainWarehouse> MainWarehouses { get; set; } = [];
+        public List<UserView>? Users { get; set; } = [];
+        public List<MainWarehouse>? MainWarehouses { get; set; } = [];
     }
 }

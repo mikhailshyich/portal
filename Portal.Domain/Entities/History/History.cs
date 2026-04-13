@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Portal.Domain.Entities.Users;
+using Portal.Domain.Entities.Warehouses;
+using System.ComponentModel.DataAnnotations;
 
 namespace Portal.Domain.Entities.History
 {
@@ -15,12 +17,18 @@ namespace Portal.Domain.Entities.History
         public Guid? UserWarehouseId { get; set; }
         public string OperationType { get; set; }
         public DateTime DateTimeChanges { get; set; }
-        public string? Responsible { get; set; }
-        public string? Sender { get; set; }
-        public string? Recipient { get; set; }
-        public string? MainWarehouse { get; set; }
-        public string? UserWarehouse { get; set; }
+        public string? ResponsibleString { get; set; }
+        public string? SenderString { get; set; }
+        public string? RecipientString { get; set; }
+        public string? MainWarehouseString { get; set; }
+        public string? UserWarehouseString { get; set; }
         public string? Annotation { get; set; }
+
+        public UserView? ResponsibleUser { get; set; }
+        public UserView? SenderUser { get; set; }
+        public UserView? RecipienUser { get; set; }
+        public MainWarehouse? MainWarehouse { get; set; }
+        public UserWarehouse? UserWarehouse { get; set; }
 
 
         public History() { }

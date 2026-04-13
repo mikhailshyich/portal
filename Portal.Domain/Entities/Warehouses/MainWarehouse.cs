@@ -13,7 +13,7 @@ namespace Portal.Domain.Entities.Warehouses
         [MaxLength(100)]
         public string Description { get; set; } = string.Empty;
 
-        public List<Hardware> Hardwares { get; set; } = [];
+        public List<Hardware>? Hardwares { get; set; } = [];
         public UserDepartment? UserDepartment { get; set; }
     }
 }

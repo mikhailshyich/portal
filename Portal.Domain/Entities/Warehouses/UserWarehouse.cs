@@ -13,6 +13,6 @@ namespace Portal.Domain.Entities.Warehouses
         public string Title { get; set; } = string.Empty;
 
         public User? User { get; set; }
-        public List<Hardware> Hardwares { get; set; } = [];
+        public List<Hardware>? Hardwares { get; set; } = [];
     }
 }

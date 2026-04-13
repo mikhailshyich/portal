@@ -20,6 +20,9 @@ namespace Portal.Domain.Entities.Users
         [Compare(nameof(Password), ErrorMessage = "Введённые пароли не совпадают.")]
         public string? ConfirmPassword { get; set; } = string.Empty;
 
+        public UserRole? UserRole { get; set; }
+        public UserDepartment? UserDepartment { get; set; }
+
         public UserView() { }
 
         /// <summary>

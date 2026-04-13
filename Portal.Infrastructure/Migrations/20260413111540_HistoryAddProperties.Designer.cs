@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portal.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Portal.Infrastructure.Data;
 namespace Portal.Infrastructure.Migrations
 {
     [DbContext(typeof(PortalDbContext))]
-    partial class PortalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260413111540_HistoryAddProperties")]
+    partial class HistoryAddProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,10 +219,7 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<Guid?>("HardwareMarkCode")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MainWarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("MainWarehouseString")
+                    b.Property<string>("MainWarehouse")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OperationType")
@@ -229,42 +229,40 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<Guid?>("RecipienUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Recipient")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("RecipientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RecipientString")
+                    b.Property<string>("Responsible")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ResponsibleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ResponsibleString")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("ResponsibleUserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Sender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("SenderString")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("SenderUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserWarehouse")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("UserWarehouseId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserWarehouseString")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("WarehouseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MainWarehouseId");
 
                     b.HasIndex("RecipienUserId");
 
@@ -273,6 +271,8 @@ namespace Portal.Infrastructure.Migrations
                     b.HasIndex("SenderUserId");
 
                     b.HasIndex("UserWarehouseId");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("HistoryEntries");
                 });
@@ -698,10 +698,6 @@ namespace Portal.Infrastructure.Migrations
 
             modelBuilder.Entity("Portal.Domain.Entities.History.History", b =>
                 {
-                    b.HasOne("Portal.Domain.Entities.Warehouses.MainWarehouse", "MainWarehouse")
-                        .WithMany()
-                        .HasForeignKey("MainWarehouseId");
-
                     b.HasOne("Portal.Domain.Entities.Users.UserView", "RecipienUser")
                         .WithMany()
                         .HasForeignKey("RecipienUserId");
@@ -714,11 +710,13 @@ namespace Portal.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("SenderUserId");
 
-                    b.HasOne("Portal.Domain.Entities.Warehouses.UserWarehouse", "UserWarehouse")
+                    b.HasOne("Portal.Domain.Entities.Warehouses.UserWarehouse", "UsersWarehouse")
                         .WithMany()
                         .HasForeignKey("UserWarehouseId");
 
-                    b.Navigation("MainWarehouse");
+                    b.HasOne("Portal.Domain.Entities.Warehouses.MainWarehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId");
 
                     b.Navigation("RecipienUser");
 
@@ -726,7 +724,9 @@ namespace Portal.Infrastructure.Migrations
 
                     b.Navigation("SenderUser");
 
-                    b.Navigation("UserWarehouse");
+                    b.Navigation("UsersWarehouse");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("Portal.Domain.Entities.KnowledgeTests.QuestionAnswer", b =>

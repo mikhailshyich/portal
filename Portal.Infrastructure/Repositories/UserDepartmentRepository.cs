@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.EntityFrameworkCore;
 using Portal.Domain.DTOs;
 using Portal.Domain.Entities.Users;
 using Portal.Domain.Interfaces;
@@ -58,7 +59,16 @@ namespace Portal.Infrastructure.Repositories
             var department = await context.UserDepartments.FindAsync(id);
             if (department is null) return null!;
 
-            var users = context.Users.Where(d => d.UserDepartmentId == department.Id).ToList();
+            List<UserView> users = new();
+
+            var usersDB = context.Users.Where(d => d.UserDepartmentId == department.Id).ToList();
+            foreach(var user in usersDB)
+            {
+                UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
+                       user.Patronymic, user.Specialization, user.Email, user.IsActive);
+                users.Add(userView);
+            }
+           
             if (users != null)
             {
                 department.Users = users;

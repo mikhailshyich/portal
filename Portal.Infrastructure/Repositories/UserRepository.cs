@@ -244,12 +244,16 @@ namespace Portal.Infrastructure.Repositories
             var user = await context.Users.FindAsync(id);
             if (user is null) return null!;
 
+            UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
+                        user.Patronymic, user.Specialization, user.Email, user.IsActive);
+
             var userRole = await context.UserRoles.FindAsync(user.UserRoleId);
             if (userRole != null)
-                user.UserRole = userRole;
+                userView.UserRole = userRole;
 
-            UserView userView = new(user.Id, user.UserRoleId, user.UserDepartmentId, user.FirstName, user.LastName,
-                                    user.Patronymic, user.Specialization, user.Email, user.IsActive);
+            var userDepartment = await context.UserDepartments.FindAsync(user.UserDepartmentId);
+            if(userDepartment != null)
+                userView.UserDepartment = userDepartment;
 
             return userView;
         }

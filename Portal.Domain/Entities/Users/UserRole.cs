@@ -11,6 +11,6 @@ namespace Portal.Domain.Entities.Users
         [MaxLength(50)]
         public string PublicTitle { get; set; } = string.Empty;
 
-        public List<User> Users { get; set; } = [];
+        public List<UserView>? Users { get; set; } = [];
     }
 }

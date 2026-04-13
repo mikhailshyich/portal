@@ -866,7 +866,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12 ps-5">
-                                                    <h6>[@history.Responsible]</h6>
+                                                    <h6>[@history.ResponsibleString]</h6>
                                                 </div>
                                             </div>
                                         }
@@ -887,7 +887,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12 ps-5">
-                                                            <h6>[@history.Responsible]</h6>
+                                                            <h6>[@history.ResponsibleString]</h6>
                                                         </div>
                                                     </div>
                                                 }
@@ -1342,7 +1342,7 @@
                     var responsible = await UserService.GetByIdAsync(resposibleId);
                     if (responsible != null)
                     {
-                        history.Responsible = $"{responsible.LastName} {responsible.FirstName}";
+                        history.ResponsibleString = $"{responsible.LastName} {responsible.FirstName}";
                     }
                 }
 
@@ -1352,7 +1352,7 @@
                     var sender = await UserService.GetByIdAsync(senderId);
                     if (sender != null)
                     {
-                        history.Sender = $"{sender.LastName} {sender.FirstName}";
+                        history.SenderString = $"{sender.LastName} {sender.FirstName}";
                     }
                 }
 
@@ -1362,7 +1362,7 @@
                     var recipient = await UserService.GetByIdAsync(recipientId);
                     if (recipient != null)
                     {
-                        history.Recipient = $"{recipient.LastName} {recipient.FirstName}";
+                        history.RecipientString = $"{recipient.LastName} {recipient.FirstName}";
                     }
                 }
 
@@ -1372,7 +1372,7 @@
                     var mainWarehouse = await MainWarehouseService.GetByIdAsync(warehouseId);
                     if (mainWarehouse != null)
                     {
-                        history.MainWarehouse = mainWarehouse.Title;
+                        history.MainWarehouseString = mainWarehouse.Title;
                     }
                 }
 
@@ -1382,7 +1382,7 @@
                     var userWarehouse = await UserWarehouseService.GetByIdAsync(userWarehouseId);
                     if (userWarehouse != null)
                     {
-                        history.UserWarehouse = userWarehouse.Title;
+                        history.UserWarehouseString = userWarehouse.Title;
                     }
                 }
 
@@ -1390,11 +1390,11 @@
                 {
                     if (history.SenderId.HasValue)
                     {
-                        history.Annotation = $"Оборудование перемещено {history.Sender} → {history.Recipient} ({history.UserWarehouse}).";
+                        history.Annotation = $"Оборудование перемещено {history.SenderString} → {history.RecipientString} ({history.UserWarehouseString}).";
                     }
                     else
                     {
-                        history.Annotation = $"Оборудование перемещено на {history.Recipient} ({history.UserWarehouse}).";
+                        history.Annotation = $"Оборудование перемещено на {history.RecipientString} ({history.UserWarehouseString}).";
                     }
                 }
 
@@ -1402,11 +1402,11 @@
                 {
                     if (history.SenderId.HasValue)
                     {
-                        history.Annotation = $"Оборудование выдано {history.Sender} → {history.Recipient} ({history.UserWarehouse}).";
+                        history.Annotation = $"Оборудование выдано {history.SenderString} → {history.RecipientString} ({history.UserWarehouseString}).";
                     }
                     else
                     {
-                        history.Annotation = $"Оборудование выдано {history.Recipient} ({history.UserWarehouse}).";
+                        history.Annotation = $"Оборудование выдано {history.RecipientString} ({history.UserWarehouseString}).";
                     }
                 }
 
@@ -1438,11 +1438,11 @@
                 {
                     if (history.UserWarehouseId.HasValue & history.SenderId.HasValue)
                     {
-                        history.Annotation = $"Оборудование возвращено на {history.Sender} ({history.UserWarehouse}).";
+                        history.Annotation = $"Оборудование возвращено на {history.SenderString} ({history.UserWarehouseString}).";
                     }
                     else
                     {
-                        history.Annotation = $"Оборудование возвращено на склад ({history.MainWarehouse}).";
+                        history.Annotation = $"Оборудование возвращено на склад ({history.MainWarehouseString}).";
                     }
                 }
 
@@ -1450,7 +1450,7 @@
                 {
                     if (history.WarehouseId.HasValue)
                     {
-                        history.Annotation = $"Оборудование импортировано из Excel ({history.MainWarehouse}).";
+                        history.Annotation = $"Оборудование импортировано из Excel ({history.MainWarehouseString}).";
                     }
                     else
                     {
@@ -1462,7 +1462,7 @@
                 {
                     if (history.WarehouseId.HasValue)
                     {
-                        history.Annotation = $"Оборудование добавлено вручную ({history.MainWarehouse}).";
+                        history.Annotation = $"Оборудование добавлено вручную ({history.MainWarehouseString}).";
                     }
                     else
                     {
@@ -1486,7 +1486,7 @@
                 {
                     if (history.WarehouseId.HasValue)
                     {
-                        history.Annotation = $"Оборудование списано ({history.MainWarehouse}).";
+                        history.Annotation = $"Оборудование списано ({history.MainWarehouseString}).";
                     }
                     else
                     {
